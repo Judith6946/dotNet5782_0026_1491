@@ -1,7 +1,7 @@
 ﻿
-
 namespace DO;
 
-internal class Enums
+public class Enums
 {
+   public enum Category { necklace ,ring, bracelet , earrings , personal_design }
 }

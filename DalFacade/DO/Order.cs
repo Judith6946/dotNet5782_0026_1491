@@ -43,6 +43,10 @@ public struct Order
     /// </summary>
     public DateTime DeliveryDate { get; set; }
 
+    /// <summary>
+    /// Report an Order's description as a string. 
+    /// </summary>
+    /// <returns>A string representing an order.</returns>
     public override string ToString() => $@"
         Product ID={ID}, 
         Order Name={CustomerName}

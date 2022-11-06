@@ -1,4 +1,6 @@
 ﻿
+
+
 namespace DO;
 
 /// <summary>
@@ -25,7 +27,7 @@ public struct Product
     /// <summary>
     /// Category of product.
     /// </summary>
-    public string Category { get; set; } //check!!!!!!!!!
+    public Enums.Category Category { get; set; } 
 
     /// <summary>
     /// Quantity of products in stock.
