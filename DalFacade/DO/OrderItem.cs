@@ -9,6 +9,12 @@ namespace DO;
 public struct OrderItem
 {
     /// <summary>
+    ///  Unique ID of order-item.
+    /// </summary>
+    public int ID { get; set; }
+
+
+    /// <summary>
     /// Id of product.
     /// </summary>
     public int ProductId { get; set; }
