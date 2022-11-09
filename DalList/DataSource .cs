@@ -78,20 +78,20 @@ internal static class DataSource
     {
         string[] productNames = new string[10] { "great ring", "golden necklace", "rose bracelet", "goldfild bracelet", "small silver earrings", "kids earrings", "personal design silver ring", "Wedding ring", "Long decorated earring", "Personalized designer necklace" };
         Enums.Category[] productsCategories = new Enums.Category[10] { Enums.Category.ring, Enums.Category.necklace, Enums.Category.bracelet, Enums.Category.bracelet, Enums.Category.earrings, Enums.Category.earrings, Enums.Category.ring, Enums.Category.ring, Enums.Category.earrings, Enums.Category.necklace };
+        int i;
 
-
-        for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
         {
-            Product p = new Product();
-            p.ID = rn.Next(100000, 999999);
-            p.Name = productNames[i];
-            p.Category = productsCategories[i];
-            p.Price = rn.Next(100, 500);
-            p.InStock = rn.Next(0, 30);
+            i = Config.productIndex;
+            productsArr[i] = new Product();
+            productsArr[i].ID = rn.Next(100000, 999999);
+            productsArr[i].Name = productNames[i];
+            productsArr[i].Category = productsCategories[i];
+            productsArr[i].Price = rn.Next(100, 500);
+            productsArr[i].InStock = rn.Next(0, 30);
 
-            if (i == 0) p.InStock = 0;
-
-            addProduct(p);
+            if (i == 0) productsArr[i].InStock = 0;
+            Config.productIndex++;
         }
 
 
@@ -106,21 +106,23 @@ internal static class DataSource
         string[] customerNames = new string[10] { "Yehudit", "Chaya", "Sara", "David", "Moshe", "Tovi", "Adina", "Avi", "Dan", "Miri" };
         string[] customerEmails = new string[10] { "yt9074547@gmail.com", "Chaya9@gmail.com", "Sara@gmail.com", "David@gmail.com", "Moshe@gmail.com", "Tovi@gmail.com", "Adina@gmail.com", "Avi@gmail.com", "Dan@gmail.com", "Miri@gmail.com" };
         string[] customerAdress = new string[10] { "Rdak 4 Elad", "Haperach 5 Petach Tikva", "Rdak 4 Tel Aviv", "Dror 4 Bnei Brak", "Hatamar 67 Beit Shemesh", "Rdak 5 Elad", "Hateena 2 Elad", "Givataaim", "Derech Hashalom 11 Tel Aviv", "Kalanit 10 Eilat" };
+        int i;
 
-        for (int i = 0; i < 20; i++)
+        for (int j = 0; j < 20; j++)
         {
-            Order order = new Order();
-            order.ID = Config.OrderLastId;
-            order.CustomerName = customerNames[i % 10];
-            order.CustomerEmail = customerEmails[i % 10];
-            order.CustomerAdress = customerAdress[i % 10];
-            order.OrderDate = DateTime.MinValue;
+            i = Config.orderIndex;
+            ordersArr[i] = new Order();
+            ordersArr[i].ID = Config.OrderLastId;
+            ordersArr[i].CustomerName = customerNames[i % 10];
+            ordersArr[i].CustomerEmail = customerEmails[i % 10];
+            ordersArr[i].CustomerAdress = customerAdress[i % 10];
+            ordersArr[i].OrderDate = DateTime.MinValue;
             TimeSpan tms = new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60));
-            order.ShipDate = DateTime.MinValue + tms;
+            ordersArr[i].ShipDate = DateTime.MinValue + tms;
             tms.Add(new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60)));
-            order.DeliveryDate = order.ShipDate + tms;
-
-            addOrder(order);
+            ordersArr[i].DeliveryDate = ordersArr[i].ShipDate + tms;
+          
+            Config.orderIndex++;
         }
     }
 
@@ -130,83 +132,25 @@ internal static class DataSource
     /// </summary>
     private static void initializeOrderItems()
     {
-        for (int i = 0; i < 40; i++)
+        int i;
+        for (int j= 0; j < 40; j++)
         {
-            OrderItem orderItem = new OrderItem();
-            orderItem.ID = Config.OrderItemLastId;
-            orderItem.OrderId = ordersArr[i % 20].ID;
-            orderItem.ProductId = productsArr[i % 10].ID;
-            orderItem.Price = productsArr[i % 10].Price;
-            orderItem.Amount = rn.Next(1, 5);
-
-            addOrderItem(orderItem);
+            i = Config.orderItemIndex;
+            orderItemsArr[i] = new OrderItem();
+            orderItemsArr[i].ID = Config.OrderItemLastId;
+            orderItemsArr[i].OrderId = ordersArr[i % 20].ID;
+            orderItemsArr[i].ProductId = productsArr[i % 10].ID;
+            orderItemsArr[i].Price = productsArr[i % 10].Price;
+            orderItemsArr[i].Amount = rn.Next(1, 5);
+           
+            Config.orderItemIndex++;
+            
         }
     }
 
     #endregion
 
 
-    #region Adding_Methods
-
-
-    /// <summary>
-    /// Add a product to the products array.
-    /// </summary>
-    /// <param name="product">The product to be added</param>
-    internal static void addProduct(Product product)
-    {
-        if (!validateProductId(product.ID))
-            throw new Exception("The product is already exist");
-
-        int i = Config.productIndex;
-        productsArr[i] = product;
-        Config.productIndex++;
-    }
-
-
-    /// <summary>
-    /// Add an order to the orders array.
-    /// </summary>
-    /// <param name="order">The order to be added</param>
-    internal static void addOrder(Order order)
-    {
-        int i = Config.orderIndex;
-        ordersArr[i] = order;
-        Config.orderIndex++;
-    }
-
-
-    /// <summary>
-    /// Add an orderItem to the orderItems array.
-    /// </summary>
-    /// <param name="orderItem">The orderItem to be added</param>
-    internal static void addOrderItem(OrderItem orderItem)
-    {
-        int i = Config.orderItemIndex;
-        orderItemsArr[i] = orderItem;
-        Config.orderItemIndex++;
-    }
-
-
-    #endregion
-
-
-    #region validation
-    /// <summary>
-    /// Validate an id of a new product.
-    /// </summary>
-    /// <param name="id">The id to be validated</param>
-    /// <returns>A boolean variable that determines whether the id is ok</returns>
-    internal static bool validateProductId(int id)
-    {
-        for(int i = 0; i < Config.productIndex; i++)
-        {
-            if (productsArr[i].ID == id)
-                return false;
-        }
-        return true;
-    }
-
-    #endregion
+   
 
 }

@@ -16,9 +16,16 @@ public class DataProduct
     /// <returns>Id of the new product.</returns>
     public int Add(Product p)
     {
-        Random rn = new Random();
-        p.ID = rn.Next(100000, 999999);  
-        DataSource.addProduct(p);
+        //Check whether the id does not already exist.
+        for (int i = 0; i < DataSource.Config.productIndex; i ++)
+        {
+            if (DataSource.productsArr[i].ID == p.ID)
+                throw new Exception("Product id is aready exist.");
+        }
+
+        //Adding product.
+        DataSource.productsArr[DataSource.Config.productIndex]=p;
+        DataSource.Config.productIndex++;
         return p.ID;
     }
 
@@ -56,7 +63,27 @@ public class DataProduct
     /// <param name="id">Id of product to be deleted</param>
     public void Delete(int id)
     {
-        //how?????????
+        
+        int i = 0;
+        bool found = false;
+
+        //Search product.
+        for(;i<DataSource.Config.productIndex&&!found;i++)
+        {
+            if (DataSource.productsArr[i].ID==id)
+                found= true;
+        }
+        
+        //Move next products.
+        for(;i< DataSource.Config.productIndex &&found;i++)
+        {
+            DataSource.productsArr[i - 1] = DataSource.productsArr[i];
+        }
+
+        if (found)
+            DataSource.Config.productIndex--;
+        else
+            throw new Exception("Cannot find this product.");
     }
 
     /// <summary>
@@ -83,10 +110,3 @@ public class DataProduct
 }
 
 
-//איפה נשמרת הכמות שיש במערכים
-//איך מטפלים בחורים, מחיקה, הוספה וכו
-//איפה מקדמים את האינדקסים
-//למה המזהה האוטומוטי מאותחל??
-
-//זה בסדר שהוספנו מתודות הוספה??
-//מתודת הבדיקה, בסדר
