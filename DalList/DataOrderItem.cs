@@ -1,6 +1,4 @@
-﻿
-
-using DO;
+﻿using DO;
 
 namespace Dal;
 
@@ -9,5 +7,5 @@ namespace Dal;
 /// </summary>
 public class DataOrderItem
 {
-   
+
 }
