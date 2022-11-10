@@ -14,6 +14,7 @@ public class DataProduct
     /// </summary>
     /// <param name="p">Product to be added</param>
     /// <returns>Id of the new product.</returns>
+    /// <exception cref="Exception">Thrown when product is already exist or when the array is full</exception>
     public int Add(Product p)
     {
         //Check whether the id does not already exist.
@@ -22,6 +23,10 @@ public class DataProduct
             if (DataSource.productsArr[i].ID == p.ID)
                 throw new Exception("Product id is aready exist.");
         }
+
+        //check if the array is not full.
+        if (DataSource.Config.productIndex >= DataSource.productsArr.Length)
+            throw new Exception("No place for the new product.");
 
         //Adding product.
         DataSource.productsArr[DataSource.Config.productIndex]=p;

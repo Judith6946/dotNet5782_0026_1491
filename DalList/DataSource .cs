@@ -15,6 +15,7 @@ internal static class DataSource
     /// </summary>
     internal static class Config
     {
+
         //arrays next available index
         internal static int orderIndex = 0;
         internal static int orderItemIndex = 0;
