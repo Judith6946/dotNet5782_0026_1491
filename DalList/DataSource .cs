@@ -111,17 +111,27 @@ internal static class DataSource
 
         for (int j = 0; j < 20; j++)
         {
+            TimeSpan tms;
             i = Config.orderIndex;
             ordersArr[i] = new Order();
             ordersArr[i].ID = Config.OrderLastId;
             ordersArr[i].CustomerName = customerNames[i % 10];
             ordersArr[i].CustomerEmail = customerEmails[i % 10];
             ordersArr[i].CustomerAdress = customerAdress[i % 10];
+            
             ordersArr[i].OrderDate = DateTime.MinValue;
-            TimeSpan tms = new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60));
-            ordersArr[i].ShipDate = DateTime.MinValue + tms;
-            tms.Add(new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60)));
-            ordersArr[i].DeliveryDate = ordersArr[i].ShipDate + tms;
+            tms = new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60));
+
+            if (j < 16)
+            {
+                ordersArr[i].ShipDate = DateTime.MinValue + tms;
+            }
+
+            if (j < 10)
+            {
+                tms.Add(new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60)));
+                ordersArr[i].DeliveryDate = ordersArr[i].ShipDate + tms;
+            }
           
             Config.orderIndex++;
         }

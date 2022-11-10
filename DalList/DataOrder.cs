@@ -8,6 +8,13 @@ namespace Dal;
 /// </summary>
 public class DataOrder
 {
+
+    /// <summary>
+    /// Add an order to the order array.
+    /// </summary>
+    /// <param name="o">Order object to be added.</param>
+    /// <returns>New order id.</returns>
+    /// <exception cref="Exception">Thrown when the order array is full.</exception>
     public int Add(Order o)
     {
         //Check whether the id does not already exist.
@@ -17,11 +24,16 @@ public class DataOrder
                 throw new Exception("Order id is aready exist.");
         }
 
+        //check if the array is not full.
+        if (DataSource.Config.orderIndex >= DataSource.ordersArr.Length)
+            throw new Exception("No place for the new order.");
+
         //Adding order.
         DataSource.ordersArr[DataSource.Config.orderIndex] = o;
         DataSource.Config.orderIndex++;
         return o.ID;
     }
+
 
     /// <summary>
     /// Get a order by its id. 
@@ -39,6 +51,7 @@ public class DataOrder
         throw new Exception("Cannot find this order.");
     }
 
+
     /// <summary>
     /// Get all of orders. 
     /// </summary>
@@ -50,6 +63,7 @@ public class DataOrder
         Array.Copy(DataSource.ordersArr, orders, size);
         return orders;
     }
+
 
     /// <summary>
     /// Delete a order by its id.
@@ -80,6 +94,7 @@ public class DataOrder
             throw new Exception("Cannot find this product.");
     }
 
+
     /// <summary>
     /// Update a order.
     /// </summary>
@@ -100,4 +115,6 @@ public class DataOrder
         if (!found)
             throw new Exception("cannot find this order");
     }
+
+
 }

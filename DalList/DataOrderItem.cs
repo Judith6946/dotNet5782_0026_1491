@@ -7,6 +7,8 @@ namespace Dal;
 /// </summary>
 public class DataOrderItem
 {
+
+   
     /// <summary>
     /// Add item to order. 
     /// </summary>
@@ -21,18 +23,25 @@ public class DataOrderItem
                 throw new Exception("OrderItem id is aready exist.");
         }
 
+        //check if the array is not full.
+        if (DataSource.Config.orderItemIndex >= DataSource.orderItemsArr.Length)
+            throw new Exception("No place for the new order item.");
+
         //Adding product.
         DataSource.orderItemsArr[DataSource.Config.orderItemIndex] = o;
         DataSource.Config.orderItemIndex++;
         return o.ID;
     }
+
+    
+   
     /// <summary>
     /// Get a item by its id. 
     /// </summary>
     /// <param name="id">Id of item .</param>
     /// <returns>OrderItem object.</returns>
     /// <exception cref="Exception">Thrown when the OrderItem cant be found.</exception>
-    public OrderItem Get(int id)
+    public OrderItem GetById(int id)
     {
         for (int i = 0; i < DataSource.Config.orderItemIndex; i++)
         {
@@ -41,6 +50,7 @@ public class DataOrderItem
         }
         throw new Exception("Cannot find this OrderItem.");
     }
+   
 
 
     /// <summary>
@@ -54,6 +64,8 @@ public class DataOrderItem
         Array.Copy(DataSource.orderItemsArr, orderItems, size);
         return orderItems;
     }
+
+
 
     /// <summary>
     /// Delete a OrderItem by its id.
@@ -84,6 +96,8 @@ public class DataOrderItem
             throw new Exception("Cannot find this OrderItem.");
     }
 
+
+
     /// <summary>
     /// Update a orderItem.
     /// </summary>
@@ -104,4 +118,55 @@ public class DataOrderItem
         if (!found)
             throw new Exception("cannot find this OrderItem");
     }
+
+
+
+    /// <summary>
+    /// Search an order item by order id and product id.
+    /// </summary>
+    /// <param name="orderId">Id of order</param>
+    /// <param name="productId">Id of product</param>
+    /// <returns>The found order item object.</returns>
+    /// <exception cref="Exception">Thrown when no such item was found.</exception>
+    public OrderItem GetByOrderAndProduct(int orderId, int productId)
+    {
+        for (int i = 0; i < DataSource.Config.orderItemIndex; i++)
+        {
+            if (DataSource.orderItemsArr[i].ProductId == productId && DataSource.orderItemsArr[i].OrderId == orderId)
+            {
+                return DataSource.orderItemsArr[i];
+            }
+        }
+
+        throw new Exception("cannot find this OrderItem");
+    }
+
+
+
+    /// <summary>
+    /// Get all items on a given order. 
+    /// </summary>
+    /// <param name="orderId">The order id.</param>
+    /// <returns>All order items of the given order.</returns>
+    /// /// <exception cref="Exception">Thrown when the order has no items.</exception>
+    public OrderItem[] GetByOrder(int orderId)
+    {
+        OrderItem[] arr=new OrderItem[DataSource.Config.orderItemIndex];
+        int k = 0;
+
+        for (int i = 0; i < DataSource.Config.orderItemIndex; i++)
+        {
+            if (DataSource.orderItemsArr[i].OrderId == orderId)
+            {
+                arr[k++] = DataSource.orderItemsArr[i]; 
+            }
+        }
+        if (k == 0)
+            throw new Exception("No items on this order.");
+        OrderItem[] arr2 = new OrderItem[k];
+        Array.Copy(arr, arr2, k);
+        return arr2;
+    }
+
+
 }

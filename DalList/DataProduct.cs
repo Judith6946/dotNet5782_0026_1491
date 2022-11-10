@@ -34,6 +34,7 @@ public class DataProduct
         return p.ID;
     }
 
+
     /// <summary>
     /// Get a product by its id. 
     /// </summary>
@@ -50,6 +51,7 @@ public class DataProduct
         throw new Exception("Cannot find this product.");
     }
 
+
     /// <summary>
     /// Get all of products. 
     /// </summary>
@@ -61,6 +63,7 @@ public class DataProduct
         Array.Copy(DataSource.productsArr, products, size);
         return products;
     }
+
 
     /// <summary>
     /// Delete a product by its id.
@@ -91,6 +94,7 @@ public class DataProduct
             throw new Exception("Cannot find this product.");
     }
 
+
     /// <summary>
     /// Update a product.
     /// </summary>
@@ -111,6 +115,7 @@ public class DataProduct
         if (!found)
             throw new Exception("cannot find this product");
     }
+
 
 }
 
