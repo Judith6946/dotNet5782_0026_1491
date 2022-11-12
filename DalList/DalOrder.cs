@@ -6,7 +6,7 @@ namespace Dal;
 /// <summary>
 /// Access order data. 
 /// </summary>
-public class DataOrder
+public class DalOrder
 {
 
     /// <summary>

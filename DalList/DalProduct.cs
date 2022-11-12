@@ -6,7 +6,7 @@ namespace Dal;
 /// <summary>
 /// Access product data. 
 /// </summary>
-public class DataProduct
+public class DalProduct
 {
 
     /// <summary>
