@@ -133,7 +133,40 @@ internal class Program
     /// </summary>
     private static void orderItemMenu()
     {
-
+        OrderItemChoice choice = getOrderItemChoice();
+        try
+        {
+            switch (choice)
+            {
+                case OrderItemChoice.ADD:
+                    addOrderItem();
+                    break;
+                case OrderItemChoice.SEARCH_BY_ID:
+                    searchOrderItem();
+                    break;
+                case OrderItemChoice.PRINT:
+                    printAllOrderItems();
+                    break;
+                case OrderItemChoice.UPDATE:
+                    updateOrderItem();
+                    break;
+                case OrderItemChoice.DELETE:
+                    deleteOrderItem();
+                    break;
+                case OrderItemChoice.SEARCH_BY_ORDER:
+                    searchByOrder();
+                    break;
+                case OrderItemChoice.SEARCH_BY_ORDER_AND_PRODUCT:
+                    searchByOrderAndProduct();
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
 
     #endregion
@@ -169,7 +202,7 @@ internal class Program
     /// <returns>The chosen option.</returns>
     private static OrderItemChoice getOrderItemChoice()
     {
-        Console.WriteLine("\n press 0 to add an order. \n press 1 to search order by id.\n press 2 to print all orders.\n press 3 to update an order. \n press 4 to delete an order\npress 5 to search by order id.\n press 6 to search by order and product id.\n");
+        Console.WriteLine("\n press 0 to add an order item. \n press 1 to search order item by id.\n press 2 to print all items.\n press 3 to update an order item. \n press 4 to delete an order item.\npress 5 to search by order id.\n press 6 to search by order and product id.\n");
         OrderItemChoice c = (OrderItemChoice)Enum.Parse(typeof(OrderItemChoice), Console.ReadLine());
         return c;
     }
@@ -390,5 +423,138 @@ internal class Program
     #endregion
 
 
+
+    #region OrderItem CRUD
+
+    /// <summary>
+    /// Get order item details from user.
+    /// </summary>
+    /// <param name="id">Id of the new order item</param>
+    /// <returns>The new order item object.</returns>
+    private static OrderItem getOrderItemFromUser(int id)
+    {
+        try
+        {
+            OrderItem item = new OrderItem();
+            item.ID = id;
+            Console.WriteLine("please enter product id:");
+            item.ProductId = int.Parse(Console.ReadLine());
+            Console.WriteLine("please enter order id:");
+            item.OrderId = int.Parse(Console.ReadLine());
+            Console.WriteLine("please enter price:");
+            item.Price = int.Parse(Console.ReadLine());
+            Console.WriteLine("please enter amount:");
+            item.Amount = int.Parse(Console.ReadLine());
+            return item;
+        }
+        catch (Exception e)
+        {
+            throw new Exception("invalid value");
+        }
+
+
+    }
+
+    /// <summary>
+    /// Add an order item to DB.
+    /// </summary>
+    private static void addOrderItem()
+    {
+        Console.WriteLine("please enter order item id:");
+        string s = Console.ReadLine();
+        int id;
+        if (int.TryParse(s, out id))
+        {
+            OrderItem item = getOrderItemFromUser(id);
+            dalOrderItem.Add(item);
+        }
+    }
+
+    /// <summary>
+    /// Print all order items in DB.
+    /// </summary>
+    private static void printAllOrderItems()
+    {
+        OrderItem[] items = dalOrderItem.GetAll();
+        foreach (OrderItem item in items)
+        {
+            Console.WriteLine(item);
+        }
+    }
+
+    /// <summary>
+    /// Search an order item by id.
+    /// </summary>
+    private static void searchOrderItem()
+    {
+        Console.WriteLine("please enter order item id:");
+        int id;
+        if (int.TryParse(Console.ReadLine(), out id))
+        {
+            OrderItem items = dalOrderItem.GetById(id);
+            Console.WriteLine(items);
+        }
+
+    }
+
+    /// <summary>
+    /// Update an order item.
+    /// </summary>
+    private static void updateOrderItem()
+    {
+        Console.WriteLine("please enter order item id:");
+        string s = Console.ReadLine();
+        int id;
+        if (int.TryParse(s, out id))
+        {
+            Console.WriteLine(dalOrderItem.GetById(id));
+            OrderItem item = getOrderItemFromUser(id);
+            dalOrderItem.Update(item);
+        }
+
+    }
+
+    /// <summary>
+    /// Delete an order.
+    /// </summary>
+    private static void deleteOrderItem()
+    {
+        Console.WriteLine("please enter order item id:");
+        int id;
+        if (int.TryParse(Console.ReadLine(), out id))
+            dalOrderItem.Delete(id);
+    }
+
+    /// <summary>
+    /// Print all items on a given order.
+    /// </summary>
+    private static void searchByOrder()
+    {
+        Console.WriteLine("please enter order id:");
+        int id;
+        if (int.TryParse(Console.ReadLine(), out id))
+        {
+            OrderItem[] items = dalOrderItem.GetByOrder(id);
+            foreach (OrderItem item in items)
+            {
+                Console.WriteLine(item);
+            }
+        }
+    }
+
+
+    private static void searchByOrderAndProduct()
+    {
+        Console.WriteLine("please enter order and product id:");
+        int orderId, productId;
+        if (int.TryParse(Console.ReadLine(), out orderId) && int.TryParse(Console.ReadLine(), out productId))
+        {
+            OrderItem item = dalOrderItem.GetByOrderAndProduct(orderId, productId);
+            Console.WriteLine(item);
+        }
+    }
+
+
+    #endregion
 
 }

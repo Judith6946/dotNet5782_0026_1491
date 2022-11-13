@@ -1,5 +1,4 @@
 ﻿
-using System.Xml.Linq;
 
 namespace DO;
 
@@ -39,6 +38,7 @@ public struct OrderItem
     /// </summary>
     /// <returns>A string representing an item in order.</returns>
     public override string ToString() => $@"
+        Order item ID: {ID}
         Product ID={ProductId}, 
         Order ID={OrderId}
     	Price: {Price}

@@ -48,10 +48,10 @@ public struct Order
     /// </summary>
     /// <returns>A string representing an order.</returns>
     public override string ToString() => $@"
-        Product ID={ID}, 
-        Order Name={CustomerName}
-    	Order Email={CustomerEmail}
-        Order Adress={CustomerAdress}
+        Order ID: {ID}
+        Customer Name={CustomerName}
+    	Customer Email={CustomerEmail}
+        Customer Adress={CustomerAdress}
         Order OrderDate={OrderDate}
         Order ShipDate={ShipDate}
         Order DeliveryDate={DeliveryDate}
