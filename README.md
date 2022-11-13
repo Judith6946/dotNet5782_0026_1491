@@ -1,8 +1,6 @@
 # dotNet5783_0026_1491
 Chaya &amp; Yehudit project
 
-hello there
-hey!!!!
-
-this is final. 
+# חשוב!!
+שינינו את ההגשה באישור המרצה.
 
