@@ -16,18 +16,12 @@ public class DalOrderItem
     /// <returns>Id of the new product.</returns>
     public int Add(OrderItem o)
     {
-        //Check whether the id does not already exist.
-        for (int i = 0; i < DataSource.Config.orderItemIndex; i++)
-        {
-            if (DataSource.orderItemsArr[i].ID == o.ID)
-                throw new Exception("OrderItem id is aready exist.");
-        }
-
         //check if the array is not full.
         if (DataSource.Config.orderItemIndex >= DataSource.orderItemsArr.Length)
             throw new Exception("No place for the new order item.");
 
         //Adding product.
+        o.ID = DataSource.Config.OrderItemLastId;
         DataSource.orderItemsArr[DataSource.Config.orderItemIndex] = o;
         DataSource.Config.orderItemIndex++;
         return o.ID;

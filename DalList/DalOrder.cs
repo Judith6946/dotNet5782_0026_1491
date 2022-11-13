@@ -17,18 +17,13 @@ public class DalOrder
     /// <exception cref="Exception">Thrown when the order array is full.</exception>
     public int Add(Order o)
     {
-        //Check whether the id does not already exist.
-        for (int i = 0; i < DataSource.Config.orderItemIndex; i++)
-        {
-            if (DataSource.ordersArr[i].ID == o.ID)
-                throw new Exception("Order id is aready exist.");
-        }
 
         //check if the array is not full.
         if (DataSource.Config.orderIndex >= DataSource.ordersArr.Length)
             throw new Exception("No place for the new order.");
 
         //Adding order.
+        o.ID = DataSource.Config.OrderLastId;
         DataSource.ordersArr[DataSource.Config.orderIndex] = o;
         DataSource.Config.orderIndex++;
         return o.ID;

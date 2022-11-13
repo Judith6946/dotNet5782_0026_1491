@@ -257,6 +257,7 @@ internal class Program
         {
             Product p = getProductFromUser(id);
             dalProduct.Add(p);
+            Console.WriteLine("Adding succeeded");
         }
     }
 
@@ -296,6 +297,7 @@ internal class Program
             Console.WriteLine(dalProduct.Get(id));
             Product p = getProductFromUser(id);
             dalProduct.Update(p);
+            Console.WriteLine("Updating succeeded");
         }
 
     }
@@ -306,8 +308,13 @@ internal class Program
     private static void deleteProduct()
     {
         Console.WriteLine("please enter product id:");
-        int id = int.Parse(Console.ReadLine());
-        dalProduct.Delete(id);
+        int id;
+        if(int.TryParse(Console.ReadLine(),out id))
+        {
+            dalProduct.Delete(id);
+            Console.WriteLine("Deleting succeeded");
+        }
+        
     }
 
     #endregion
@@ -321,11 +328,12 @@ internal class Program
     /// </summary>
     /// <param name="id">Id of the new order</param>
     /// <returns>The new order object.</returns>
-    private static Order getOrderFromUser(int id)
+    private static Order getOrderFromUser(int id = 0)
     {
         DateTime dt;
         Order order = new Order();
-        order.ID = id;
+        if (id > 0)
+            order.ID = id;
         Console.WriteLine("please enter order customer name:");
         order.CustomerName = Console.ReadLine();
         Console.WriteLine("please enter order customer email:");
@@ -355,14 +363,9 @@ internal class Program
     /// </summary>
     private static void addOrder()
     {
-        Console.WriteLine("please enter order id:");
-        string s = Console.ReadLine();
-        int id;
-        if (int.TryParse(s, out id))
-        {
-            Order order = getOrderFromUser(id);
-            dalOrder.Add(order);
-        }
+        Order order = getOrderFromUser();
+        dalOrder.Add(order);
+        Console.WriteLine("Adding succeeded");
     }
 
     /// <summary>
@@ -405,6 +408,7 @@ internal class Program
             Console.WriteLine(dalOrder.Get(id));
             Order order = getOrderFromUser(id);
             dalOrder.Update(order);
+            Console.WriteLine("Updating succeeded");
         }
 
     }
@@ -417,7 +421,11 @@ internal class Program
         Console.WriteLine("please enter order id:");
         int id;
         if (int.TryParse(Console.ReadLine(), out id))
+        {
             dalOrder.Delete(id);
+            Console.WriteLine("Deleting succeeded");
+        }
+           
     }
 
     #endregion
@@ -431,12 +439,13 @@ internal class Program
     /// </summary>
     /// <param name="id">Id of the new order item</param>
     /// <returns>The new order item object.</returns>
-    private static OrderItem getOrderItemFromUser(int id)
+    private static OrderItem getOrderItemFromUser(int id = 0)
     {
         try
         {
             OrderItem item = new OrderItem();
-            item.ID = id;
+            if (id > 0)
+                item.ID = id;
             Console.WriteLine("please enter product id:");
             item.ProductId = int.Parse(Console.ReadLine());
             Console.WriteLine("please enter order id:");
@@ -460,14 +469,9 @@ internal class Program
     /// </summary>
     private static void addOrderItem()
     {
-        Console.WriteLine("please enter order item id:");
-        string s = Console.ReadLine();
-        int id;
-        if (int.TryParse(s, out id))
-        {
-            OrderItem item = getOrderItemFromUser(id);
-            dalOrderItem.Add(item);
-        }
+        OrderItem item = getOrderItemFromUser();
+        dalOrderItem.Add(item);
+        Console.WriteLine("Adding succeeded");
     }
 
     /// <summary>
@@ -510,6 +514,7 @@ internal class Program
             Console.WriteLine(dalOrderItem.GetById(id));
             OrderItem item = getOrderItemFromUser(id);
             dalOrderItem.Update(item);
+            Console.WriteLine("Updating succeeded");
         }
 
     }
@@ -522,7 +527,11 @@ internal class Program
         Console.WriteLine("please enter order item id:");
         int id;
         if (int.TryParse(Console.ReadLine(), out id))
+        {
             dalOrderItem.Delete(id);
+            Console.WriteLine("Deleting succeeded");
+        }
+           
     }
 
     /// <summary>
