@@ -11,17 +11,12 @@ internal static class DataSource
 
     #region config_class
     /// <summary>
-    /// A config class that manages the indexes & id's of the entities array. 
+    /// A config class that manages the indexes & id's of the entities list. 
     /// </summary>
     internal static class Config
     {
 
-        //arrays next available index
-        internal static int orderIndex = 0;
-        internal static int orderItemIndex = 0;
-        internal static int productIndex = 0;
-
-        //arrays next id's
+        //lists next id's
         private static int orderLastId = 1000;
         private static int orderItemLastId = 1000;
 
@@ -41,10 +36,10 @@ internal static class DataSource
 
     private static readonly Random rn = new Random();
 
-    //entities arrays
-    internal static Product[] productsArr = new Product[50];
-    internal static Order[] ordersArr = new Order[100];
-    internal static OrderItem[] orderItemsArr = new OrderItem[200];
+    //entities lists
+    internal static List<Product> productsList = new List<Product>();
+    internal static List<Order>  ordersList = new List<Order> ();
+    internal static List<OrderItem>  orderItemsList = new List<OrderItem> ();
 
     #region ctor
     /// <summary>
@@ -62,7 +57,7 @@ internal static class DataSource
 
 
     /// <summary>
-    /// Initialize the etities arrays. 
+    /// Initialize the etities lists. 
     /// </summary>
     private static void s_Initialize()
     {
@@ -73,7 +68,7 @@ internal static class DataSource
 
 
     /// <summary>
-    /// Initialize the products array. 
+    /// Initialize the products list. 
     /// </summary>
     private static void initializeProducts()
     {
@@ -83,24 +78,22 @@ internal static class DataSource
 
         for (int j = 0; j < 10; j++)
         {
-            i = Config.productIndex;
-            productsArr[i] = new Product();
-            productsArr[i].ID = rn.Next(100000, 999999);
-            productsArr[i].Name = productNames[i];
-            productsArr[i].Category = productsCategories[i];
-            productsArr[i].Price = rn.Next(100, 500);
-            productsArr[i].InStock = rn.Next(0, 30);
+            Product p=new Product();
+            p.ID = rn.Next(100000, 999999);
+            p.Name = productNames[j];
+            p.Category = productsCategories[j];
+            p.Price = rn.Next(100, 500);
+            p.InStock = rn.Next(0, 30);
 
-            if (i == 0) productsArr[i].InStock = 0;
-            Config.productIndex++;
+            if (j == 0)p.InStock = 0;
+            productsList.Add(p);
         }
-
 
     }
 
 
     /// <summary>
-    /// Initialize the orders array. 
+    /// Initialize the orders list. 
     /// </summary>
     private static void initializeOrders()
     {
@@ -112,49 +105,49 @@ internal static class DataSource
         for (int j = 0; j < 20; j++)
         {
             TimeSpan tms;
-            i = Config.orderIndex;
-            ordersArr[i] = new Order();
-            ordersArr[i].ID = Config.OrderLastId;
-            ordersArr[i].CustomerName = customerNames[i % 10];
-            ordersArr[i].CustomerEmail = customerEmails[i % 10];
-            ordersArr[i].CustomerAdress = customerAdress[i % 10];
             
-            ordersArr[i].OrderDate = DateTime.MinValue;
-            tms = new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60));
+           Order order = new Order();
+           order.ID = Config.OrderLastId;
+           order.CustomerName = customerNames[j % 10];
+           order.CustomerEmail = customerEmails[j % 10];
+           order.CustomerAdress = customerAdress[j % 10];
+           
+           order.OrderDate = DateTime.MinValue;
+           tms = new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60));
 
             if (j < 16)
             {
-                ordersArr[i].ShipDate = DateTime.MinValue + tms;
+                order.ShipDate = DateTime.MinValue + tms;
             }
 
             if (j < 10)
             {
                 tms.Add(new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60)));
-                ordersArr[i].DeliveryDate = ordersArr[i].ShipDate + tms;
+                order.DeliveryDate = order.ShipDate + tms;
             }
-          
-            Config.orderIndex++;
+
+            ordersList.Add(order);
         }
     }
 
 
     /// <summary>
-    /// Initialize the orderItems array. 
+    /// Initialize the orderItems list. 
     /// </summary>
     private static void initializeOrderItems()
     {
-        int i;
+        
         for (int j= 0; j < 40; j++)
         {
-            i = Config.orderItemIndex;
-            orderItemsArr[i] = new OrderItem();
-            orderItemsArr[i].ID = Config.OrderItemLastId;
-            orderItemsArr[i].OrderId = ordersArr[i % 20].ID;
-            orderItemsArr[i].ProductId = productsArr[i % 10].ID;
-            orderItemsArr[i].Price = productsArr[i % 10].Price;
-            orderItemsArr[i].Amount = rn.Next(1, 5);
            
-            Config.orderItemIndex++;
+            OrderItem item = new OrderItem();
+           item.ID = Config.OrderItemLastId;
+           item.OrderId = ordersList[j % 20].ID;
+           item.ProductId = productsList[j % 10].ID;
+           item.Price = productsList[j % 10].Price;
+           item.Amount = rn.Next(1, 5);
+           
+            orderItemsList.Add(item);
             
         }
     }

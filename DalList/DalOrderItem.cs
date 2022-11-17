@@ -1,11 +1,11 @@
 ﻿using DO;
-
+using DalApi;
 namespace Dal;
 
 /// <summary>
 /// Access order item data. 
 /// </summary>
-public class DalOrderItem
+public class DalOrderItem:IOrderItem
 {
 
    
@@ -16,14 +16,16 @@ public class DalOrderItem
     /// <returns>Id of the new product.</returns>
     public int Add(OrderItem o)
     {
-        //check if the array is not full.
-        if (DataSource.Config.orderItemIndex >= DataSource.orderItemsArr.Length)
-            throw new Exception("No place for the new order item.");
+        //Check whether the id does not already exist.
 
-        //Adding product.
-        o.ID = DataSource.Config.OrderItemLastId;
-        DataSource.orderItemsArr[DataSource.Config.orderItemIndex] = o;
-        DataSource.Config.orderItemIndex++;
+        if (DataSource.orderItemsList.Any(x => x.ID == o.ID))
+        {
+            throw new Exception("order item id is already exist.");
+        }
+
+
+        //Adding item.
+        DataSource.orderItemsList.Add(o);
         return o.ID;
     }
 
@@ -37,12 +39,10 @@ public class DalOrderItem
     /// <exception cref="Exception">Thrown when the OrderItem cant be found.</exception>
     public OrderItem GetById(int id)
     {
-        for (int i = 0; i < DataSource.Config.orderItemIndex; i++)
-        {
-            if (DataSource.orderItemsArr[i].ID == id)
-                return DataSource.orderItemsArr[i];
-        }
-        throw new Exception("Cannot find this OrderItem.");
+        OrderItem item = DataSource.orderItemsList.FirstOrDefault(x => x.ID == id, new OrderItem { ID = 0 });
+        if (item.ID == 0)
+            throw new Exception("Cannot find this item.");
+        return item;
     }
    
 
@@ -51,12 +51,9 @@ public class DalOrderItem
     /// Get all of products. 
     /// </summary>
     /// <returns>Products array.</returns>
-    public OrderItem[] GetAll()
+    public IEnumerable<OrderItem> GetAll()
     {
-        int size = DataSource.Config.orderItemIndex;
-        OrderItem[] orderItems = new OrderItem[size];
-        Array.Copy(DataSource.orderItemsArr, orderItems, size);
-        return orderItems;
+        return new List<OrderItem>(DataSource.orderItemsList);
     }
 
 
@@ -68,26 +65,7 @@ public class DalOrderItem
     public void Delete(int id)
     {
 
-        int i = 0;
-        bool found = false;
-
-        //Search OrderItem.
-        for (; i < DataSource.Config.orderItemIndex && !found; i++)
-        {
-            if (DataSource.orderItemsArr[i].ID == id)
-                found = true;
-        }
-
-        //Move next OrderItem.
-        for (; i < DataSource.Config.orderItemIndex && found; i++)
-        {
-            DataSource.orderItemsArr[i - 1] = DataSource.orderItemsArr[i];
-        }
-
-        if (found)
-            DataSource.Config.orderItemIndex--;
-        else
-            throw new Exception("Cannot find this OrderItem.");
+        DataSource.orderItemsList.RemoveAll(x => x.ID == id);
     }
 
 
@@ -99,18 +77,13 @@ public class DalOrderItem
     /// <exception cref="Exception">Thrown when orderItem cant be found.</exception>
     public void Update(OrderItem o)
     {
-        bool found = false;
-        for (int i = 0; i < DataSource.Config.orderItemIndex; i++)
+        if (!DataSource.orderItemsList.Any(x => x.ID == o.ID))
         {
-            if (DataSource.orderItemsArr[i].ID == o.ID)
-            {
-                found = true;
-                DataSource.orderItemsArr[i] = o;
-            }
+            throw new Exception("Item is not exist.");
         }
-
-        if (!found)
-            throw new Exception("cannot find this OrderItem");
+        //update- remove and add...
+        DataSource.orderItemsList.RemoveAll(x => x.ID == o.ID);
+        DataSource.orderItemsList.Add(o);
     }
 
 
@@ -124,15 +97,11 @@ public class DalOrderItem
     /// <exception cref="Exception">Thrown when no such item was found.</exception>
     public OrderItem GetByOrderAndProduct(int orderId, int productId)
     {
-        for (int i = 0; i < DataSource.Config.orderItemIndex; i++)
-        {
-            if (DataSource.orderItemsArr[i].ProductId == productId && DataSource.orderItemsArr[i].OrderId == orderId)
-            {
-                return DataSource.orderItemsArr[i];
-            }
-        }
-
-        throw new Exception("cannot find this OrderItem");
+        OrderItem item = DataSource.orderItemsList.FirstOrDefault(x => x.OrderId == orderId&&x.ProductId==productId, new OrderItem { ID = 0 });
+        if (item.ID == 0)
+            throw new Exception("Cannot find this item.");
+        return item;
+       
     }
 
 
@@ -143,23 +112,9 @@ public class DalOrderItem
     /// <param name="orderId">The order id.</param>
     /// <returns>All order items of the given order.</returns>
     /// /// <exception cref="Exception">Thrown when the order has no items.</exception>
-    public OrderItem[] GetByOrder(int orderId)
+    public IEnumerable<OrderItem> GetByOrder(int orderId)
     {
-        OrderItem[] arr=new OrderItem[DataSource.Config.orderItemIndex];
-        int k = 0;
-
-        for (int i = 0; i < DataSource.Config.orderItemIndex; i++)
-        {
-            if (DataSource.orderItemsArr[i].OrderId == orderId)
-            {
-                arr[k++] = DataSource.orderItemsArr[i]; 
-            }
-        }
-        if (k == 0)
-            throw new Exception("No items on this order.");
-        OrderItem[] arr2 = new OrderItem[k];
-        Array.Copy(arr, arr2, k);
-        return arr2;
+        return DataSource.orderItemsList.Where(x => x.OrderId == orderId).ToList<OrderItem>();
     }
 
 

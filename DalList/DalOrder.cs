@@ -1,31 +1,24 @@
 ﻿using DO;
-
+using DalApi;
 namespace Dal;
 
 
 /// <summary>
 /// Access order data. 
 /// </summary>
-public class DalOrder
+public class DalOrder:IOrder
 {
 
     /// <summary>
-    /// Add an order to the order array.
+    /// Add an order to the order list.
     /// </summary>
     /// <param name="o">Order object to be added.</param>
     /// <returns>New order id.</returns>
-    /// <exception cref="Exception">Thrown when the order array is full.</exception>
     public int Add(Order o)
     {
-
-        //check if the array is not full.
-        if (DataSource.Config.orderIndex >= DataSource.ordersArr.Length)
-            throw new Exception("No place for the new order.");
-
         //Adding order.
         o.ID = DataSource.Config.OrderLastId;
-        DataSource.ordersArr[DataSource.Config.orderIndex] = o;
-        DataSource.Config.orderIndex++;
+        DataSource.ordersList.Add(o);
         return o.ID;
     }
 
@@ -36,14 +29,15 @@ public class DalOrder
     /// <param name="id">Id of order.</param>
     /// <returns>Order object.</returns>
     /// <exception cref="Exception">Thrown when the order cant be found.</exception>
-    public Order Get(int id)
+    public Order GetById(int id)
     {
-        for (int i = 0; i < DataSource.Config.orderIndex; i++)
-        {
-            if (DataSource.ordersArr[i].ID == id)
-                return DataSource.ordersArr[i];
-        }
-        throw new Exception("Cannot find this order.");
+
+        Order order = DataSource.ordersList.FirstOrDefault(x => x.ID == id, new Order { ID = 0 });
+        if (order.ID == 0)
+            throw new Exception("Cannot find this order.");
+        return order;
+
+
     }
 
 
@@ -51,12 +45,10 @@ public class DalOrder
     /// Get all of orders. 
     /// </summary>
     /// <returns>Orders array.</returns>
-    public Order[] GetAll()
+    public IEnumerable<Order> GetAll()
     {
-        int size = DataSource.Config.orderIndex;
-        Order[] orders = new Order[size];
-        Array.Copy(DataSource.ordersArr, orders, size);
-        return orders;
+        return new List<Order>(DataSource.ordersList);
+       
     }
 
 
@@ -66,27 +58,8 @@ public class DalOrder
     /// <param name="id">Id of order to be deleted</param>
     public void Delete(int id)
     {
+        DataSource.ordersList.RemoveAll(x => x.ID == id);
 
-        int i = 0;
-        bool found = false;
-
-        //Search order.
-        for (; i < DataSource.Config.orderIndex && !found; i++)
-        {
-            if (DataSource.ordersArr[i].ID == id)
-                found = true;
-        }
-
-        //Move next orders.
-        for (; i < DataSource.Config.orderItemIndex && found; i++)
-        {
-            DataSource.ordersArr[i - 1] = DataSource.ordersArr[i];
-        }
-
-        if (found)
-            DataSource.Config.orderIndex--;
-        else
-            throw new Exception("Cannot find this product.");
     }
 
 
@@ -97,18 +70,13 @@ public class DalOrder
     /// <exception cref="Exception">Thrown when order cant be found.</exception>
     public void Update(Order o)
     {
-        bool found = false;
-        for (int i = 0; i < DataSource.Config.orderIndex; i++)
+        if (!DataSource.ordersList.Any(x => x.ID == o.ID))
         {
-            if (DataSource.ordersArr[i].ID == o.ID)
-            {
-                found = true;
-                DataSource.ordersArr[i] = o;
-            }
+            throw new Exception("order is not exist.");
         }
-
-        if (!found)
-            throw new Exception("cannot find this order");
+        //update- remove and add...
+        DataSource.ordersList.RemoveAll(x => x.ID == o.ID);
+        DataSource.ordersList.Add(o);
     }
 
 

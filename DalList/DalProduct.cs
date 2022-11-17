@@ -1,4 +1,4 @@
-﻿
+﻿using DalApi;
 using DO;
 
 namespace Dal;
@@ -6,7 +6,7 @@ namespace Dal;
 /// <summary>
 /// Access product data. 
 /// </summary>
-public class DalProduct
+internal class DalProduct : IProduct
 {
 
     /// <summary>
@@ -18,19 +18,15 @@ public class DalProduct
     public int Add(Product p)
     {
         //Check whether the id does not already exist.
-        for (int i = 0; i < DataSource.Config.productIndex; i ++)
+
+        if (DataSource.productsList.Any(x => x.ID == p.ID))
         {
-            if (DataSource.productsArr[i].ID == p.ID)
-                throw new Exception("Product id is aready exist.");
+            throw new Exception("Product id is aready exist.");
         }
 
-        //check if the array is not full.
-        if (DataSource.Config.productIndex >= DataSource.productsArr.Length)
-            throw new Exception("No place for the new product.");
 
         //Adding product.
-        DataSource.productsArr[DataSource.Config.productIndex]=p;
-        DataSource.Config.productIndex++;
+        DataSource.productsList.Add(p);
         return p.ID;
     }
 
@@ -41,14 +37,12 @@ public class DalProduct
     /// <param name="id">Id of product.</param>
     /// <returns>Product object.</returns>
     /// <exception cref="Exception">Thrown when the product cant be found.</exception>
-    public Product Get(int id)
+    public Product GetById(int id)
     {
-        for (int i = 0; i < DataSource.Config.productIndex; i++)
-        {
-            if (DataSource.productsArr[i].ID == id)
-                return DataSource.productsArr[i];
-        }
-        throw new Exception("Cannot find this product.");
+        Product p = DataSource.productsList.FirstOrDefault(x => x.ID == id, new Product { ID = 0 });
+        if (p.ID == 0)
+            throw new Exception("Cannot find this product.");
+        return p;
     }
 
 
@@ -56,12 +50,9 @@ public class DalProduct
     /// Get all of products. 
     /// </summary>
     /// <returns>Products array.</returns>
-    public Product[] GetAll()
+    public IEnumerable<Product> GetAll()
     {
-        int size = DataSource.Config.productIndex;
-        Product[] products = new Product[size];
-        Array.Copy(DataSource.productsArr, products, size);
-        return products;
+        return new List<Product>(DataSource.productsList);
     }
 
 
@@ -71,27 +62,7 @@ public class DalProduct
     /// <param name="id">Id of product to be deleted</param>
     public void Delete(int id)
     {
-        
-        int i = 0;
-        bool found = false;
-
-        //Search product.
-        for(;i<DataSource.Config.productIndex&&!found;i++)
-        {
-            if (DataSource.productsArr[i].ID==id)
-                found= true;
-        }
-        
-        //Move next products.
-        for(;i< DataSource.Config.productIndex &&found;i++)
-        {
-            DataSource.productsArr[i - 1] = DataSource.productsArr[i];
-        }
-
-        if (found)
-            DataSource.Config.productIndex--;
-        else
-            throw new Exception("Cannot find this product.");
+        DataSource.productsList.RemoveAll(x => x.ID == id);
     }
 
 
@@ -102,18 +73,13 @@ public class DalProduct
     /// <exception cref="Exception">Thrown when product cant be found.</exception>
     public void Update(Product p)
     {
-        bool found = false;
-        for (int i = 0; i < DataSource.Config.productIndex; i++)
+        if (!DataSource.productsList.Any(x => x.ID == p.ID))
         {
-            if (DataSource.productsArr[i].ID == p.ID)
-            {
-                found = true;
-                DataSource.productsArr[i] = p;
-            }
+            throw new Exception("Productis not exist.");
         }
-
-        if (!found)
-            throw new Exception("cannot find this product");
+        //update- remove and add...
+        DataSource.productsList.RemoveAll(x => x.ID == p.ID);
+        DataSource.productsList.Add(p);
     }
 
 

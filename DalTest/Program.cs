@@ -1,4 +1,4 @@
-﻿
+﻿using DalApi;
 using Dal;
 using DO;
 
@@ -9,9 +9,7 @@ using DO;
 internal class Program
 {
 
-    private static DalProduct dalProduct = new DalProduct();
-    private static DalOrder dalOrder = new DalOrder();
-    private static DalOrderItem dalOrderItem = new DalOrderItem();
+    static IDal dal = new DalList();
 
     #region ENUMS
     private enum Menue { EXIT, PRODUCT, ORDER, ORDER_ITEM };
@@ -256,7 +254,7 @@ internal class Program
         if (int.TryParse(s, out id))
         {
             Product p = getProductFromUser(id);
-            dalProduct.Add(p);
+            dal.Product.Add(p);
             Console.WriteLine("Adding succeeded");
         }
     }
@@ -266,7 +264,7 @@ internal class Program
     /// </summary>
     private static void printAllProducts()
     {
-        Product[] products = dalProduct.GetAll();
+        IEnumerable<Product> products = dal.Product.GetAll();
         foreach (Product p in products)
         {
             Console.WriteLine(p);
@@ -280,7 +278,7 @@ internal class Program
     {
         Console.WriteLine("please enter product id:");
         int id = int.Parse(Console.ReadLine());
-        Product p = dalProduct.Get(id);
+        Product p = dal.Product.GetById(id);
         Console.WriteLine(p);
     }
 
@@ -294,9 +292,9 @@ internal class Program
         int id;
         if (int.TryParse(s, out id))
         {
-            Console.WriteLine(dalProduct.Get(id));
+            Console.WriteLine(dal.Product.GetById(id));
             Product p = getProductFromUser(id);
-            dalProduct.Update(p);
+            dal.Product.Update(p);
             Console.WriteLine("Updating succeeded");
         }
 
@@ -311,7 +309,7 @@ internal class Program
         int id;
         if(int.TryParse(Console.ReadLine(),out id))
         {
-            dalProduct.Delete(id);
+            dal.Product.Delete(id);
             Console.WriteLine("Deleting succeeded");
         }
         
@@ -364,7 +362,7 @@ internal class Program
     private static void addOrder()
     {
         Order order = getOrderFromUser();
-        dalOrder.Add(order);
+        dal.Order.Add(order);
         Console.WriteLine("Adding succeeded");
     }
 
@@ -373,7 +371,7 @@ internal class Program
     /// </summary>
     private static void printAllOrders()
     {
-        Order[] orders = dalOrder.GetAll();
+       IEnumerable<Order> orders = dal.Order.GetAll();
         foreach (Order order in orders)
         {
             Console.WriteLine(order);
@@ -389,7 +387,7 @@ internal class Program
         int id;
         if (int.TryParse(Console.ReadLine(), out id))
         {
-            Order order = dalOrder.Get(id);
+            Order order = dal.Order.GetById(id);
             Console.WriteLine(order);
         }
 
@@ -405,9 +403,9 @@ internal class Program
         int id;
         if (int.TryParse(s, out id))
         {
-            Console.WriteLine(dalOrder.Get(id));
+            Console.WriteLine(dal.Order.GetById(id));
             Order order = getOrderFromUser(id);
-            dalOrder.Update(order);
+            dal.Order.Update(order);
             Console.WriteLine("Updating succeeded");
         }
 
@@ -422,7 +420,7 @@ internal class Program
         int id;
         if (int.TryParse(Console.ReadLine(), out id))
         {
-            dalOrder.Delete(id);
+            dal.Order.Delete(id);
             Console.WriteLine("Deleting succeeded");
         }
            
@@ -470,7 +468,7 @@ internal class Program
     private static void addOrderItem()
     {
         OrderItem item = getOrderItemFromUser();
-        dalOrderItem.Add(item);
+        dal.OrderItem.Add(item);
         Console.WriteLine("Adding succeeded");
     }
 
@@ -479,7 +477,7 @@ internal class Program
     /// </summary>
     private static void printAllOrderItems()
     {
-        OrderItem[] items = dalOrderItem.GetAll();
+        IEnumerable<OrderItem> items = dal.OrderItem.GetAll();
         foreach (OrderItem item in items)
         {
             Console.WriteLine(item);
@@ -495,7 +493,7 @@ internal class Program
         int id;
         if (int.TryParse(Console.ReadLine(), out id))
         {
-            OrderItem items = dalOrderItem.GetById(id);
+            OrderItem items = dal.OrderItem.GetById(id);
             Console.WriteLine(items);
         }
 
@@ -511,9 +509,9 @@ internal class Program
         int id;
         if (int.TryParse(s, out id))
         {
-            Console.WriteLine(dalOrderItem.GetById(id));
+            Console.WriteLine(dal.OrderItem.GetById(id));
             OrderItem item = getOrderItemFromUser(id);
-            dalOrderItem.Update(item);
+            dal.OrderItem.Update(item);
             Console.WriteLine("Updating succeeded");
         }
 
@@ -528,7 +526,7 @@ internal class Program
         int id;
         if (int.TryParse(Console.ReadLine(), out id))
         {
-            dalOrderItem.Delete(id);
+            dal.OrderItem.Delete(id);
             Console.WriteLine("Deleting succeeded");
         }
            
@@ -543,7 +541,7 @@ internal class Program
         int id;
         if (int.TryParse(Console.ReadLine(), out id))
         {
-            OrderItem[] items = dalOrderItem.GetByOrder(id);
+            IEnumerable<OrderItem> items = dal.OrderItem.GetByOrder(id);
             foreach (OrderItem item in items)
             {
                 Console.WriteLine(item);
@@ -551,19 +549,23 @@ internal class Program
         }
     }
 
-
+    /// <summary>
+    /// Print all items on a given order and product.
+    /// </summary>
     private static void searchByOrderAndProduct()
     {
         Console.WriteLine("please enter order and product id:");
         int orderId, productId;
         if (int.TryParse(Console.ReadLine(), out orderId) && int.TryParse(Console.ReadLine(), out productId))
         {
-            OrderItem item = dalOrderItem.GetByOrderAndProduct(orderId, productId);
+            OrderItem item = dal.OrderItem.GetByOrderAndProduct(orderId, productId);
             Console.WriteLine(item);
         }
     }
 
 
     #endregion
+
+
 
 }
