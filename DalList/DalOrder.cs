@@ -34,10 +34,8 @@ public class DalOrder:IOrder
 
         Order order = DataSource.ordersList.FirstOrDefault(x => x.ID == id, new Order { ID = 0 });
         if (order.ID == 0)
-            throw new Exception("Cannot find this order.");
+            throw new NotFoundException("Cannot find this order.");
         return order;
-
-
     }
 
 
@@ -58,8 +56,11 @@ public class DalOrder:IOrder
     /// <param name="id">Id of order to be deleted</param>
     public void Delete(int id)
     {
+        if (!DataSource.ordersList.Any(x => x.ID == id))
+        {
+            throw new NotFoundException("order is not exist.");
+        }
         DataSource.ordersList.RemoveAll(x => x.ID == id);
-
     }
 
 
@@ -72,7 +73,7 @@ public class DalOrder:IOrder
     {
         if (!DataSource.ordersList.Any(x => x.ID == o.ID))
         {
-            throw new Exception("order is not exist.");
+            throw new NotFoundException("order is not exist.");
         }
         //update- remove and add...
         DataSource.ordersList.RemoveAll(x => x.ID == o.ID);

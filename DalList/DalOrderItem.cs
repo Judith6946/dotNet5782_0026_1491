@@ -20,7 +20,7 @@ public class DalOrderItem:IOrderItem
 
         if (DataSource.orderItemsList.Any(x => x.ID == o.ID))
         {
-            throw new Exception("order item id is already exist.");
+            throw new AlreadyExistException("order item id is already exist.");
         }
 
 
@@ -41,7 +41,7 @@ public class DalOrderItem:IOrderItem
     {
         OrderItem item = DataSource.orderItemsList.FirstOrDefault(x => x.ID == id, new OrderItem { ID = 0 });
         if (item.ID == 0)
-            throw new Exception("Cannot find this item.");
+            throw new NotFoundException("Cannot find this item.");
         return item;
     }
    
@@ -64,7 +64,10 @@ public class DalOrderItem:IOrderItem
     /// <param name="id">Id of OrderItem to be deleted</param>
     public void Delete(int id)
     {
-
+        if (!DataSource.orderItemsList.Any(x => x.ID == id))
+        {
+            throw new NotFoundException("Item is not exist.");
+        }
         DataSource.orderItemsList.RemoveAll(x => x.ID == id);
     }
 
@@ -79,7 +82,7 @@ public class DalOrderItem:IOrderItem
     {
         if (!DataSource.orderItemsList.Any(x => x.ID == o.ID))
         {
-            throw new Exception("Item is not exist.");
+            throw new NotFoundException("Item is not exist.");
         }
         //update- remove and add...
         DataSource.orderItemsList.RemoveAll(x => x.ID == o.ID);
@@ -99,7 +102,7 @@ public class DalOrderItem:IOrderItem
     {
         OrderItem item = DataSource.orderItemsList.FirstOrDefault(x => x.OrderId == orderId&&x.ProductId==productId, new OrderItem { ID = 0 });
         if (item.ID == 0)
-            throw new Exception("Cannot find this item.");
+            throw new NotFoundException("Cannot find this item.");
         return item;
        
     }

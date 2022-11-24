@@ -21,7 +21,7 @@ internal class DalProduct : IProduct
 
         if (DataSource.productsList.Any(x => x.ID == p.ID))
         {
-            throw new Exception("Product id is aready exist.");
+            throw new AlreadyExistException("Product id is aready exist.");
         }
 
 
@@ -41,7 +41,7 @@ internal class DalProduct : IProduct
     {
         Product p = DataSource.productsList.FirstOrDefault(x => x.ID == id, new Product { ID = 0 });
         if (p.ID == 0)
-            throw new Exception("Cannot find this product.");
+            throw new NotFoundException("Cannot find this product.");
         return p;
     }
 
@@ -62,6 +62,10 @@ internal class DalProduct : IProduct
     /// <param name="id">Id of product to be deleted</param>
     public void Delete(int id)
     {
+        if (!DataSource.productsList.Any(x => x.ID == p.ID))
+        {
+            throw new NotFoundException("Productis not exist.");
+        }
         DataSource.productsList.RemoveAll(x => x.ID == id);
     }
 
@@ -75,7 +79,7 @@ internal class DalProduct : IProduct
     {
         if (!DataSource.productsList.Any(x => x.ID == p.ID))
         {
-            throw new Exception("Productis not exist.");
+            throw new NotFoundException("Productis not exist.");
         }
         //update- remove and add...
         DataSource.productsList.RemoveAll(x => x.ID == p.ID);
