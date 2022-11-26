@@ -22,7 +22,7 @@ namespace BO
         /// <summary>
         ///  Category of product-for-list.
         /// </summary>
-        public string Category { get; set; }
+        public Enums.Category Category { get; set; }
 
     }
 }
