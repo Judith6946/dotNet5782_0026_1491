@@ -56,6 +56,9 @@ public class Order
     /// </summary>
     public double TotalPrice { get; set; }
 
+
+   
+
     /// <summary>
     /// Report an Order's description as a string. 
     /// </summary>
