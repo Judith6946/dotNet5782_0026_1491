@@ -14,6 +14,6 @@ public class Enums
     /// <summary>
     /// Order statuses.
     /// </summary>
-    public enum OrderStatus { approved,sent, delivered };
+    public enum OrderStatus { approved ,sent, delivered };
 }
 

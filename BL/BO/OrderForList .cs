@@ -18,7 +18,7 @@ namespace BO
         // <summary>
         /// status of order.
         /// </summary>
-        public string StatusOrder { get; set; }
+        public Enums.OrderStatus StatusOrder { get; set; }
 
         // <summary>
         /// amount of products in order.
@@ -28,6 +28,6 @@ namespace BO
         // <summary>
         /// Total price of order.
         /// </summary>
-        public int TotalPrice { get; set; }
+        public double TotalPrice { get; set; }
     }
 }

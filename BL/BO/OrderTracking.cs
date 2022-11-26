@@ -7,12 +7,12 @@ namespace BO
         /// <summary>
         ///  Unique ID of order.
         /// </summary>
-        public int ID { get; set; }
+        public int OrderId { get; set; }
 
         // <summary>
         /// status of order.
         /// </summary>
-        public string StatusOrder { get; set; }
+        public Enums.OrderStatus StatusOrder { get; set; }
 
 
         // <summary>
