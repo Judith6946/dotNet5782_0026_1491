@@ -1,19 +1,25 @@
 ﻿
 
-
+using BO;
 using BlApi;
 using BlImplementation;
-using DalApi;
-
 namespace BlTest;
 
 
 internal class Program
 {
-    static IBl bl = new BL();
+    private static IBl bl = new BL();
+
+    private static List<Cart> carts = new List<Cart>();
+
+    #region ENUMS
     private enum Menue { EXIT, PRODUCT, ORDER, CART };
 
     private enum ProductMenu { GET_PRODUCTS,MANAGER_SEATCH, UPDATE,DELETE,ADD,CUSTOMER_SEARCH}
+
+    private enum CartMenu { ADD_ITEM,UPDATE_AMOUNT,MAKE_ORDER }
+
+    #endregion
 
     static void Main(string[] args)
     {
@@ -33,7 +39,7 @@ internal class Program
                         orderMenu();
                         break;
                     case Menue.CART:
-                        orderItemMenu();
+                        cartMenu();
                         break;
                     default:
                         Console.WriteLine("No such menu, please try again.");
@@ -49,10 +55,36 @@ internal class Program
         }
     }
 
-    private static void orderItemMenu()
+
+    #region Menues
+
+    private static void cartMenu()
     {
-        throw new NotImplementedException();
+        CartMenu c = getCartChoice();
+        try
+        {
+            switch (c)
+            {
+                case CartMenu.ADD_ITEM:
+                    addItemForCart();
+                    break;
+                case CartMenu.UPDATE_AMOUNT:
+                    updateAmountOnCart();
+                    break;
+                case CartMenu.MAKE_ORDER:
+                    makeOrder();
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
     }
+
+   
 
     private static void orderMenu()
     {
@@ -76,10 +108,13 @@ internal class Program
                     updateProduct();
                     break;
                 case ProductMenu.DELETE:
+                    deleteProduct();
                     break;
                 case ProductMenu.ADD:
+                    addProduct();
                     break;
                 case ProductMenu.CUSTOMER_SEARCH:
+                    productCustomerSearch();
                     break;
                 default:
                     break;
@@ -91,9 +126,84 @@ internal class Program
         }
     }
 
-    private static BO.Product getProductFromUser(int id)
+
+
+    #endregion
+
+
+    #region Cart CRUD
+
+    private static void makeOrder()
     {
-        BO.Product p = new BO.Product();
+        Cart cart = getCart();
+        Console.WriteLine("Insert Your Name:");
+        string name = Console.ReadLine();
+        Console.WriteLine("Insert Your Adress:");
+        string adress = Console.ReadLine();
+        cart.CustomerName = name;
+        cart.CustomerAdress = adress;
+        bl.Cart.MakeOrder(cart);
+    }
+
+    private static void updateAmountOnCart()
+    {
+        Cart cart = getCart();
+        Console.WriteLine("Insert product id:");
+        string s1 = Console.ReadLine();
+        Console.WriteLine("Insert new Amount:");
+        string s2 = Console.ReadLine();
+        int id,amount;
+        if (int.TryParse(s1, out id)&& int.TryParse(s2, out amount))
+        {
+            cart=bl.Cart.UpdateAmount(cart,amount,id);
+            updateCart(cart);
+            Console.WriteLine("Updating succeeded");
+        }
+    }
+
+    private static Cart getCart()
+    {
+        Console.WriteLine("Insert your email:");
+        string email = Console.ReadLine();
+        Cart cart = carts.FirstOrDefault(x => x.CustomerEmail == email, null);
+        if (cart == null)
+        {
+            cart = new Cart() { CustomerEmail = email, ItemsList = new List<OrderItem>(), TotalPrice = 0 };
+            carts.Add(cart);
+        }
+        return cart;
+    }
+
+    private static void updateCart(Cart cart)
+    {
+        int index = carts.FindIndex(x=>x.CustomerEmail==cart.CustomerEmail);
+
+        if (index != -1)
+            carts[index] = cart;
+    }
+
+    private static void addItemForCart()
+    {
+        Cart cart = getCart();
+        Console.WriteLine(cart);
+        Console.WriteLine("Insert product id:");
+        string s = Console.ReadLine();
+        int id;
+        if (int.TryParse(s, out id))
+        {
+            cart=bl.Cart.AddItem(cart,id);
+            updateCart(cart);
+            Console.WriteLine("Adding succeeded");
+        }
+    }
+
+    #endregion
+
+
+    #region Product CRUD
+    private static Product getProductFromUser(int id)
+    {
+        Product p = new Product();
         p.ID = id;
         Console.WriteLine("please enter product name:");
         p.Name = Console.ReadLine();
@@ -103,7 +213,6 @@ internal class Program
         p.InStock = int.Parse(Console.ReadLine());
         Console.WriteLine("please choose a category: \npress 0 for necklace \npress 1 for ring \npress 2 for bracelet \npress 3 for earrings \npress 4 for personal_design");
         p.Category = (Enums.Category)Enum.Parse(typeof(Enums.Category), Console.ReadLine());
-
         return p;
     }
 
@@ -114,9 +223,9 @@ internal class Program
         int id;
         if (int.TryParse(s, out id))
         {
-            Console.WriteLine(dal.Product.GetById(id));
+            Console.WriteLine(bl.Product.GetProduct(id));
             Product p = getProductFromUser(id);
-            dal.Product.Update(p);
+            bl.Product.UpdateProduct(p);
             Console.WriteLine("Updating succeeded");
         }
     }
@@ -139,6 +248,40 @@ internal class Program
     }
 
 
+    private static void productCustomerSearch()
+    {
+        //which cart???
+    }
+
+    private static void addProduct()
+    {
+        Console.WriteLine("please enter product id:");
+        string s = Console.ReadLine();
+        int id;
+        if (int.TryParse(s, out id))
+        {
+            Product p = getProductFromUser(id);
+            bl.Product.AddProduct(p);
+            Console.WriteLine("Adding succeeded");
+        }
+    }
+
+    private static void deleteProduct()
+    {
+        Console.WriteLine("please enter product id:");
+        int id;
+        if (int.TryParse(Console.ReadLine(), out id))
+        {
+            bl.Product.DeleteProduct(id);
+            Console.WriteLine("Deleting succeeded");
+        }
+    }
+
+    #endregion
+
+
+    #region User Choices
+
     /// <summary>
     /// Get a menu option chosen by user.
     /// </summary>
@@ -160,4 +303,19 @@ internal class Program
         ProductMenu c = (ProductMenu)Enum.Parse(typeof(ProductMenu), Console.ReadLine());
         return c;
     }
+
+    /// <summary>
+    /// Get a cart-menu option chosen by user.
+    /// </summary>
+    /// <returns>The chosen option.</returns>
+    private static CartMenu getCartChoice()
+    {
+        Console.WriteLine("\n press 0 to add item to your cart. \n press 1 to update amount for a product.\n press 2 to make an order.\n");
+        CartMenu c = (CartMenu)Enum.Parse(typeof(CartMenu), Console.ReadLine());
+        return c;
+    }
+
+    #endregion
+
+
 }

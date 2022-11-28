@@ -24,5 +24,10 @@ namespace BO
         /// </summary>
         public Enums.Category Category { get; set; }
 
+        public override string ToString() => $@"
+        Product ID={ID}: {Name}, 
+        category - {Category}
+    	Price: {Price}
+        ";
     }
 }

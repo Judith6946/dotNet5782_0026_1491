@@ -1,9 +1,9 @@
 ﻿
-
-using DO;
-
 namespace BO;
 
+/// <summary>
+/// Order Entity
+/// </summary>
 public class Order
 {
     /// <summary>
@@ -55,23 +55,13 @@ public class Order
     /// Total price of order.
     /// </summary>
     public double TotalPrice { get; set; }
-
-
    
 
     /// <summary>
     /// Report an Order's description as a string. 
     /// </summary>
     /// <returns>A string representing an order.</returns>
-    public override string ToString() => $@"
-        Order ID: {ID}
-        Customer Name={CustomerName}
-    	Customer Email={CustomerEmail}
-        Customer Adress={CustomerAdress}
-        Order OrderDate={OrderDate}
-        Order ShipDate={ShipDate}
-        Order DeliveryDate={DeliveryDate}
-        ";
+    public override string ToString() => this.ToStringProperty();
 
 
 }

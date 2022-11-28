@@ -1,6 +1,9 @@
 ﻿
 namespace BO;
 
+/// <summary>
+/// Item On Order.
+/// </summary>
 public class OrderItem
 {
     /// <summary>
@@ -39,10 +42,5 @@ public class OrderItem
     /// Report an OrderItem's description as a string. 
     /// </summary>
     /// <returns>A string representing an item in order.</returns>
-    public override string ToString() => $@"
-        Order item ID: {ID}
-        Product ID={ProductId}, 
-    	Price: {Price}
-    	Amount: {Amount}
-        ";
+    public override string ToString() => this.ToStringProperty();
 }

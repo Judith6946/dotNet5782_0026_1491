@@ -1,9 +1,10 @@
 ﻿
 
-using DO;
-
 namespace BO;
 
+/// <summary>
+/// Customer Cart Entity.
+/// </summary>
 public class Cart
 {
     /// <summary>
@@ -31,13 +32,11 @@ public class Cart
     /// </summary>
     public double TotalPrice { get; set; }
 
+
     /// <summary>
-    /// Report an Order's description as a string. 
+    /// Report a Cart's description as a string. 
     /// </summary>
-    /// <returns>A string representing an order.</returns>
-    public override string ToString() => $@"
-        Customer Name={CustomerName}
-    	Customer Email={CustomerEmail}
-        Customer Adress={CustomerAdress}
-        ";
+    /// <returns>A string representing a cart.</returns>
+    public override string ToString() => this.ToStringProperty();
+
 }

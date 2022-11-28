@@ -94,7 +94,7 @@ internal class Cart : ICart
     {
         try
         {
-            BO.OrderItem item = cart.ItemsList.FirstOrDefault(x => x.ID == id, null);
+            BO.OrderItem item = cart.ItemsList.FirstOrDefault(x => x.ProductId == id, null);
             if (item == null)
                 throw new Exception();
             if(item.Amount > amount)

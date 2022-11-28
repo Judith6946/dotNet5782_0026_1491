@@ -62,7 +62,7 @@ internal class DalProduct : IProduct
     /// <param name="id">Id of product to be deleted</param>
     public void Delete(int id)
     {
-        if (!DataSource.productsList.Any(x => x.ID == p.ID))
+        if (!DataSource.productsList.Any(x => x.ID == id))
         {
             throw new NotFoundException("Productis not exist.");
         }
