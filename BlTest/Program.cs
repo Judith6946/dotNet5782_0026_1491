@@ -3,6 +3,8 @@
 using BO;
 using BlApi;
 using BlImplementation;
+using DalApi;
+
 namespace BlTest;
 
 
@@ -21,6 +23,8 @@ internal class Program
 
     #endregion
 
+    private enum OrderMenu { GET_ORDERS, GET_ORDER, UPDATE_ORDER_SHIPING, UPDATE_ORDER_DELIVERY, FOLLOW_ORDER}
+
     static void Main(string[] args)
     {
         try
@@ -36,7 +40,7 @@ internal class Program
                         productMenu();
                         break;
                     case Menue.ORDER:
-                        orderMenu();
+                        OrderMenu();
                         break;
                     case Menue.CART:
                         cartMenu();
@@ -82,13 +86,87 @@ internal class Program
         {
             Console.WriteLine(e.Message);
         }
+    private static OrderMenu GetOrdertChoice()
+    {
+        Console.WriteLine("\n press 0 to get all products. \n press 1 to get all the orders, for manager.\n press 2 to get a order.\n press 3 to update ship date of order. \n press 4 to update a delivery date of order. \n press 5 to follow an order.\n ");
+        OrderMenu c = (OrderMenu)Enum.Parse(typeof(OrderMenu), Console.ReadLine());
+        return c;
+    }
+
+    private static void orderMenu()
+    {
+        OrderMenu c = GetOrdertChoice();
+        try
+        {
+            switch (c)
+            {
+                case OrderMenu.GET_ORDERS:
+                    GetOrders();
+                    break;
+                case OrderMenu.GET_ORDER:
+                    GetOrder();
+                    break;
+                case OrderMenu.UPDATE_ORDER_SHIPING:
+                    UpdateOrderShipping();
+                    break;
+                case OrderMenu.UPDATE_ORDER_DELIVERY:
+                    UpdateOrderDelivery();
+                    break;
+                case OrderMenu.FOLLOW_ORDER:
+                    FollowOrder();
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
+
+    private static void FollowOrder()
+    {
+        throw new NotImplementedException();
     }
 
    
 
     private static void orderMenu()
+    private static void UpdateOrderDelivery()
     {
         throw new NotImplementedException();
+    }
+
+    private static void UpdateOrderShipping()
+    {
+        Console.WriteLine("Insert id:");
+        string s = Console.ReadLine();
+        int id;
+        if (int.TryParse(s, out id))
+        {
+            Console.WriteLine(bl.Order.GetOrder(id));
+
+            BO.Order.UpdateOrderShipping(o);
+            Console.WriteLine("Updating succeeded");
+        }
+    }
+
+    private static void GetOrder()
+    {
+        Console.WriteLine("Insert id:");
+        int id;
+        if (!int.TryParse(Console.ReadLine(), out id))
+            throw new Exception();
+        Console.WriteLine(bl.Order.GetOrder(id));
+    }
+
+    private static void GetOrders()
+    {
+        foreach (var item in bl.Order.GetOrders())
+        {
+            Console.WriteLine(item);
+        }
     }
 
     private static void productMenu()
