@@ -6,7 +6,7 @@ namespace Dal;
 /// <summary>
 /// Access order data. 
 /// </summary>
-public class DalOrder:IOrder
+public class DalOrder : IOrder
 {
 
     /// <summary>
@@ -46,7 +46,7 @@ public class DalOrder:IOrder
     public IEnumerable<Order> GetAll()
     {
         return new List<Order>(DataSource.ordersList);
-       
+
     }
 
 
@@ -71,13 +71,12 @@ public class DalOrder:IOrder
     /// <exception cref="Exception">Thrown when order cant be found.</exception>
     public void Update(Order o)
     {
-        if (!DataSource.ordersList.Any(x => x.ID == o.ID))
+        int index = DataSource.ordersList.FindIndex(x => x.ID == o.ID);
+        if (index == -1)
         {
             throw new NotFoundException("order is not exist.");
         }
-        //update- remove and add...
-        DataSource.ordersList.RemoveAll(x => x.ID == o.ID);
-        DataSource.ordersList.Add(o);
+        DataSource.ordersList.Insert(index, o);
     }
 
 

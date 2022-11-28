@@ -5,10 +5,10 @@ namespace Dal;
 /// <summary>
 /// Access order item data. 
 /// </summary>
-public class DalOrderItem:IOrderItem
+public class DalOrderItem : IOrderItem
 {
 
-   
+
     /// <summary>
     /// Add item to order. 
     /// </summary>
@@ -29,8 +29,8 @@ public class DalOrderItem:IOrderItem
         return o.ID;
     }
 
-    
-   
+
+
     /// <summary>
     /// Get a item by its id. 
     /// </summary>
@@ -44,7 +44,7 @@ public class DalOrderItem:IOrderItem
             throw new NotFoundException("Cannot find this item.");
         return item;
     }
-   
+
 
 
     /// <summary>
@@ -80,13 +80,12 @@ public class DalOrderItem:IOrderItem
     /// <exception cref="Exception">Thrown when orderItem cant be found.</exception>
     public void Update(OrderItem o)
     {
-        if (!DataSource.orderItemsList.Any(x => x.ID == o.ID))
+        int index = DataSource.orderItemsList.FindIndex(x => x.ID == o.ID);
+        if (index == -1)
         {
             throw new NotFoundException("Item is not exist.");
         }
-        //update- remove and add...
-        DataSource.orderItemsList.RemoveAll(x => x.ID == o.ID);
-        DataSource.orderItemsList.Add(o);
+        DataSource.orderItemsList.Insert(index, o);
     }
 
 
@@ -100,11 +99,11 @@ public class DalOrderItem:IOrderItem
     /// <exception cref="Exception">Thrown when no such item was found.</exception>
     public OrderItem GetByOrderAndProduct(int orderId, int productId)
     {
-        OrderItem item = DataSource.orderItemsList.FirstOrDefault(x => x.OrderId == orderId&&x.ProductId==productId, new OrderItem { ID = 0 });
+        OrderItem item = DataSource.orderItemsList.FirstOrDefault(x => x.OrderId == orderId && x.ProductId == productId, new OrderItem { ID = 0 });
         if (item.ID == 0)
             throw new NotFoundException("Cannot find this item.");
         return item;
-       
+
     }
 
 

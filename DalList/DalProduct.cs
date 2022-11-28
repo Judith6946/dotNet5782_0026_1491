@@ -77,13 +77,12 @@ internal class DalProduct : IProduct
     /// <exception cref="Exception">Thrown when product cant be found.</exception>
     public void Update(Product p)
     {
-        if (!DataSource.productsList.Any(x => x.ID == p.ID))
+        int index = DataSource.productsList.FindIndex(x => x.ID == p.ID);
+        if (index == -1)
         {
             throw new NotFoundException("Productis not exist.");
         }
-        //update- remove and add...
-        DataSource.productsList.RemoveAll(x => x.ID == p.ID);
-        DataSource.productsList.Add(p);
+        DataSource.productsList[index] = p;
     }
 
 
