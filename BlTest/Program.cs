@@ -3,7 +3,6 @@
 using BO;
 using BlApi;
 using BlImplementation;
-using DalApi;
 
 namespace BlTest;
 
@@ -21,9 +20,11 @@ internal class Program
 
     private enum CartMenu { ADD_ITEM,UPDATE_AMOUNT,MAKE_ORDER }
 
+    private enum OrderMenu { GET_ORDERS, GET_ORDER, UPDATE_ORDER_SHIPING, UPDATE_ORDER_DELIVERY, FOLLOW_ORDER }
+
     #endregion
 
-    private enum OrderMenu { GET_ORDERS, GET_ORDER, UPDATE_ORDER_SHIPING, UPDATE_ORDER_DELIVERY, FOLLOW_ORDER}
+
 
     static void Main(string[] args)
     {
@@ -85,12 +86,7 @@ internal class Program
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-        }
-    private static OrderMenu GetOrdertChoice()
-    {
-        Console.WriteLine("\n press 0 to get all products. \n press 1 to get all the orders, for manager.\n press 2 to get a order.\n press 3 to update ship date of order. \n press 4 to update a delivery date of order. \n press 5 to follow an order.\n ");
-        OrderMenu c = (OrderMenu)Enum.Parse(typeof(OrderMenu), Console.ReadLine());
-        return c;
+        } 
     }
 
     private static void orderMenu()
@@ -122,50 +118,6 @@ internal class Program
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-        }
-    }
-
-    private static void FollowOrder()
-    {
-        throw new NotImplementedException();
-    }
-
-   
-
-    private static void orderMenu()
-    private static void UpdateOrderDelivery()
-    {
-        throw new NotImplementedException();
-    }
-
-    private static void UpdateOrderShipping()
-    {
-        Console.WriteLine("Insert id:");
-        string s = Console.ReadLine();
-        int id;
-        if (int.TryParse(s, out id))
-        {
-            Console.WriteLine(bl.Order.GetOrder(id));
-
-            BO.Order.UpdateOrderShipping(o);
-            Console.WriteLine("Updating succeeded");
-        }
-    }
-
-    private static void GetOrder()
-    {
-        Console.WriteLine("Insert id:");
-        int id;
-        if (!int.TryParse(Console.ReadLine(), out id))
-            throw new Exception();
-        Console.WriteLine(bl.Order.GetOrder(id));
-    }
-
-    private static void GetOrders()
-    {
-        foreach (var item in bl.Order.GetOrders())
-        {
-            Console.WriteLine(item);
         }
     }
 
@@ -205,7 +157,66 @@ internal class Program
     }
 
 
+    #endregion
 
+
+    #region Order CRUD
+
+    private static void UpdateOrderDelivery()
+    {
+        Console.WriteLine("Insert id:");
+        string s = Console.ReadLine();
+        int id;
+        if (int.TryParse(s, out id))
+        {
+            bl.Order.UpdateOrderDelivery(id);
+            Console.WriteLine("Updating succeeded");
+        }
+    }
+
+    private static void FollowOrder()
+    {
+        Console.WriteLine("Insert id:");
+        string s = Console.ReadLine();
+        int id;
+        if (int.TryParse(s, out id))
+        {
+            OrderTracking tracking = bl.Order.FollowOrder(id);
+            Console.WriteLine(tracking);
+        }
+
+    }
+
+    private static void UpdateOrderShipping()
+    {
+        Console.WriteLine("Insert id:");
+        string s = Console.ReadLine();
+        int id;
+        if (int.TryParse(s, out id))
+        {
+            bl.Order.UpdateOrderShipping(id);
+            Console.WriteLine("Updating succeeded");
+        }
+    }
+
+    private static void GetOrder()
+    {
+        Console.WriteLine("Insert id:");
+        int id;
+        if (!int.TryParse(Console.ReadLine(), out id))
+            throw new Exception();
+        Console.WriteLine(bl.Order.GetOrder(id));
+    }
+
+    private static void GetOrders()
+    {
+        foreach (var item in bl.Order.GetOrders())
+        {
+            Console.WriteLine(item);
+        }
+    }
+
+   
     #endregion
 
 
@@ -369,6 +380,13 @@ internal class Program
         Console.WriteLine("Choose a menu: \n press 1 to the product menu. \n press 2 to the order menu. \n press 3 to the cart menu. \n press 0 to exit.");
         Menue menue = (Menue)Enum.Parse(typeof(Menue), Console.ReadLine());
         return menue;
+    }
+
+    private static OrderMenu GetOrdertChoice()
+    {
+        Console.WriteLine("\n press 0 to get all products. \n press 1 to get all the orders, for manager.\n press 2 to get a order.\n press 3 to update ship date of order. \n press 4 to update a delivery date of order. \n press 5 to follow an order.\n ");
+        OrderMenu c = (OrderMenu)Enum.Parse(typeof(OrderMenu), Console.ReadLine());
+        return c;
     }
 
     /// <summary>

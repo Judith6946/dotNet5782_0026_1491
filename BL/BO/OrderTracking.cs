@@ -19,10 +19,15 @@ public class OrderTracking
 
 
     /// <summary>
-    /// עוד לא צריך להתיחס לזה, אבל אח"כ אמור להיות שם תאריך וסטטוס הזמנה.
+    /// List of touples, representing the order process.
     /// </summary>
     public IEnumerable<Tuple<DateTime, string>> Tracking { get; set; }
 
 
+    /// <summary>
+    /// Report an OrderTracking's description as a string. 
+    /// </summary>
+    /// <returns>A string representing an OrderTracking.</returns>
+    public override string ToString() => this.ToStringProperty();
 
 }
