@@ -2,12 +2,15 @@
 // See https://aka.ms/new-console-template for more information
 
 
+
 namespace Targil0
 {
     partial class Program
     {
         public static void Main(string[] args)
         {
+           
+
             Welcome0026();
             Welcome1491();
             Console.ReadKey();

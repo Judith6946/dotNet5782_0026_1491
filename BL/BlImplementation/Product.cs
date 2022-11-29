@@ -105,7 +105,8 @@ internal class Product : BlApi.IProduct
             //});
             //Console.WriteLine(Mappers.c);
 
-            BO.Product P2 = mapper.Map<DO.Product, BO.Product>(p);
+            BO.ProductForList P2 = mapper.Map<DO.Product, BO.ProductForList>(p);
+            products.Add(P2);
         };
         return products;
     }

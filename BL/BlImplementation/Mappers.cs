@@ -9,7 +9,7 @@ internal class BoProfile:Profile
 {
     public BoProfile()
     {
-        CreateMap<DO.Product, BO.Product>().ForMember(dest => dest.Category, opts => opts.MapFrom(src => enumParser(src.Category)));
+        CreateMap<DO.Product, BO.ProductForList>().ForMember(dest => dest.Category, opts => opts.MapFrom(src => enumParser(src.Category)));
     }
 
     //public static MapperConfiguration config = new MapperConfiguration(cfg =>
