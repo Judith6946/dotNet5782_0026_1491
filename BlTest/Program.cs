@@ -41,7 +41,7 @@ internal class Program
                         productMenu();
                         break;
                     case Menue.ORDER:
-                        OrderMenu();
+                        orderMenu();
                         break;
                     case Menue.CART:
                         cartMenu();

@@ -1,8 +1,8 @@
 ﻿
 using BlApi;
-
 using Dal;
 using DalApi;
+
 
 namespace BlImplementation
 {

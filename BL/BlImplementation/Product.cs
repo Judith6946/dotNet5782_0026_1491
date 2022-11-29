@@ -95,13 +95,14 @@ internal class Product : BlApi.IProduct
         List<BO.ProductForList> products = new List<BO.ProductForList>();
         foreach (DO.Product p in Dal.Product.GetAll())
         {
-            products.Add(new BO.ProductForList()
-            {
-                Category = (BO.Enums.Category)Enum.Parse(typeof(DO.Enums.Category), p.Category.ToString()),
-                Price = p.Price,
-                Name = p.Name,
-                ID = p.ID
-            });
+            //products.Add(new BO.ProductForList()
+            //{
+            //    Category = (BO.Enums.Category)Enum.Parse(typeof(DO.Enums.Category), p.Category.ToString()),
+            //    Price = p.Price,
+            //    Name = p.Name,
+            //    ID = p.ID
+            //});
+            BO.Product P2 = Mappers.iMapper.Map<DO.Product, BO.Product>(p);
         };
         return products;
     }
