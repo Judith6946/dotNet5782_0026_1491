@@ -1,7 +1,7 @@
 ﻿
 using Dal;
 using DalApi;
-
+using AutoMapper;
 namespace BlImplementation;
 
 /// <summary>
@@ -10,6 +10,7 @@ namespace BlImplementation;
 internal class Product : BlApi.IProduct
 {
     private IDal Dal = new DalList();
+    IMapper mapper=new MapperConfiguration(cfg=>cfg.AddProfile(new BoProfile())).CreateMapper();
 
     public void AddProduct(BO.Product product)
     {
@@ -102,7 +103,9 @@ internal class Product : BlApi.IProduct
             //    Name = p.Name,
             //    ID = p.ID
             //});
-            BO.Product P2 = Mappers.iMapper.Map<DO.Product, BO.Product>(p);
+            //Console.WriteLine(Mappers.c);
+
+            BO.Product P2 = mapper.Map<DO.Product, BO.Product>(p);
         };
         return products;
     }
