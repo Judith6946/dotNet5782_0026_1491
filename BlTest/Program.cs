@@ -1,10 +1,10 @@
 ﻿
-
 using BO;
 using BlApi;
 using BlImplementation;
-
+using AutoMapper;
 namespace BlTest;
+
 
 
 internal class Program

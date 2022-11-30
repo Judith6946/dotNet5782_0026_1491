@@ -6,15 +6,15 @@
     <Nullable>enable</Nullable>
 	  <BaseOutputPath>$(SolutionDir)\bin\</BaseOutputPath>
 	  <OutputPath>$(SolutionDir)\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <UseCommonOutputDirectory>true</UseCommonOutputDirectory>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	 <!-- <UseCommonOutputDirectory>true</UseCommonOutputDirectory> -->
 	  <RootNamespace />
 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
   </ItemGroup>
 
   <ItemGroup>
