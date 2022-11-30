@@ -1,6 +1,8 @@
 ﻿
+using AutoMapper;
 using Dal;
 using DalApi;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BlImplementation;
 
@@ -51,18 +53,25 @@ internal class Product : BlApi.IProduct
 
     public BO.Product GetProduct(int id)
     {
-        try
-        {
-            if (id < 0)
-                throw new Exception();
-            DO.Product p = Dal.Product.GetById(id);
-            return new BO.Product() { ID = p.ID, Name = p.Name, Price = p.Price, InStock = p.InStock, Category = (BO.Enums.Category)Enum.Parse(typeof(BO.Enums.Category), p.Category.ToString()) };
+        var config = new MapperConfiguration(cfg => cfg.AddProfile(new MappinProfile()));
+        IMapper mapper = config.CreateMapper();
+        DO.Product p = Dal.Product.GetById(id);
+        BO.Product p2 =  mapper.Map<BO.Product>(p);
+        Console.WriteLine(p2.ToString());
+        return p2;
 
-        }
-        catch (Exception e)
-        {
-            throw new Exception("Do something!!!!!!!!!!");
-        }
+        //try
+        //{
+        //    if (id < 0)
+        //        throw new Exception();
+        //    DO.Product p = Dal.Product.GetById(id);
+        //    return new BO.Product() { ID = p.ID, Name = p.Name, Price = p.Price, InStock = p.InStock, Category = (BO.Enums.Category)Enum.Parse(typeof(BO.Enums.Category), p.Category.ToString()) };
+
+        //}
+        //catch (Exception e)
+        //{
+        //    throw new Exception("Do something!!!!!!!!!!");
+        //}
     }
 
     public BO.ProductItem GetProductItem(int id, BO.Cart cart)
@@ -102,7 +111,7 @@ internal class Product : BlApi.IProduct
             //    Name = p.Name,
             //    ID = p.ID
             //});
-            BO.Product P2 = Mappers.iMapper.Map<DO.Product, BO.Product>(p);
+            //BO.Product P2 = MappinProfile.iMapper.Map<DO.Product, BO.Product>(p);
         };
         return products;
     }
