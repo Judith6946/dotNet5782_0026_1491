@@ -16,15 +16,8 @@ public class DalOrderItem : IOrderItem
     /// <returns>Id of the new product.</returns>
     public int Add(OrderItem o)
     {
-        //Check whether the id does not already exist.
-
-        if (DataSource.orderItemsList.Any(x => x.ID == o.ID))
-        {
-            throw new AlreadyExistException("order item id is already exist.");
-        }
-
-
         //Adding item.
+        o.ID = DataSource.Config.OrderItemLastId;
         DataSource.orderItemsList.Add(o);
         return o.ID;
     }
@@ -39,10 +32,10 @@ public class DalOrderItem : IOrderItem
     /// <exception cref="Exception">Thrown when the OrderItem cant be found.</exception>
     public OrderItem GetById(int id)
     {
-        OrderItem item = DataSource.orderItemsList.FirstOrDefault(x => x.ID == id, new OrderItem { ID = 0 });
-        if (item.ID == 0)
+        int index = DataSource.orderItemsList.ToList().FindIndex(x => x.ID == id);
+        if (index == -1)
             throw new NotFoundException("Cannot find this item.");
-        return item;
+        return DataSource.orderItemsList.ToList()[index];
     }
 
 
@@ -85,7 +78,7 @@ public class DalOrderItem : IOrderItem
         {
             throw new NotFoundException("Item is not exist.");
         }
-        DataSource.orderItemsList.Insert(index, o);
+        DataSource.orderItemsList[index]= o;
     }
 
 
@@ -99,11 +92,10 @@ public class DalOrderItem : IOrderItem
     /// <exception cref="Exception">Thrown when no such item was found.</exception>
     public OrderItem GetByOrderAndProduct(int orderId, int productId)
     {
-        OrderItem item = DataSource.orderItemsList.FirstOrDefault(x => x.OrderId == orderId && x.ProductId == productId, new OrderItem { ID = 0 });
-        if (item.ID == 0)
+        int index = DataSource.orderItemsList.ToList().FindIndex(x => x.OrderId == orderId && x.ProductId == productId);
+        if (index == -1)
             throw new NotFoundException("Cannot find this item.");
-        return item;
-
+        return DataSource.orderItemsList.ToList()[index];
     }
 
 

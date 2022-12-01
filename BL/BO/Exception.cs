@@ -16,6 +16,12 @@ public class AlreadyDoneException : Exception
 
 }
 
+public class ImpossibleException : Exception
+{
+    public ImpossibleException(string message) : base(message) { }
+
+}
+
 public class NotFoundException : Exception
 {
     public NotFoundException(string message) : base(message) { }

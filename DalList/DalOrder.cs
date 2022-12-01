@@ -31,11 +31,10 @@ public class DalOrder : IOrder
     /// <exception cref="Exception">Thrown when the order cant be found.</exception>
     public Order GetById(int id)
     {
-
-        Order order = DataSource.ordersList.FirstOrDefault(x => x.ID == id, new Order { ID = 0 });
-        if (order.ID == 0)
+        int index = DataSource.ordersList.ToList().FindIndex(x => x.ID == id);
+        if (index == -1)
             throw new NotFoundException("Cannot find this order.");
-        return order;
+        return DataSource.ordersList.ToList()[index];
     }
 
 
@@ -76,7 +75,7 @@ public class DalOrder : IOrder
         {
             throw new NotFoundException("order is not exist.");
         }
-        DataSource.ordersList.Insert(index, o);
+        DataSource.ordersList[index]= o;
     }
 
 

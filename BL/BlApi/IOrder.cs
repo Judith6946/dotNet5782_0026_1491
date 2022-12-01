@@ -3,6 +3,9 @@ using BO;
 
 namespace BlApi;
 
+/// <summary>
+/// Interface of order methods
+/// </summary>
 public interface IOrder
 {
     public IEnumerable<OrderForList> GetOrders();
@@ -15,5 +18,5 @@ public interface IOrder
 
     public OrderTracking FollowOrder(int id);
 
-    //add bunos!!!!!!!!!!
+    public Order UpdateOrder(int id,int productId,int amount);
 }

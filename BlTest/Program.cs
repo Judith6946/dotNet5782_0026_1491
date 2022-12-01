@@ -2,25 +2,35 @@
 using BO;
 using BlApi;
 using BlImplementation;
-using AutoMapper;
 namespace BlTest;
-
-
 
 internal class Program
 {
-    private static IBl bl = new BL();
 
-    private static List<Cart> carts = new List<Cart>();
+    private static IBl bl = new BL();
+    private static Cart cart = new Cart() { ItemsList = new List<OrderItem>(), TotalPrice = 0 };
 
     #region ENUMS
+
+    /// <summary>
+    /// Main Menu
+    /// </summary>
     private enum Menue { EXIT, PRODUCT, ORDER, CART };
 
-    private enum ProductMenu { GET_PRODUCTS,MANAGER_SEATCH, UPDATE,DELETE,ADD,CUSTOMER_SEARCH}
+    /// <summary>
+    /// Product Menu
+    /// </summary>
+    private enum ProductMenu { GET_PRODUCTS, MANAGER_SEATCH, UPDATE, DELETE, ADD, CUSTOMER_SEARCH }
 
-    private enum CartMenu { ADD_ITEM,UPDATE_AMOUNT,MAKE_ORDER }
+    /// <summary>
+    /// Cart Menu
+    /// </summary>
+    private enum CartMenu { ADD_ITEM, UPDATE_AMOUNT, MAKE_ORDER }
 
-    private enum OrderMenu { GET_ORDERS, GET_ORDER, UPDATE_ORDER_SHIPING, UPDATE_ORDER_DELIVERY, FOLLOW_ORDER }
+    /// <summary>
+    /// Order Menu.
+    /// </summary>
+    private enum OrderMenu { GET_ORDERS, GET_ORDER, UPDATE_ORDER_SHIPING, UPDATE_ORDER_DELIVERY, FOLLOW_ORDER,UPDATE_ORDER }
 
     #endregion
 
@@ -28,12 +38,13 @@ internal class Program
 
     static void Main(string[] args)
     {
-        try
-        {
-            Menue menue;
-            menue = getMenu();
 
-            while (menue != Menue.EXIT)
+        Menue menue;
+        menue = getMenu();
+
+        while (menue != Menue.EXIT)
+        {
+            try
             {
                 switch (menue)
                 {
@@ -52,116 +63,124 @@ internal class Program
                 }
 
                 menue = getMenu();
+
+            }
+            catch (Exception e)
+            {
+                string str = e.GetType().ToString() + ": " + e.Message;
+                if (e.InnerException != null)
+                    str += "\ninner exception - " + e.InnerException.GetType().ToString() + ": " + e.InnerException.Message;
+                Console.WriteLine(str);
             }
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+
     }
 
 
     #region Menues
 
+    /// <summary>
+    /// Handle cart menu.
+    /// </summary>
     private static void cartMenu()
     {
         CartMenu c = getCartChoice();
-        try
+
+        switch (c)
         {
-            switch (c)
-            {
-                case CartMenu.ADD_ITEM:
-                    addItemForCart();
-                    break;
-                case CartMenu.UPDATE_AMOUNT:
-                    updateAmountOnCart();
-                    break;
-                case CartMenu.MAKE_ORDER:
-                    makeOrder();
-                    break;
-                default:
-                    break;
-            }
+            case CartMenu.ADD_ITEM:
+                addItemForCart();
+                break;
+            case CartMenu.UPDATE_AMOUNT:
+                updateAmountOnCart();
+                break;
+            case CartMenu.MAKE_ORDER:
+                makeOrder();
+                break;
+            default:
+                break;
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        } 
     }
 
+
+    /// <summary>
+    /// Handle order menu.
+    /// </summary>
     private static void orderMenu()
     {
         OrderMenu c = GetOrdertChoice();
-        try
+
+        switch (c)
         {
-            switch (c)
-            {
-                case OrderMenu.GET_ORDERS:
-                    GetOrders();
-                    break;
-                case OrderMenu.GET_ORDER:
-                    GetOrder();
-                    break;
-                case OrderMenu.UPDATE_ORDER_SHIPING:
-                    UpdateOrderShipping();
-                    break;
-                case OrderMenu.UPDATE_ORDER_DELIVERY:
-                    UpdateOrderDelivery();
-                    break;
-                case OrderMenu.FOLLOW_ORDER:
-                    FollowOrder();
-                    break;
-                default:
-                    break;
-            }
+            case OrderMenu.GET_ORDERS:
+                GetOrders();
+                break;
+            case OrderMenu.GET_ORDER:
+                GetOrder();
+                break;
+            case OrderMenu.UPDATE_ORDER_SHIPING:
+                UpdateOrderShipping();
+                break;
+            case OrderMenu.UPDATE_ORDER_DELIVERY:
+                UpdateOrderDelivery();
+                break;
+            case OrderMenu.FOLLOW_ORDER:
+                FollowOrder();
+                break;
+            case OrderMenu.UPDATE_ORDER:
+                UpdateOrder();
+                break;
+            default:
+                break;
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+
     }
 
+
+    /// <summary>
+    /// Handle product menu.
+    /// </summary>
     private static void productMenu()
     {
         ProductMenu c = getProductChoice();
-        try
+
+        switch (c)
         {
-            switch (c)
-            {
-                case ProductMenu.GET_PRODUCTS:
-                    getAllProducts();
-                    break;
-                case ProductMenu.MANAGER_SEATCH:
-                    productManagerSearch();
-                    break;
-                case ProductMenu.UPDATE:
-                    updateProduct();
-                    break;
-                case ProductMenu.DELETE:
-                    deleteProduct();
-                    break;
-                case ProductMenu.ADD:
-                    addProduct();
-                    break;
-                case ProductMenu.CUSTOMER_SEARCH:
-                    productCustomerSearch();
-                    break;
-                default:
-                    break;
-            }
+            case ProductMenu.GET_PRODUCTS:
+                getAllProducts();
+                break;
+            case ProductMenu.MANAGER_SEATCH:
+                productManagerSearch();
+                break;
+            case ProductMenu.UPDATE:
+                updateProduct();
+                break;
+            case ProductMenu.DELETE:
+                deleteProduct();
+                break;
+            case ProductMenu.ADD:
+                addProduct();
+                break;
+            case ProductMenu.CUSTOMER_SEARCH:
+                productCustomerSearch();
+                break;
+            default:
+                break;
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+
     }
 
 
     #endregion
 
 
+
     #region Order CRUD
 
+    /// <summary>
+    /// Deliver an order.
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when order id is not valid.</exception>
     private static void UpdateOrderDelivery()
     {
         Console.WriteLine("Insert id:");
@@ -172,8 +191,14 @@ internal class Program
             bl.Order.UpdateOrderDelivery(id);
             Console.WriteLine("Updating succeeded");
         }
+        else
+            throw new InvalidInputException("Id was not valid");
     }
 
+    /// <summary>
+    /// Follow an order- print order state.
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when order id is not valid.</exception>
     private static void FollowOrder()
     {
         Console.WriteLine("Insert id:");
@@ -184,9 +209,14 @@ internal class Program
             OrderTracking tracking = bl.Order.FollowOrder(id);
             Console.WriteLine(tracking);
         }
-
+        else
+            throw new InvalidInputException("Id was not valid.");
     }
 
+    /// <summary>
+    /// Ship an order.
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when order id is not valid.</exception>
     private static void UpdateOrderShipping()
     {
         Console.WriteLine("Insert id:");
@@ -197,17 +227,26 @@ internal class Program
             bl.Order.UpdateOrderShipping(id);
             Console.WriteLine("Updating succeeded");
         }
+        else
+            throw new InvalidInputException("Id was not valid.");
     }
 
+    /// <summary>
+    /// Get an order - print order details.
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when order id is not valid.</exception>
     private static void GetOrder()
     {
         Console.WriteLine("Insert id:");
         int id;
         if (!int.TryParse(Console.ReadLine(), out id))
-            throw new Exception();
+            throw new InvalidInputException("Id was not valid.");
         Console.WriteLine(bl.Order.GetOrder(id));
     }
 
+    /// <summary>
+    /// Print all orders.
+    /// </summary>
     private static void GetOrders()
     {
         foreach (var item in bl.Order.GetOrders())
@@ -216,80 +255,98 @@ internal class Program
         }
     }
 
-   
+    private static void UpdateOrder()
+    {
+        int id, productId, amount;
+        string strId, strPID, strAmount;
+        Console.WriteLine("insert id:");
+        strId = Console.ReadLine();
+        Console.WriteLine("insert product id");
+        strPID = Console.ReadLine();
+        Console.WriteLine("insert amount");
+        strAmount = Console.ReadLine();
+
+        if (int.TryParse(strId, out id) && int.TryParse(strPID, out productId) && int.TryParse(strAmount, out amount))
+        {
+            bl.Order.UpdateOrder(id, productId, amount);
+            Console.WriteLine("updating succeeded");
+        }
+        else
+            throw new InvalidInputException("Id and amount must be numbers");
+    }
+
     #endregion
+
 
 
     #region Cart CRUD
 
+    /// <summary>
+    /// Make an order from cart.
+    /// </summary>
     private static void makeOrder()
     {
-        Cart cart = getCart();
+        Console.WriteLine("Insert Your Email:");
+        string email = Console.ReadLine();
         Console.WriteLine("Insert Your Name:");
         string name = Console.ReadLine();
         Console.WriteLine("Insert Your Adress:");
         string adress = Console.ReadLine();
         cart.CustomerName = name;
         cart.CustomerAdress = adress;
+        cart.CustomerEmail = email;
         bl.Cart.MakeOrder(cart);
+        cart = new Cart() { ItemsList = new List<OrderItem>(), TotalPrice = 0 };
     }
 
+    /// <summary>
+    /// Update amount of product on cart.
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when input was invalid.</exception>
     private static void updateAmountOnCart()
     {
-        Cart cart = getCart();
         Console.WriteLine("Insert product id:");
         string s1 = Console.ReadLine();
         Console.WriteLine("Insert new Amount:");
         string s2 = Console.ReadLine();
-        int id,amount;
-        if (int.TryParse(s1, out id)&& int.TryParse(s2, out amount))
+        int id, amount;
+        if (int.TryParse(s1, out id) && int.TryParse(s2, out amount))
         {
-            cart=bl.Cart.UpdateAmount(cart,amount,id);
-            updateCart(cart);
+            cart = bl.Cart.UpdateAmount(cart, amount, id);
             Console.WriteLine("Updating succeeded");
         }
+        else
+            throw new InvalidInputException("id/amount is invalid.");
     }
 
-    private static Cart getCart()
-    {
-        Console.WriteLine("Insert your email:");
-        string email = Console.ReadLine();
-        Cart cart = carts.FirstOrDefault(x => x.CustomerEmail == email, null);
-        if (cart == null)
-        {
-            cart = new Cart() { CustomerEmail = email, ItemsList = new List<OrderItem>(), TotalPrice = 0 };
-            carts.Add(cart);
-        }
-        return cart;
-    }
-
-    private static void updateCart(Cart cart)
-    {
-        int index = carts.FindIndex(x=>x.CustomerEmail==cart.CustomerEmail);
-
-        if (index != -1)
-            carts[index] = cart;
-    }
-
+    /// <summary>
+    /// Add product to cart.
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when id was invalid.</exception>
     private static void addItemForCart()
     {
-        Cart cart = getCart();
-        Console.WriteLine(cart);
         Console.WriteLine("Insert product id:");
         string s = Console.ReadLine();
         int id;
         if (int.TryParse(s, out id))
         {
-            cart=bl.Cart.AddItem(cart,id);
-            updateCart(cart);
+            cart = bl.Cart.AddItem(cart, id);
             Console.WriteLine("Adding succeeded");
         }
+        else
+            throw new InvalidInputException("id/amount is invalid.");
     }
 
     #endregion
 
 
     #region Product CRUD
+
+    /// <summary>
+    /// Get a product from user.
+    /// </summary>
+    /// <param name="id">Id of new product.</param>
+    /// <returns>New product.</returns>
     private static Product getProductFromUser(int id)
     {
         Product p = new Product();
@@ -305,6 +362,10 @@ internal class Program
         return p;
     }
 
+    /// <summary>
+    /// Update a product.
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when id was invalid.</exception> 
     private static void updateProduct()
     {
         Console.WriteLine("please enter product id:");
@@ -317,17 +378,26 @@ internal class Program
             bl.Product.UpdateProduct(p);
             Console.WriteLine("Updating succeeded");
         }
+        else
+            throw new InvalidInputException("id/amount is invalid.");
     }
 
+    /// <summary>
+    /// Search a product (for manager)
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when id was invalid.</exception>
     private static void productManagerSearch()
     {
         Console.WriteLine("Insert id:");
         int id;
         if (!int.TryParse(Console.ReadLine(), out id))
-            throw new Exception();
+            throw new InvalidInputException("Id was not valid");
         Console.WriteLine(bl.Product.GetProduct(id));
     }
 
+    /// <summary>
+    /// Print all products
+    /// </summary>
     private static void getAllProducts()
     {
         foreach (var item in bl.Product.GetProducts())
@@ -336,12 +406,23 @@ internal class Program
         }
     }
 
-
+    /// <summary>
+    /// Search a product (for customer)
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when id was invalid.</exception>
     private static void productCustomerSearch()
     {
-        //which cart???
+        Console.WriteLine("Insert id:");
+        int id;
+        if (!int.TryParse(Console.ReadLine(), out id))
+            throw new InvalidInputException("Id was not valid");
+        Console.WriteLine(bl.Product.GetProductItem(id, cart));
     }
 
+    /// <summary>
+    /// Add a product
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when id was invalid.</exception>
     private static void addProduct()
     {
         Console.WriteLine("please enter product id:");
@@ -353,8 +434,14 @@ internal class Program
             bl.Product.AddProduct(p);
             Console.WriteLine("Adding succeeded");
         }
+        else
+            throw new InvalidInputException("Id was invalid.");
     }
 
+    /// <summary>
+    /// Delete a product
+    /// </summary>
+    /// <exception cref="InvalidInputException">Thrown when id was invalid.</exception>
     private static void deleteProduct()
     {
         Console.WriteLine("please enter product id:");
@@ -364,6 +451,8 @@ internal class Program
             bl.Product.DeleteProduct(id);
             Console.WriteLine("Deleting succeeded");
         }
+        else
+            throw new InvalidInputException("Id was invalid.");
     }
 
     #endregion
@@ -382,9 +471,13 @@ internal class Program
         return menue;
     }
 
+    /// <summary>
+    /// Get an order action chosen by user.
+    /// </summary>
+    /// <returns>The chosen action.</returns>
     private static OrderMenu GetOrdertChoice()
     {
-        Console.WriteLine("\n press 0 to get all products. \n press 1 to get all the orders, for manager.\n press 2 to get a order.\n press 3 to update ship date of order. \n press 4 to update a delivery date of order. \n press 5 to follow an order.\n ");
+        Console.WriteLine("\n press 0 to get all the orders, for manager.\n press 1 to get an order.\n press 2 to update ship date of order. \n press 3 to update a delivery date of order. \n press 4 to follow an order.\n press 5 to update order.\n");
         OrderMenu c = (OrderMenu)Enum.Parse(typeof(OrderMenu), Console.ReadLine());
         return c;
     }

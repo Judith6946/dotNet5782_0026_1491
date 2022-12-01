@@ -2,6 +2,10 @@
 
 namespace DalApi;
 
+/// <summary>
+/// Interface of a dal class.
+/// </summary>
+/// <typeparam name="T">Type of entity</typeparam>
 public interface ICrud<T>
 {
     IEnumerable<T> GetAll();

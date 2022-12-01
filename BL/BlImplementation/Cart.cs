@@ -29,11 +29,12 @@ internal class Cart : ICart
     {
 
         //find item on the items list of cart.
-        BO.OrderItem item = cart.ItemsList.FirstOrDefault(x => x.ID == id, null);
+        int index = cart.ItemsList.ToList().FindIndex(x => x.ProductId == id);
 
         //if you find the item - update amount.
-        if (item != null)
+        if (index != -1)
         {
+            BO.OrderItem item = cart.ItemsList.ToList()[index];
             if (isSoldOut(id, item.Amount + 1))
                 throw new SoldOutException("This product was sold out.");
             item.Amount++;
@@ -47,7 +48,9 @@ internal class Cart : ICart
             DO.Product p = getProduct(id);
             if (p.InStock <= 0)
                 throw new SoldOutException("This product was sold out.");
-            cart.ItemsList.ToList().Add(mapper.Map<DO.Product, BO.OrderItem>(p));
+            BO.OrderItem item = mapper.Map<DO.Product, BO.OrderItem>(p);
+            item.TotalPrice = item.Price;
+           (cart.ItemsList as List<BO.OrderItem>).Add(item);
             cart.TotalPrice += p.Price;
         }
 
@@ -117,21 +120,26 @@ internal class Cart : ICart
         //check amount
         if (item.Amount < amount && isSoldOut(item.ProductId, amount))
             throw new SoldOutException("This product is sold out.");
-        else if (amount == 0)
-            cart.ItemsList.ToList().Remove(item);
 
-        //update amount
-        item.Amount = amount;
-        item.TotalPrice = item.Price * amount;
-        cart.TotalPrice = item.Price * amount;
+        (cart.ItemsList as List<BO.OrderItem>).RemoveAll(x => x.ProductId == item.ProductId);
+        if (amount != 0)
+        {
+            //update amount
+            cart.TotalPrice = cart.TotalPrice - item.TotalPrice + item.Price * amount;
+            item.Amount = amount;
+            item.TotalPrice = item.Price * amount;
+
+            //add updated item
+            (cart.ItemsList as List<BO.OrderItem>).Add(item);
+        }
 
         //return updated cart.
         return cart;
 
     }
 
-    
-    
+
+
     #region UTILS
 
     /// <summary>

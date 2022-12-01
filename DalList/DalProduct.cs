@@ -39,10 +39,10 @@ internal class DalProduct : IProduct
     /// <exception cref="Exception">Thrown when the product cant be found.</exception>
     public Product GetById(int id)
     {
-        Product p = DataSource.productsList.FirstOrDefault(x => x.ID == id, new Product { ID = 0 });
-        if (p.ID == 0)
+        int index = DataSource.productsList.ToList().FindIndex(x => x.ID == id);
+        if (index == -1)
             throw new NotFoundException("Cannot find this product.");
-        return p;
+        return DataSource.productsList.ToList()[index];
     }
 
 

@@ -19,7 +19,7 @@ static internal class Utils
     /// <param name="t">The object to be described.</param>
     /// <param name="tabs">Number of tabs at the beginnig of the string.</param>
     /// <returns>A string representing an object.</returns>
-    public static string ToStringProperty<T>(this T t,int tabs=0)
+    public static string ToStringProperty<T>(this T t)
     {
         string str = "";
         foreach (PropertyInfo item in t.GetType().GetProperties())
@@ -30,13 +30,13 @@ static internal class Utils
                 str += "\n" + item.Name + ": ";
                 foreach (var item2 in (IEnumerable)item.GetValue(t,null))
                 {
-                    str += "\n" + item2.ToStringProperty(tabs+1)+"\n";
+                    str += "\n" + item2.ToString();
                 }
             }
             else
-                str += "\n"+new string('\t',tabs) + item.Name +": " + item.GetValue(t, null);
+                str += "\n" + item.Name +": " + item.GetValue(t, null);
         }
-        return str;
+        return str+"\n";
     }
 
 

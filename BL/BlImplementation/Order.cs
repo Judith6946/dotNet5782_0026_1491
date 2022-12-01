@@ -30,11 +30,11 @@ internal class Order : BlApi.IOrder
         BO.OrderTracking orderTracking = mapper.Map<DO.Order, BO.OrderTracking>(order);
 
         //set the tracking list.
-        orderTracking.Tracking.ToList().Add(new Tuple<DateTime, string>(order.OrderDate, "Order approved"));
+        (orderTracking.Tracking as List<Tuple<DateTime, string>>).Add(new Tuple<DateTime, string>(order.OrderDate, "Order approved"));
         if (order.ShipDate != DateTime.MinValue)
-            orderTracking.Tracking.ToList().Add(new Tuple<DateTime, string>(order.ShipDate, "Order sent"));
+            (orderTracking.Tracking as List<Tuple<DateTime, string>>).Add(new Tuple<DateTime, string>(order.ShipDate, "Order sent"));
         if (order.DeliveryDate != DateTime.MinValue)
-            orderTracking.Tracking.ToList().Add(new Tuple<DateTime, string>(order.DeliveryDate, "Order delivered"));
+            (orderTracking.Tracking as List<Tuple<DateTime, string>>).Add(new Tuple<DateTime, string>(order.DeliveryDate, "Order delivered"));
 
         //return the tracking.
         return orderTracking;
@@ -60,12 +60,12 @@ internal class Order : BlApi.IOrder
 
         //get order items
         IEnumerable<DO.OrderItem> items = getOrderItemsByOrder(id);
-        order.TotalPrice = items.Sum(x => x.Price);
+        order.TotalPrice = items.Sum(x => x.Price * x.Amount);
         foreach (var item in items)
         {
             BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item);
             orderItem.ProductName = getProduct(item.ProductId).Name;
-            order.ItemsList.ToList().Add(orderItem);
+            (order.ItemsList as List<BO.OrderItem>).Add(orderItem);
         }
 
         //return order object.
@@ -84,7 +84,7 @@ internal class Order : BlApi.IOrder
         foreach (DO.Order o in getOrders())
         {
             BO.OrderForList orderForList = mapper.Map<DO.Order, BO.OrderForList>(o);
-            orderForList.TotalPrice = getOrderItemsByOrder(o.ID).Sum(x => x.Price);
+            orderForList.TotalPrice = getOrderItemsByOrder(o.ID).Sum(x => x.Price * x.Amount);
             orderForList.AmountOfItems = getOrderItemsByOrder(o.ID).Sum(x => x.Amount);
             orders.Add(orderForList);
         };
@@ -158,7 +158,7 @@ internal class Order : BlApi.IOrder
         order.ShipDate = DateTime.Now;
         BO.Order order2 = mapper.Map<DO.Order, BO.Order>(order);
         order2.Status = BO.Enums.OrderStatus.sent;
-        order2.TotalPrice = orderItems.Sum(x => x.Price);
+        order2.TotalPrice = orderItems.Sum(x => x.Price*x.Amount);
 
         //add items
         foreach (var item in orderItems)
@@ -171,9 +171,52 @@ internal class Order : BlApi.IOrder
         updateProduct(order);
         return order2;
 
-    
+
     }
 
+    /// <summary>
+    /// Update an amount of item on order.
+    /// </summary>
+    /// <param name="id">Id of order</param>
+    /// <param name="productId">Id of product</param>
+    /// <param name="amount">Updated amount</param>
+    /// <returns>Updated order</returns>
+    /// <exception cref="InvalidInputException">Thrown when input is invalid</exception>
+    /// <exception cref="ImpossibleException">Thrown when order was already shipped</exception>
+    /// <exception cref="NotFoundException">Thrown when no such product was found on this order.</exception>
+    public BO.Order UpdateOrder(int id, int productId, int amount)
+    {
+        //check id validity.
+        if (id <= 0)
+            throw new InvalidInputException("Id is a positive value.");
+
+        //find order.
+        DO.Order order = getOrder(id);
+        if (order.ShipDate != DateTime.MinValue)
+            throw new ImpossibleException("Order was already shipped.");
+        BO.Order order2 = mapper.Map<DO.Order, BO.Order>(order);
+
+        //find order items
+        IEnumerable<DO.OrderItem> orderItems = getOrderItemsByOrder(id);
+        int index=(orderItems as List<DO.OrderItem>).FindIndex(x => x.ProductId == productId);
+        if (index == -1)
+            throw new NotFoundException("Could not found this product.");
+        DO.OrderItem item1 = (orderItems as List<DO.OrderItem>)[index];
+        item1.Amount = amount;
+        updateOrderItem(item1);
+        order2.TotalPrice = orderItems.Sum(x => x.Price * x.Amount);
+
+        //add items
+        foreach (var item in orderItems)
+        {
+            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item);
+            orderItem.ProductName = getProduct(item.ProductId).Name;
+            (order2.ItemsList as List<BO.OrderItem>).Add(orderItem);
+        }
+
+        
+        return order2;
+    }
 
 
     #region UTILS
@@ -268,6 +311,24 @@ internal class Order : BlApi.IOrder
         catch (Exception e)
         {
             throw new DalException("Exception was thrown while updating the order.", e);
+        }
+
+    }
+
+    /// <summary>
+    /// Update an order item.
+    /// </summary>
+    /// <param name="product">Order item object to be update.</param>
+    /// <exception cref="DalException">Thrown when DB could not update the order item.</exception>
+    private static void updateOrderItem(DO.OrderItem item)
+    {
+        try
+        {
+            Dal.OrderItem.Update(item);
+        }
+        catch (Exception e)
+        {
+            throw new DalException("Exception was thrown while updating the order item.", e);
         }
 
     }

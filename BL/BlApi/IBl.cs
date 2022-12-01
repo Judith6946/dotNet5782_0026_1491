@@ -1,6 +1,9 @@
 ﻿
 namespace BlApi;
 
+/// <summary>
+/// BL interface
+/// </summary>
 public interface IBl
 {
     public IProduct Product { get; }
