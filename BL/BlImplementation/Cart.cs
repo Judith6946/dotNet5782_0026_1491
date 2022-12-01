@@ -1,128 +1,240 @@
 ﻿
+using AutoMapper;
 using BlApi;
+using BO;
 using Dal;
 using DalApi;
 
 namespace BlImplementation;
 
+/// <summary>
+///  Implementation of cart methods (BL layer)
+/// </summary>
 internal class Cart : ICart
 {
 
-    private IDal Dal = new DalList();
+    private static IDal Dal = new DalList();
+    private static IMapper mapper = new MapperConfiguration(cfg => cfg.AddProfile(new BoProfile())).CreateMapper();
+
+
+
+    /// <summary>
+    /// Add an item to customer cart.
+    /// </summary>
+    /// <param name="cart">Customer cart.</param>
+    /// <param name="id">Id of product to be added.</param>
+    /// <returns>Updated cart.</returns>
+    /// <exception cref="SoldOutException">Thrown when the required product is sold out.</exception>
     public BO.Cart AddItem(BO.Cart cart, int id)
+    {
+
+        //find item on the items list of cart.
+        BO.OrderItem item = cart.ItemsList.FirstOrDefault(x => x.ID == id, null);
+
+        //if you find the item - update amount.
+        if (item != null)
+        {
+            if (isSoldOut(id, item.Amount + 1))
+                throw new SoldOutException("This product was sold out.");
+            item.Amount++;
+            item.TotalPrice += item.Price;
+            cart.TotalPrice += item.Price;
+        }
+
+        //did not find the item - add it now.
+        else
+        {
+            DO.Product p = getProduct(id);
+            if (p.InStock <= 0)
+                throw new SoldOutException("This product was sold out.");
+            cart.ItemsList.ToList().Add(mapper.Map<DO.Product, BO.OrderItem>(p));
+            cart.TotalPrice += p.Price;
+        }
+
+
+        return cart;
+
+
+
+    }
+
+
+    /// <summary>
+    /// Make an order from customer cart.
+    /// </summary>
+    /// <param name="cart">Customer cart.</param>
+    /// <exception cref="SoldOutException">Thrown when one of the products was sold out.</exception>
+    public void MakeOrder(BO.Cart cart)
+    {
+
+        //add בדיקת תקינות
+
+        //add new order
+        DO.Order order = mapper.Map<BO.Cart, DO.Order>(cart);
+        int id = addOrder(order);
+
+        //add all order items...
+        foreach (var item in cart.ItemsList)
+        {
+            //update amount of product.
+            DO.Product p = getProduct(item.ProductId);
+            p.InStock -= item.Amount;
+            if (p.InStock < 0)
+                throw new SoldOutException($"product {p.Name}, id={p.ID} was sold out");
+            updateProduct(p);
+
+            //add an order item.
+            DO.OrderItem orderItem = mapper.Map<BO.OrderItem, DO.OrderItem>(item);
+            orderItem.OrderId = id;
+            addOrderItem(orderItem);
+        }
+
+    }
+
+
+    /// <summary>
+    /// Update amount of product on customer cart.
+    /// </summary>
+    /// <param name="cart">Customer cart.</param>
+    /// <param name="amount">Updated amount.</param>
+    /// <param name="id">Id of product to be updated.</param>
+    /// <returns>Updated cart.</returns>
+    /// <exception cref="InvalidInputException">Thrown when amount or id is invalid</exception>
+    /// <exception cref="NotFoundException">Thrown when product is not found on cart.</exception>
+    /// <exception cref="SoldOutException">Thrown when product is sold out.</exception>
+    public BO.Cart UpdateAmount(BO.Cart cart, int amount, int id)
+    {
+
+        //check input validity
+        if (amount < 0 || id < 0)
+            throw new InvalidInputException("Amount/Id cannot be negative.");
+
+        //find the item
+        BO.OrderItem item = cart.ItemsList.FirstOrDefault(x => x.ProductId == id, null);
+        if (item == null)
+            throw new NotFoundException("Cannot find this product on your cart.");
+
+        //check amount
+        if (item.Amount < amount && isSoldOut(item.ProductId, amount))
+            throw new SoldOutException("This product is sold out.");
+        else if (amount == 0)
+            cart.ItemsList.ToList().Remove(item);
+
+        //update amount
+        item.Amount = amount;
+        item.TotalPrice = item.Price * amount;
+        cart.TotalPrice = item.Price * amount;
+
+        //return updated cart.
+        return cart;
+
+    }
+
+    
+    
+    #region UTILS
+
+    /// <summary>
+    /// Determines whether the product is sold out.
+    /// </summary>
+    /// <param name="id">Id of product to be checked.</param>
+    /// <param name="amount">Needed amount of product.</param>
+    /// <returns>Whether the product is sold out.</returns>
+    /// <exception cref="DalException">Thrown when DB could not get the product details.</exception>
+    private static bool isSoldOut(int id, int amount)
     {
         try
         {
-            BO.OrderItem item = cart.ItemsList.FirstOrDefault(x => x.ID == id, null);
-            if (item != null)
-            {
-                if (Dal.Product.GetById(id).InStock <= item.Amount)
-                    throw new Exception();
-                item.Amount++;
-                item.TotalPrice += item.Price;
-                cart.TotalPrice += item.Price;
-            }
-            else
-            {
-               DO.Product p=Dal.Product.GetAll().FirstOrDefault(x => x.ID == id,new DO.Product() { ID=0});
-               if(p.ID==0||p.InStock<=0)
-                    throw new Exception();
-                ((List<BO.OrderItem>)cart.ItemsList).Add(new BO.OrderItem()
-                {
-                    ID = 0,
-                    Amount = 1,
-                    Price = p.Price,
-                    ProductId = p.ID,
-                    ProductName = p.Name,
-                    TotalPrice = p.Price
-                });
-                cart.TotalPrice+=p.Price;
-            }
-            return cart;
+            return Dal.Product.GetById(id).InStock <= amount;
         }
         catch (Exception e)
         {
-            throw new Exception();
+            throw new DalException("Exception was thrown while getting the product.", e);
+        }
+    }
+
+
+    /// <summary>
+    /// Get a product by id.
+    /// </summary>
+    /// <param name="id">Id of required product</param>
+    /// <returns>Product entity</returns>
+    /// <exception cref="DalException">Thrown when DB could not get the product.</exception>
+    private static DO.Product getProduct(int id)
+    {
+        try
+        {
+            return Dal.Product.GetById(id);
+        }
+        catch (Exception e)
+        {
+            throw new DalException("Exception was thrown while getting the product.", e);
         }
 
     }
 
-    public void MakeOrder(BO.Cart cart)
+
+    /// <summary>
+    /// Add an order to DB.
+    /// </summary>
+    /// <param name="order">Order object to be added.</param>
+    /// <returns>Id of new order.</returns>
+    /// <exception cref="DalException">Thrown when DB could not add the order.</exception>
+    private static int addOrder(DO.Order order)
     {
         try
         {
-            //add בדיקת תקינות
-            DO.Order order = new DO.Order()
-            {
-                CustomerAdress=cart.CustomerAdress,
-                CustomerEmail=cart.CustomerEmail,
-                CustomerName=cart.CustomerName, 
-                OrderDate=DateTime.Now,
-                DeliveryDate=DateTime.MinValue,
-                ShipDate=DateTime.MinValue,
-            };
             int id = Dal.Order.Add(order);
-
-            foreach (var item in cart.ItemsList)
-            {
-
-                DO.Product p = Dal.Product.GetById(item.ProductId);
-                p.InStock -= item.Amount;
-                if (p.InStock < 0)
-                    throw new Exception();
-                Dal.Product.Update(p);
-
-                Dal.OrderItem.Add(new DO.OrderItem()
-                {
-                    Amount = item.Amount,
-                    Price = item.Price,
-                    ProductId = item.ProductId,
-                    OrderId = id
-                });
-                
-               
-            }
-
+            return id;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-
+            throw new DalException("Exception was thrown while adding the order.", e);
         }
+
     }
 
-    public BO.Cart UpdateAmount(BO.Cart cart, int amount, int id)
+
+    /// <summary>
+    /// Add an order item to DB.
+    /// </summary>
+    /// <param name="orderItem">Order item object to be added.</param>
+    /// <returns>Id of new order item.</returns>
+    /// <exception cref="DalException">Thrown when DB could not add the order item.</exception>
+    private static int addOrderItem(DO.OrderItem orderItem)
     {
         try
         {
-            BO.OrderItem item = cart.ItemsList.FirstOrDefault(x => x.ProductId == id, null);
-            if (item == null)
-                throw new Exception();
-            if(item.Amount > amount)
-            {
-                if (Dal.Product.GetById(id).InStock <= item.Amount)
-                    throw new Exception();
-                item.Amount++;
-                item.TotalPrice += item.Price;
-                cart.TotalPrice += item.Price;
-            }
-            else
-            {
-                item.Amount--;
-                item.TotalPrice -= item.Price;
-                cart.TotalPrice -= item.Price;
-                if(item.Amount == 0)
-                {
-                    cart.ItemsList.ToList().Remove(item);
-                }
-            }
-
-            return cart;
-
+            int id = Dal.OrderItem.Add(orderItem);
+            return id;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            throw new Exception();
+            throw new DalException("Exception was thrown while adding the order item.", e);
         }
+
     }
+
+
+    /// <summary>
+    /// Update a product.
+    /// </summary>
+    /// <param name="product">Product object to be update.</param>
+    /// <exception cref="DalException">Thrown when DB could not update the product.</exception>
+    private static void updateProduct(DO.Product product)
+    {
+        try
+        {
+            Dal.Product.Update(product);
+        }
+        catch (Exception e)
+        {
+            throw new DalException("Exception was thrown while updating the product.", e);
+        }
+
+    }
+
+
+    #endregion
 
 }

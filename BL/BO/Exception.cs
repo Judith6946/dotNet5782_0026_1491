@@ -16,6 +16,12 @@ public class AlreadyDoneException : Exception
 
 }
 
+public class NotFoundException : Exception
+{
+    public NotFoundException(string message) : base(message) { }
+
+}
+
 public class SoldOutException : Exception
 {
     public SoldOutException(string message) : base(message) { }
