@@ -1,4 +1,5 @@
 ﻿
+using AutoMapper;
 using Dal;
 using DalApi;
 using AutoMapper;
