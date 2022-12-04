@@ -70,8 +70,7 @@ internal class Cart : ICart
     public void MakeOrder(BO.Cart cart)
     {
 
-        //add בדיקת תקינות
-
+        checkOrderValidity(cart);
         //add new order
         DO.Order order = mapper.Map<BO.Cart, DO.Order>(cart);
         int id = addOrder(order);
@@ -115,7 +114,7 @@ internal class Cart : ICart
         //find the item
         BO.OrderItem item = cart.ItemsList.FirstOrDefault(x => x.ProductId == id, null);
         if (item == null)
-            throw new NotFoundException("Cannot find this product on your cart.");
+            throw new BO.NotFoundException("Cannot find this product on your cart.");
 
         //check amount
         if (item.Amount < amount && isSoldOut(item.ProductId, amount))
@@ -242,6 +241,19 @@ internal class Cart : ICart
 
     }
 
+    private static void checkOrderValidity(BO.Cart cart)
+    {
+        if(cart.CustomerAdress==""||cart.CustomerName==""||cart.CustomerEmail=="")
+           throw new InvalidInputException ("address & name & email cannot be empty");
+        foreach (var item in cart.ItemsList)
+        {
+            if(item.Price<0||item.Amount<0)
+                throw new InvalidInputException("price & amount cannot be negative");
+            var product = getProduct(item.ProductId);
+            if (product.InStock < item.Amount)
+                throw new SoldOutException($"product {item.ProductId} was sold out");
+        }
+    }
 
     #endregion
 

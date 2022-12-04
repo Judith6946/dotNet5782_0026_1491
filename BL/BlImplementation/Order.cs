@@ -200,7 +200,7 @@ internal class Order : BlApi.IOrder
         IEnumerable<DO.OrderItem> orderItems = getOrderItemsByOrder(id);
         int index=(orderItems as List<DO.OrderItem>).FindIndex(x => x.ProductId == productId);
         if (index == -1)
-            throw new NotFoundException("Could not found this product.");
+            throw new BO.NotFoundException("Could not found this product.");
         DO.OrderItem item1 = (orderItems as List<DO.OrderItem>)[index];
         item1.Amount = amount;
         updateOrderItem(item1);

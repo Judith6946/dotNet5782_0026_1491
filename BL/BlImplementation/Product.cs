@@ -27,7 +27,7 @@ internal class Product : BlApi.IProduct
     public void AddProduct(BO.Product product)
     {
         if (product.ID <= 0 || product.Name == "" || product.InStock < 0 || product.Price < 0)
-            throw new InvalidInputException("");
+            throw new InvalidInputException("product details are not valid.");
 
         try
         {
@@ -48,6 +48,10 @@ internal class Product : BlApi.IProduct
     /// <exception cref="DalException">Thrown when DB could not delete the product. </exception>
     public void DeleteProduct(int id)
     {
+        if (id <= 0)
+            throw new InvalidInputException("Id was negative.");
+        if (isOrdered(id))
+            throw new ImpossibleException("Cannot delete a product that already has been ordered.");
         try
         {
             Dal.Product.Delete(id);
@@ -142,15 +146,44 @@ internal class Product : BlApi.IProduct
     /// <exception cref="DalException">Thrown when DB could not update the products.</exception>
     public void UpdateProduct(BO.Product product)
     {
+        if (product.ID <= 0 || product.Name == "" || product.InStock < 0 || product.Price < 0)
+            throw new InvalidInputException("Product details are invalid.");
         try
         {
-            if (product.ID <= 0 || product.Name == "" || product.InStock < 0 || product.Price < 0)
-                throw new InvalidInputException("Product details are invalid.");
             Dal.Product.Update(mapper.Map<BO.Product,DO.Product>(product));
         }
         catch (Exception e)
         {
             throw new DalException("Exception was thrown while updating the products",e);
+        }
+    }
+
+
+    /// <summary>
+    /// Check if a product is ordered.
+    /// </summary>
+    /// <param name="productId">Id of product to be checked</param>
+    /// <returns>Weather the product was ordered</returns>
+    /// <exception cref="DalException">Thrown when DB could not get the data.</exception>
+    private bool isOrdered(int productId)
+    {
+        try
+        {
+            IEnumerable<DO.Order> orders = Dal.Order.GetAll();
+            foreach (DO.Order order in orders)
+            {
+                IEnumerable< DO.OrderItem > orderItems = Dal.OrderItem.GetByOrder(order.ID);
+                foreach (DO.OrderItem item in orderItems)
+                {
+                    if(item.ProductId == productId)
+                        return true;
+                }
+            }
+            return false;
+        }
+        catch(Exception e)
+        {
+            throw new DalException("Exception was thrown while getting orders details", e);
         }
     }
 

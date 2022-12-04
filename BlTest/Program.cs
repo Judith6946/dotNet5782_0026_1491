@@ -488,7 +488,7 @@ internal class Program
     /// <returns>The chosen option.</returns>
     private static ProductMenu getProductChoice()
     {
-        Console.WriteLine("\n press 0 to get all products. \n press 1 to search product by id, for manager.\n press 2 to update a product.\n press 3 to delete a product. \n press 4 to add a product.\n \n press 5 to search a product for customer\n");
+        Console.WriteLine("\n press 0 to get all products. \n press 1 to search product by id, for manager.\n press 2 to update a product.\n press 3 to delete a product. \n press 4 to add a product.\n press 5 to search a product for customer\n");
         ProductMenu c = (ProductMenu)Enum.Parse(typeof(ProductMenu), Console.ReadLine());
         return c;
     }
