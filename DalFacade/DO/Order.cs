@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace DO;
 /// <summary>
-/// Structure for Order
+/// Structure for Order.
 /// </summary>
 public struct Order
 {
