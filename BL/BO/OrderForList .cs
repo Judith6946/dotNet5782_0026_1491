@@ -15,12 +15,12 @@ public class OrderForList
     /// <summary>
     /// Name of customer.
     /// </summary>
-    public string CustomerName { get; set; }
+    public string? CustomerName { get; set; }
 
     /// <summary>
     /// status of order.
     /// </summary>
-    public Enums.OrderStatus StatusOrder { get; set; }
+    public Enums.OrderStatus? StatusOrder { get; set; }
 
     /// <summary>
     /// amount of products in order.

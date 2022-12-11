@@ -14,42 +14,42 @@ public class Order
     /// <summary>
     /// Name of Customer.
     /// </summary>
-    public string CustomerName { get; set; }
+    public string? CustomerName { get; set; }
 
     /// <summary>
     /// Email of customer.
     /// </summary>
-    public string CustomerEmail { get; set; }
+    public string? CustomerEmail { get; set; }
 
     /// <summary>
     /// Adress of customer.
     /// </summary>
-    public string CustomerAdress { get; set; }
+    public string? CustomerAdress { get; set; }
 
     /// <summary>
     /// Date of order.
     /// </summary>
-    public DateTime OrderDate { get; set; }
+    public DateTime? OrderDate { get; set; }
 
     /// <summary>
     /// Ship date of order.
     /// </summary>
-    public DateTime ShipDate { get; set; }
+    public DateTime? ShipDate { get; set; }
 
     /// <summary>
     /// Delivery date of order.
     /// </summary>
-    public DateTime DeliveryDate { get; set; }
+    public DateTime? DeliveryDate { get; set; }
 
     /// <summary>
     /// Status of order.
     /// </summary>
-    public Enums.OrderStatus Status { get; set; }
+    public Enums.OrderStatus? Status { get; set; }
 
     /// <summary>
     /// List of items on order.
     /// </summary>
-    public IEnumerable<OrderItem> ItemsList { get; set; }
+    public IEnumerable<OrderItem?>? ItemsList { get; set; }
 
     /// <summary>
     /// Total price of order.

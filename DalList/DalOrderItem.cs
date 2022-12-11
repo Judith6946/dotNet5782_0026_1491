@@ -32,10 +32,7 @@ public class DalOrderItem : IOrderItem
     /// <exception cref="Exception">Thrown when the OrderItem cant be found.</exception>
     public OrderItem GetById(int id)
     {
-        int index = DataSource.orderItemsList.ToList().FindIndex(x => x.ID == id);
-        if (index == -1)
-            throw new NotFoundException("Cannot find this item.");
-        return DataSource.orderItemsList.ToList()[index];
+        return getByCondition(x => x?.ID == id) ?? throw new NotFoundException("Cannot find this order item.");
     }
 
 
@@ -44,9 +41,26 @@ public class DalOrderItem : IOrderItem
     /// Get all of products. 
     /// </summary>
     /// <returns>Products array.</returns>
-    public IEnumerable<OrderItem> GetAll()
+    public IEnumerable<OrderItem?> GetAll(Func<OrderItem?, bool>? predicate = null)
     {
-        return new List<OrderItem>(DataSource.orderItemsList);
+        List<OrderItem?> items = new List<OrderItem?>(DataSource.orderItemsList);
+        if (predicate == null)
+            return items;
+        return items.Where(predicate);
+    }
+
+    /// <summary>
+    /// Get an order item by condition.
+    /// </summary>
+    /// <param name="predicate">Condition function.</param>
+    /// <returns></returns>
+    /// <exception cref="InvalidInputException">Thrown when condition is null</exception>
+    /// <exception cref="NotFoundException">Thrown when order item cant be found.</exception>
+    public OrderItem? getByCondition(Func<OrderItem?, bool>? predicate)
+    {
+        return DataSource.orderItemsList.FirstOrDefault(predicate ??
+            throw new InvalidInputException("condition cannot be null"), null) ??
+            throw new NotFoundException("cannot find this product.");
     }
 
 
@@ -57,11 +71,8 @@ public class DalOrderItem : IOrderItem
     /// <param name="id">Id of OrderItem to be deleted</param>
     public void Delete(int id)
     {
-        if (!DataSource.orderItemsList.Any(x => x.ID == id))
-        {
-            throw new NotFoundException("Item is not exist.");
-        }
-        DataSource.orderItemsList.RemoveAll(x => x.ID == id);
+        _ = getByCondition(x => x?.ID == id) ?? throw new NotFoundException("Order item is not exist.");
+        DataSource.orderItemsList.RemoveAll(x => x?.ID == id);
     }
 
 
@@ -92,10 +103,8 @@ public class DalOrderItem : IOrderItem
     /// <exception cref="Exception">Thrown when no such item was found.</exception>
     public OrderItem GetByOrderAndProduct(int orderId, int productId)
     {
-        int index = DataSource.orderItemsList.ToList().FindIndex(x => x.OrderId == orderId && x.ProductId == productId);
-        if (index == -1)
+        return getByCondition(x => x?.OrderId == orderId && x?.ProductId == productId)?? 
             throw new NotFoundException("Cannot find this item.");
-        return DataSource.orderItemsList.ToList()[index];
     }
 
 
@@ -106,9 +115,9 @@ public class DalOrderItem : IOrderItem
     /// <param name="orderId">The order id.</param>
     /// <returns>All order items of the given order.</returns>
     /// /// <exception cref="Exception">Thrown when the order has no items.</exception>
-    public IEnumerable<OrderItem> GetByOrder(int orderId)
+    public IEnumerable<OrderItem?> GetByOrder(int orderId)
     {
-        return DataSource.orderItemsList.Where(x => x.OrderId == orderId).ToList<OrderItem>();
+        return GetAll(x => x?.OrderId == orderId);
     }
 
 

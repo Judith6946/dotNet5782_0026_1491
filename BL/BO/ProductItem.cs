@@ -16,7 +16,7 @@ public class ProductItem
     /// <summary>
     /// Name of product-item.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
 
     /// <summary>
@@ -28,7 +28,7 @@ public class ProductItem
     /// <summary>
     /// Category of product-item.
     /// </summary>
-    public Enums.Category Category { get; set; }
+    public Enums.Category? Category { get; set; }
 
 
     /// <summary>

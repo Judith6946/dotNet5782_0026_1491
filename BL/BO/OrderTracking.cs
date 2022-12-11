@@ -15,13 +15,13 @@ public class OrderTracking
     /// <summary>
     /// status of order.
     /// </summary>
-    public Enums.OrderStatus StatusOrder { get; set; }
+    public Enums.OrderStatus? StatusOrder { get; set; }
 
 
     /// <summary>
     /// List of touples, representing the order process.
     /// </summary>
-    public IEnumerable<Tuple<DateTime, string>> Tracking { get; set; }
+    public IEnumerable<Tuple<DateTime?, string?>>? Tracking { get; set; }
 
 
     /// <summary>

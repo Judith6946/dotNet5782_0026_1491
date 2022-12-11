@@ -17,7 +17,7 @@ public class ProductForList
     /// <summary>
     ///  Name of product-for-list.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
 
     /// <summary>
@@ -29,7 +29,7 @@ public class ProductForList
     /// <summary>
     ///  Category of product-for-list.
     /// </summary>
-    public Enums.Category Category { get; set; }
+    public Enums.Category? Category { get; set; }
 
 
     /// <summary>

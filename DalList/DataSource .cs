@@ -37,9 +37,9 @@ internal static class DataSource
     private static readonly Random rn = new Random();
 
     //entities lists
-    internal static List<Product> productsList = new List<Product>();
-    internal static List<Order>  ordersList = new List<Order> ();
-    internal static List<OrderItem>  orderItemsList = new List<OrderItem> ();
+    internal static List<Product?> productsList = new List<Product?>();
+    internal static List<Order?>  ordersList = new List<Order?> ();
+    internal static List<OrderItem?>  orderItemsList = new List<OrderItem?> ();
 
     #region ctor
     /// <summary>

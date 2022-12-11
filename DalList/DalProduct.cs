@@ -1,5 +1,6 @@
 ﻿using DalApi;
 using DO;
+using System.Linq;
 
 namespace Dal;
 
@@ -18,8 +19,7 @@ internal class DalProduct : IProduct
     public int Add(Product p)
     {
         //Check whether the id does not already exist.
-
-        if (DataSource.productsList.Any(x => x.ID == p.ID))
+        if (getByCondition(x => x?.ID == p.ID) != null)
         {
             throw new AlreadyExistException("Product id is aready exist.");
         }
@@ -39,10 +39,20 @@ internal class DalProduct : IProduct
     /// <exception cref="Exception">Thrown when the product cant be found.</exception>
     public Product GetById(int id)
     {
-        int index = DataSource.productsList.ToList().FindIndex(x => x.ID == id);
-        if (index == -1)
-            throw new NotFoundException("Cannot find this product.");
-        return DataSource.productsList.ToList()[index];
+        return getByCondition(x => x?.ID == id) ?? throw new NotFoundException("Cannot find this product.");
+    }
+
+
+    /// <summary>
+    /// Get a product by condition.
+    /// </summary>
+    /// <param name="predicate">Condition function.</param>
+    /// <returns></returns>
+    /// <exception cref="InvalidInputException">Thrown when condition is null</exception>
+    public Product? getByCondition(Func<Product?, bool>? predicate)
+    {
+        return DataSource.productsList.FirstOrDefault(predicate ??
+            throw new InvalidInputException("condition cannot be null"), null)
     }
 
 
@@ -50,9 +60,12 @@ internal class DalProduct : IProduct
     /// Get all of products. 
     /// </summary>
     /// <returns>Products array.</returns>
-    public IEnumerable<Product> GetAll()
+    public IEnumerable<Product?> GetAll(Func<Product?, bool>? predicate = null)
     {
-        return new List<Product>(DataSource.productsList);
+        List<Product?> products = new List<Product?>(DataSource.productsList);
+        if (predicate == null)
+            return products;
+        return products.Where(predicate);
     }
 
 
@@ -62,11 +75,8 @@ internal class DalProduct : IProduct
     /// <param name="id">Id of product to be deleted</param>
     public void Delete(int id)
     {
-        if (!DataSource.productsList.Any(x => x.ID == id))
-        {
-            throw new NotFoundException("Productis not exist.");
-        }
-        DataSource.productsList.RemoveAll(x => x.ID == id);
+        _ = getByCondition(x => x?.ID == id) ?? throw new NotFoundException("Product is not exist.");
+        DataSource.productsList.RemoveAll(x => x?.ID == id);
     }
 
 
@@ -77,10 +87,10 @@ internal class DalProduct : IProduct
     /// <exception cref="Exception">Thrown when product cant be found.</exception>
     public void Update(Product p)
     {
-        int index = DataSource.productsList.FindIndex(x => x.ID == p.ID);
+        int index = DataSource.productsList.FindIndex(x => x?.ID == p.ID);
         if (index == -1)
         {
-            throw new NotFoundException("Productis not exist.");
+            throw new NotFoundException("Product is not exist.");
         }
         DataSource.productsList[index] = p;
     }
