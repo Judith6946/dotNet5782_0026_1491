@@ -74,7 +74,7 @@ internal static class DataSource
     {
         string[] productNames = new string[10] { "great ring", "golden necklace", "rose bracelet", "goldfild bracelet", "small silver earrings", "kids earrings", "personal design silver ring", "Wedding ring", "Long decorated earring", "Personalized designer necklace" };
         Enums.Category[] productsCategories = new Enums.Category[10] { Enums.Category.ring, Enums.Category.necklace, Enums.Category.bracelet, Enums.Category.bracelet, Enums.Category.earrings, Enums.Category.earrings, Enums.Category.ring, Enums.Category.ring, Enums.Category.earrings, Enums.Category.necklace };
-        int i;
+        
 
         for (int j = 0; j < 10; j++)
         {
@@ -100,7 +100,7 @@ internal static class DataSource
         string[] customerNames = new string[10] { "Yehudit", "Chaya", "Sara", "David", "Moshe", "Tovi", "Adina", "Avi", "Dan", "Miri" };
         string[] customerEmails = new string[10] { "yt9074547@gmail.com", "Chaya9@gmail.com", "Sara@gmail.com", "David@gmail.com", "Moshe@gmail.com", "Tovi@gmail.com", "Adina@gmail.com", "Avi@gmail.com", "Dan@gmail.com", "Miri@gmail.com" };
         string[] customerAdress = new string[10] { "Rdak 4 Elad", "Haperach 5 Petach Tikva", "Rdak 4 Tel Aviv", "Dror 4 Bnei Brak", "Hatamar 67 Beit Shemesh", "Rdak 5 Elad", "Hateena 2 Elad", "Givataaim", "Derech Hashalom 11 Tel Aviv", "Kalanit 10 Eilat" };
-        int i;
+        
 
         for (int j = 0; j < 20; j++)
         {
@@ -142,9 +142,9 @@ internal static class DataSource
            
             OrderItem item = new OrderItem();
            item.ID = Config.OrderItemLastId;
-           item.OrderId = ordersList[j % 20].ID;
-           item.ProductId = productsList[j % 10].ID;
-           item.Price = productsList[j % 10].Price;
+           item.OrderId = (int)ordersList[j % 20]?.ID!;
+           item.ProductId = (int)productsList[j % 10]?.ID!;
+           item.Price = (int)productsList[j % 10]?.Price!;
            item.Amount = rn.Next(1, 5);
            
             orderItemsList.Add(item);

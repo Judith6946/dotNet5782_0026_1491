@@ -27,14 +27,16 @@ internal class Cart : ICart
     /// <exception cref="SoldOutException">Thrown when the required product is sold out.</exception>
     public BO.Cart AddItem(BO.Cart cart, int id)
     {
+        if (cart.ItemsList == null)
+            cart.ItemsList = new List<OrderItem?>();
 
         //find item on the items list of cart.
-        int index = cart.ItemsList.ToList().FindIndex(x => x.ProductId == id);
+        int index = cart.ItemsList.FindIndex(x => x!.ProductId == id);
 
         //if you find the item - update amount.
         if (index != -1)
         {
-            BO.OrderItem item = cart.ItemsList.ToList()[index];
+            BO.OrderItem item = cart.ItemsList[index]!;
             if (isSoldOut(id, item.Amount + 1))
                 throw new SoldOutException("This product was sold out.");
             item.Amount++;
@@ -50,17 +52,11 @@ internal class Cart : ICart
                 throw new SoldOutException("This product was sold out.");
             BO.OrderItem item = mapper.Map<DO.Product, BO.OrderItem>(p);
             item.TotalPrice = item.Price;
-           (cart.ItemsList as List<BO.OrderItem>).Add(item);
+            cart.ItemsList.Add(item);
             cart.TotalPrice += p.Price;
         }
-
-
         return cart;
-
-
-
     }
-
 
     /// <summary>
     /// Make an order from customer cart.
@@ -76,10 +72,10 @@ internal class Cart : ICart
         int id = addOrder(order);
 
         //add all order items...
-        foreach (var item in cart.ItemsList)
+        foreach (var item in cart.ItemsList!)
         {
             //update amount of product.
-            DO.Product p = getProduct(item.ProductId);
+            DO.Product p = getProduct(item!.ProductId);
             p.InStock -= item.Amount;
             if (p.InStock < 0)
                 throw new SoldOutException($"product {p.Name}, id={p.ID} was sold out");
@@ -106,13 +102,15 @@ internal class Cart : ICart
     /// <exception cref="SoldOutException">Thrown when product is sold out.</exception>
     public BO.Cart UpdateAmount(BO.Cart cart, int amount, int id)
     {
+        if (cart.ItemsList == null)
+            throw new InvalidInputException("your cart is empty");
 
         //check input validity
         if (amount < 0 || id < 0)
             throw new InvalidInputException("Amount/Id cannot be negative.");
 
         //find the item
-        BO.OrderItem item = cart.ItemsList.FirstOrDefault(x => x.ProductId == id, null);
+        BO.OrderItem? item = cart.ItemsList.FirstOrDefault(x => x!.ProductId == id, null);
         if (item == null)
             throw new BO.NotFoundException("Cannot find this product on your cart.");
 
@@ -120,7 +118,7 @@ internal class Cart : ICart
         if (item.Amount < amount && isSoldOut(item.ProductId, amount))
             throw new SoldOutException("This product is sold out.");
 
-        (cart.ItemsList as List<BO.OrderItem>).RemoveAll(x => x.ProductId == item.ProductId);
+        cart.ItemsList.RemoveAll(x => x!.ProductId == item.ProductId);
         if (amount != 0)
         {
             //update amount
@@ -129,7 +127,7 @@ internal class Cart : ICart
             item.TotalPrice = item.Price * amount;
 
             //add updated item
-            (cart.ItemsList as List<BO.OrderItem>).Add(item);
+            cart.ItemsList.Add(item);
         }
 
         //return updated cart.
@@ -243,11 +241,13 @@ internal class Cart : ICart
 
     private static void checkOrderValidity(BO.Cart cart)
     {
-        if(cart.CustomerAdress==""||cart.CustomerName==""||cart.CustomerEmail=="")
-           throw new InvalidInputException ("address & name & email cannot be empty");
+        if (cart.CustomerAdress == "" || cart.CustomerName == "" || cart.CustomerEmail == ""||cart.ItemsList==null)
+            throw new InvalidInputException("address & name & email & items cannot be empty");
         foreach (var item in cart.ItemsList)
         {
-            if(item.Price<0||item.Amount<0)
+            if (item == null)
+                throw new InvalidInputException("item cannot be null");
+            if (item.Price < 0 || item.Amount < 0)
                 throw new InvalidInputException("price & amount cannot be negative");
             var product = getProduct(item.ProductId);
             if (product.InStock < item.Amount)

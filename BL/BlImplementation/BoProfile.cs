@@ -13,13 +13,13 @@ internal class BoProfile:Profile
 
         #region Product Mappers
         
-        CreateMap<DO.Product, BO.ProductForList>().ForMember(dest => dest.Category, opts => opts.MapFrom(src => enumParser<BO.Enums.Category, DO.Enums.Category>(src.Category)));
+        CreateMap<DO.Product, BO.ProductForList>().ForMember(dest => dest.Category, opts => opts.MapFrom(src => enumParser<BO.Enums.Category, DO.Enums.Category>((DO.Enums.Category)src.Category!)));
         
-        CreateMap<BO.Product, DO.Product>().ForMember(dest => dest.Category, opts => opts.MapFrom(src => enumParser<DO.Enums.Category,BO.Enums.Category>(src.Category)));
+        CreateMap<BO.Product, DO.Product>().ForMember(dest => dest.Category, opts => opts.MapFrom(src => enumParser<DO.Enums.Category,BO.Enums.Category>((BO.Enums.Category)src.Category!)));
         
-        CreateMap<DO.Product, BO.Product>().ForMember(dest => dest.Category, opts => opts.MapFrom(src => enumParser<BO.Enums.Category, DO.Enums.Category>(src.Category)));
+        CreateMap<DO.Product, BO.Product>().ForMember(dest => dest.Category, opts => opts.MapFrom(src => enumParser<BO.Enums.Category, DO.Enums.Category>((DO.Enums.Category)src.Category!)));
         
-        CreateMap<DO.Product, BO.ProductItem>().ForMember(dest => dest.Category, opts => opts.MapFrom(src => enumParser<BO.Enums.Category, DO.Enums.Category>(src.Category)))
+        CreateMap<DO.Product, BO.ProductItem>().ForMember(dest => dest.Category, opts => opts.MapFrom(src => enumParser<BO.Enums.Category, DO.Enums.Category>((DO.Enums.Category)src.Category!)))
             .ForMember(dest=>dest.Available,opts=>opts.MapFrom(src=>src.InStock>0));
 
         #endregion
@@ -66,7 +66,8 @@ internal class BoProfile:Profile
     /// <typeparam name="K">Enum type of source.</typeparam>
     /// <param name="c">Source enum</param>
     /// <returns>Enum c, coverted to type T.</returns>
-    private static T enumParser<T,K>(K c)=> (T)Enum.Parse(typeof(K), c.ToString());
+    private static T enumParser<T,K>(K c)=> (T)Enum.Parse(typeof(K), c!.ToString()??
+        throw new BO.InvalidInputException("enum was invalid."));
 
     /// <summary>
     /// Get a status enum of an order object.

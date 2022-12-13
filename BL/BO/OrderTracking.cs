@@ -21,7 +21,7 @@ public class OrderTracking
     /// <summary>
     /// List of touples, representing the order process.
     /// </summary>
-    public IEnumerable<Tuple<DateTime?, string?>>? Tracking { get; set; }
+    public List<Tuple<DateTime?, string?>>? Tracking { get; set; }
 
 
     /// <summary>

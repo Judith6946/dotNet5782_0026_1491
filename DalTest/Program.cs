@@ -179,7 +179,7 @@ internal class Program
     private static Menue getMenu()
     {
         Console.WriteLine("Choose a menu: \n press 1 to the product menu. \n press 2 to the order menu. \n press 3 to the order item menu. \n press 0 to exit.");
-        Menue menue = (Menue)Enum.Parse(typeof(Menue), Console.ReadLine());
+        Menue menue = (Menue)Enum.Parse(typeof(Menue), Console.ReadLine() ?? throw new InvalidInputException("choice cannot be empty"));
         return menue;
     }
 
@@ -190,7 +190,7 @@ internal class Program
     private static Choice getProductChoice()
     {
         Console.WriteLine("\n press 0 to add a product. \n press 1 to search product by id.\n press 2 to print all products.\n press 3 to update a product. \n press 4 to delete a product\n");
-        Choice c = (Choice)Enum.Parse(typeof(Choice), Console.ReadLine());
+        Choice c = (Choice)Enum.Parse(typeof(Choice), Console.ReadLine() ?? throw new InvalidInputException("choice cannot be empty"));
         return c;
     }
 
@@ -201,7 +201,7 @@ internal class Program
     private static OrderItemChoice getOrderItemChoice()
     {
         Console.WriteLine("\n press 0 to add an order item. \n press 1 to search order item by id.\n press 2 to print all items.\n press 3 to update an order item. \n press 4 to delete an order item.\npress 5 to search by order id.\n press 6 to search by order and product id.\n");
-        OrderItemChoice c = (OrderItemChoice)Enum.Parse(typeof(OrderItemChoice), Console.ReadLine());
+        OrderItemChoice c = (OrderItemChoice)Enum.Parse(typeof(OrderItemChoice), Console.ReadLine()?? throw new InvalidInputException("choice cannot be empty"));
         return c;
     }
 
@@ -212,7 +212,7 @@ internal class Program
     private static Choice getOrderChoice()
     {
         Console.WriteLine("\n press 0 to add an order. \n press 1 to search order by id.\n press 2 to print all orders.\n press 3 to update an order. \n press 4 to delete an order.\n ");
-        Choice c = (Choice)Enum.Parse(typeof(Choice), Console.ReadLine());
+        Choice c = (Choice)Enum.Parse(typeof(Choice), Console.ReadLine() ?? throw new InvalidInputException("choice cannot be empty"));
         return c;
     }
 
@@ -234,11 +234,11 @@ internal class Program
         Console.WriteLine("please enter product name:");
         p.Name = Console.ReadLine();
         Console.WriteLine("please enter product price:");
-        p.Price = int.Parse(Console.ReadLine());
+        p.Price = int.Parse(Console.ReadLine() ?? throw new InvalidInputException("price cannot be empty"));
         Console.WriteLine("please enter amount in stock");
-        p.InStock = int.Parse(Console.ReadLine());
+        p.InStock = int.Parse(Console.ReadLine() ?? throw new InvalidInputException("in stock cannot be empty"));
         Console.WriteLine("please choose a category: \npress 0 for necklace \npress 1 for ring \npress 2 for bracelet \npress 3 for earrings \npress 4 for personal_design");
-        p.Category = (Enums.Category)Enum.Parse(typeof(Enums.Category), Console.ReadLine());
+        p.Category = (Enums.Category)Enum.Parse(typeof(Enums.Category), Console.ReadLine() ?? throw new InvalidInputException("category cannot be empty"));
 
         return p;
     }
@@ -249,7 +249,7 @@ internal class Program
     private static void addProduct()
     {
         Console.WriteLine("please enter product id:");
-        string s = Console.ReadLine();
+        string s = Console.ReadLine()?? throw new InvalidInputException("id cannot be empty");
         int id;
         if (int.TryParse(s, out id))
         {
@@ -264,8 +264,8 @@ internal class Program
     /// </summary>
     private static void printAllProducts()
     {
-        IEnumerable<Product> products = dal.Product.GetAll();
-        foreach (Product p in products)
+        IEnumerable<Product?> products = dal.Product.GetAll();
+        foreach (Product? p in products)
         {
             Console.WriteLine(p);
         }
@@ -277,7 +277,7 @@ internal class Program
     private static void searchProduct()
     {
         Console.WriteLine("please enter product id:");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine() ?? throw new InvalidInputException("id cannot be empty"));
         Product p = dal.Product.GetById(id);
         Console.WriteLine(p);
     }
@@ -288,7 +288,7 @@ internal class Program
     private static void updateProduct()
     {
         Console.WriteLine("please enter product id:");
-        string s = Console.ReadLine();
+        string s = Console.ReadLine()?? throw new InvalidInputException("id cannot be empty");
         int id;
         if (int.TryParse(s, out id))
         {
@@ -307,12 +307,12 @@ internal class Program
     {
         Console.WriteLine("please enter product id:");
         int id;
-        if(int.TryParse(Console.ReadLine(),out id))
+        if (int.TryParse(Console.ReadLine(), out id))
         {
             dal.Product.Delete(id);
             Console.WriteLine("Deleting succeeded");
         }
-        
+
     }
 
     #endregion
@@ -343,7 +343,10 @@ internal class Program
         if (DateTime.TryParse(Console.ReadLine(), out dt))
             order.OrderDate = dt;
         else
-            throw new Exception("Unvalid date.");
+            throw new Exception("Invalid date.");
+
+        order.ShipDate = null;
+        order.DeliveryDate = null;
 
         Console.WriteLine("please enter order ship date, if exist:");
         if (DateTime.TryParse(Console.ReadLine(), out dt))
@@ -372,8 +375,8 @@ internal class Program
     /// </summary>
     private static void printAllOrders()
     {
-       IEnumerable<Order> orders = dal.Order.GetAll();
-        foreach (Order order in orders)
+        IEnumerable<Order?> orders = dal.Order.GetAll();
+        foreach (Order? order in orders)
         {
             Console.WriteLine(order);
         }
@@ -400,7 +403,7 @@ internal class Program
     private static void updateOrder()
     {
         Console.WriteLine("please enter order id:");
-        string s = Console.ReadLine();
+        string s = Console.ReadLine() ?? throw new InvalidInputException("id cannot be empty");
         int id;
         if (int.TryParse(s, out id))
         {
@@ -424,7 +427,7 @@ internal class Program
             dal.Order.Delete(id);
             Console.WriteLine("Deleting succeeded");
         }
-           
+
     }
 
     #endregion
@@ -446,16 +449,16 @@ internal class Program
             if (id > 0)
                 item.ID = id;
             Console.WriteLine("please enter product id:");
-            item.ProductId = int.Parse(Console.ReadLine());
+            item.ProductId = int.Parse(Console.ReadLine() ?? throw new InvalidInputException("id cannot be empty"));
             Console.WriteLine("please enter order id:");
-            item.OrderId = int.Parse(Console.ReadLine());
+            item.OrderId = int.Parse(Console.ReadLine() ?? throw new InvalidInputException("id cannot be empty"));
             Console.WriteLine("please enter price:");
-            item.Price = int.Parse(Console.ReadLine());
+            item.Price = int.Parse(Console.ReadLine() ?? throw new InvalidInputException("price cannot be empty"));
             Console.WriteLine("please enter amount:");
-            item.Amount = int.Parse(Console.ReadLine());
+            item.Amount = int.Parse(Console.ReadLine() ?? throw new InvalidInputException("amount cannot be empty"));
             return item;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw new Exception("invalid value");
         }
@@ -478,8 +481,8 @@ internal class Program
     /// </summary>
     private static void printAllOrderItems()
     {
-        IEnumerable<OrderItem> items = dal.OrderItem.GetAll();
-        foreach (OrderItem item in items)
+        IEnumerable<OrderItem?> items = dal.OrderItem.GetAll();
+        foreach (OrderItem? item in items)
         {
             Console.WriteLine(item);
         }
@@ -506,7 +509,7 @@ internal class Program
     private static void updateOrderItem()
     {
         Console.WriteLine("please enter order item id:");
-        string s = Console.ReadLine();
+        string s = Console.ReadLine() ?? throw new InvalidInputException("id cannot be empty");
         int id;
         if (int.TryParse(s, out id))
         {
@@ -530,7 +533,7 @@ internal class Program
             dal.OrderItem.Delete(id);
             Console.WriteLine("Deleting succeeded");
         }
-           
+
     }
 
     /// <summary>
@@ -542,8 +545,8 @@ internal class Program
         int id;
         if (int.TryParse(Console.ReadLine(), out id))
         {
-            IEnumerable<OrderItem> items = dal.OrderItem.GetByOrder(id);
-            foreach (OrderItem item in items)
+            IEnumerable<OrderItem?> items = dal.OrderItem.GetByOrder(id);
+            foreach (OrderItem? item in items)
             {
                 Console.WriteLine(item);
             }

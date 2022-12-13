@@ -84,7 +84,7 @@ public class DalOrderItem : IOrderItem
     /// <exception cref="Exception">Thrown when orderItem cant be found.</exception>
     public void Update(OrderItem o)
     {
-        int index = DataSource.orderItemsList.FindIndex(x => x.ID == o.ID);
+        int index = DataSource.orderItemsList.FindIndex(x => x?.ID == o.ID);
         if (index == -1)
         {
             throw new NotFoundException("Item is not exist.");

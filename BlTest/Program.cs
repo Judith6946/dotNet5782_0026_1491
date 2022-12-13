@@ -8,7 +8,7 @@ internal class Program
 {
 
     private static IBl bl = new BL();
-    private static Cart cart = new Cart() { ItemsList = new List<OrderItem>(), TotalPrice = 0 };
+    private static Cart cart = new Cart() { ItemsList = new List<OrderItem?>(), TotalPrice = 0 };
 
     #region ENUMS
 

@@ -52,7 +52,7 @@ internal class DalProduct : IProduct
     public Product? getByCondition(Func<Product?, bool>? predicate)
     {
         return DataSource.productsList.FirstOrDefault(predicate ??
-            throw new InvalidInputException("condition cannot be null"), null)
+            throw new InvalidInputException("condition cannot be null"), null);
     }
 
 

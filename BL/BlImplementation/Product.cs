@@ -2,7 +2,6 @@
 using AutoMapper;
 using Dal;
 using DalApi;
-using AutoMapper;
 using BO;
 
 namespace BlImplementation;
@@ -88,7 +87,7 @@ internal class Product : BlApi.IProduct
         }
     }
 
-  
+
     /// <summary>
     /// Get a product Item on cart by id.
     /// </summary>
@@ -102,21 +101,26 @@ internal class Product : BlApi.IProduct
 
         if (id < 0)
             throw new InvalidInputException("Id cannot be nagative.");
+        _ = cart ?? throw new InvalidInputException("cart was null");
+        _ = cart?.ItemsList ?? throw new InvalidInputException("no products in your cart.");
+
+        BO.OrderItem item = cart?.ItemsList?.FirstOrDefault(x => x?.ProductId == id, null) ??
+                 throw new InvalidInputException("No such product in your cart.");
+
         try
         {
             DO.Product p = Dal.Product.GetById(id);
             BO.ProductItem productItem = mapper.Map<DO.Product, BO.ProductItem>(p);
-            productItem.Amount = cart.ItemsList.First(x => x.ProductId == id).Amount;
+            productItem.Amount = item.Amount;
             return productItem;
-
         }
         catch (Exception e)
         {
-            throw new DalException("Exception was thrown while getting the product",e);
+            throw new DalException("Exception was thrown while getting the product", e);
         }
     }
 
-   
+
     /// <summary>
     /// Get products list.
     /// </summary>
@@ -127,9 +131,7 @@ internal class Product : BlApi.IProduct
         try
         {
             List<BO.ProductForList> products = new List<BO.ProductForList>();
-            foreach (DO.Product p in Dal.Product.GetAll())
-                products.Add(mapper.Map<DO.Product, BO.ProductForList>(p));
-            return products;
+            return Dal.Product.GetAll().Select(x => mapper.Map<DO.Product, BO.ProductForList>((DO.Product)x!));
         }
         catch (Exception e)
         {
@@ -150,11 +152,11 @@ internal class Product : BlApi.IProduct
             throw new InvalidInputException("Product details are invalid.");
         try
         {
-            Dal.Product.Update(mapper.Map<BO.Product,DO.Product>(product));
+            Dal.Product.Update(mapper.Map<BO.Product, DO.Product>(product));
         }
         catch (Exception e)
         {
-            throw new DalException("Exception was thrown while updating the products",e);
+            throw new DalException("Exception was thrown while updating the products", e);
         }
     }
 
@@ -169,19 +171,19 @@ internal class Product : BlApi.IProduct
     {
         try
         {
-            IEnumerable<DO.Order> orders = Dal.Order.GetAll();
-            foreach (DO.Order order in orders)
+            IEnumerable<DO.Order?> orders = Dal.Order.GetAll();
+            foreach (DO.Order? order in orders)
             {
-                IEnumerable< DO.OrderItem > orderItems = Dal.OrderItem.GetByOrder(order.ID);
-                foreach (DO.OrderItem item in orderItems)
+                IEnumerable<DO.OrderItem?> orderItems = Dal.OrderItem.GetByOrder((int)order?.ID!);
+                foreach (DO.OrderItem? item in orderItems)
                 {
-                    if(item.ProductId == productId)
+                    if (item?.ProductId == productId)
                         return true;
                 }
             }
             return false;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new DalException("Exception was thrown while getting orders details", e);
         }
