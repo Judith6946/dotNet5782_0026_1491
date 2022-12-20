@@ -10,6 +10,7 @@ public interface IProduct
 {
    
     public IEnumerable<ProductForList?> GetProducts();
+    public IEnumerable<BO.ProductForList?> GetProductsByFunc(Func<BO.ProductForList, bool> condition);
 
     public Product GetProduct(int id);
 

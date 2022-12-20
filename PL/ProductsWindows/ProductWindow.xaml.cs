@@ -12,16 +12,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PL.ProductsWindows
+namespace PL.ProductsWindows;
+
+
+/// <summary>
+/// Interaction logic for ProductWindow.xaml
+/// </summary>
+public partial class ProductWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for ProductWindow.xaml
-    /// </summary>
-    public partial class ProductWindow : Window
+    private Utils.PageStatus _pageStatus;
+    public ProductWindow()
     {
-        public ProductWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        _pageStatus = Utils.PageStatus.ADD;
     }
+
+    public ProductWindow(Utils.PageStatus status)
+    {
+        InitializeComponent();
+        _pageStatus = status;
+    }
+
+
 }

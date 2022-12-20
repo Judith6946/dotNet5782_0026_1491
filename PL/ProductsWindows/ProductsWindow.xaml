@@ -17,9 +17,11 @@ VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions >
             <ComboBox Name="AttributeSelector" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Grid.Column="1" SelectionChanged="AttributeSelector_SelectionChanged" />
             <Label Content="select a category:" HorizontalAlignment="Left" Margin="146,0,0,0" VerticalAlignment="Center"/>
+            <Button Name="btnClearAll" Grid.Column="1" Content="clear all" Margin="266,0,0,0" Grid.ColumnSpan="2" Click="btnClearAll_Click" />
         </Grid>
         <ListView Grid.Row="1" Name="productsListView" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListView.View>
@@ -28,7 +30,7 @@ VerticalAlignment="Stretch" Width="auto">
                 </GridView>
             </ListView.View>
         </ListView>
-
+        <Button Name="btnAddProduct" Content="Add new Product" Grid.Row="2" HorizontalAlignment="Left" Margin="691,5,0,0" Padding="5" Click="btnAddProduct_Click"/>
 
     </Grid>
 </Window>

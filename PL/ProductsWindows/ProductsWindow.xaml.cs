@@ -28,12 +28,25 @@ namespace PL.ProductsWindows
         {
             InitializeComponent();
             productsListView.ItemsSource = bl.Product.GetProducts();
-            AttributeSelector.ItemsSource= Enum.GetValues(typeof(BO.Enums.Category));
+            AttributeSelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.Category));
         }
 
         private void AttributeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            BO.Enums.Category selectedCategory = (BO.Enums.Category)((ComboBox)sender).SelectedItem;
+            productsListView.ItemsSource = bl.Product.GetProductsByFunc(x => x.Category == selectedCategory);
         }
+
+        private void btnClearAll_Click(object sender, RoutedEventArgs e)
+        {
+            productsListView.ItemsSource = bl.Product.GetProducts();
+        }
+
+        private void btnAddProduct_Click(object sender, RoutedEventArgs e)
+        {
+            new ProductWindow(Utils.PageStatus.ADD).Show();
+        }
+
+       
     }
 }

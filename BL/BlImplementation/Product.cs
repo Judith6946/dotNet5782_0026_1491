@@ -126,12 +126,30 @@ internal class Product : BlApi.IProduct
     /// </summary>
     /// <returns>Products list.</returns>
     /// <exception cref="DalException">Thrown when DB could not get the products.</exception>
-    public IEnumerable<BO.ProductForList> GetProducts()
+    public IEnumerable<BO.ProductForList?> GetProducts()
     {
         try
         {
             List<BO.ProductForList> products = new List<BO.ProductForList>();
             return Dal.Product.GetAll().Select(x => mapper.Map<DO.Product, BO.ProductForList>((DO.Product)x!));
+        }
+        catch (Exception e)
+        {
+            throw new DalException("Exception was thrown while getting the products", e);
+        }
+    }
+
+    /// <summary>
+    /// Get products list.
+    /// </summary>
+    /// <returns>Products list.</returns>
+    /// <exception cref="DalException">Thrown when DB could not get the products.</exception>
+    public IEnumerable<BO.ProductForList?> GetProductsByFunc(Func<BO.ProductForList,bool>condition)
+    {
+        try
+        {
+            List<BO.ProductForList> products = new List<BO.ProductForList>();
+            return Dal.Product.GetAll().Select(x => mapper.Map<DO.Product, BO.ProductForList>((DO.Product)x!)).Where(condition);
         }
         catch (Exception e)
         {
