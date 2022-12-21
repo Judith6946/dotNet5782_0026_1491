@@ -23,7 +23,7 @@ VerticalAlignment="Stretch" Width="auto">
             <Label Content="select a category:" HorizontalAlignment="Left" Margin="146,0,0,0" VerticalAlignment="Center"/>
             <Button Name="btnClearAll" Grid.Column="1" Content="clear all" Margin="266,0,0,0" Grid.ColumnSpan="2" Click="btnClearAll_Click" />
         </Grid>
-        <ListView Grid.Row="1" Name="productsListView" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ListView Grid.Row="1" Name="productsListView" d:ItemsSource="{d:SampleData ItemCount=5}"  MouseDoubleClick="productsListView_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>

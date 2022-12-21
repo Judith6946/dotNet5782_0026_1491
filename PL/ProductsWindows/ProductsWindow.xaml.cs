@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using BlImplementation;
+using BO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,9 +45,22 @@ namespace PL.ProductsWindows
 
         private void btnAddProduct_Click(object sender, RoutedEventArgs e)
         {
-            new ProductWindow(Utils.PageStatus.ADD).Show();
+            var window = new ProductWindow();
+            window.Show();
+            window.Closing += Window_Closing;
         }
 
-       
+        private void Window_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            productsListView.ItemsSource = bl.Product.GetProducts();
+        }
+
+        
+        private void productsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var window = new ProductWindow(((ProductForList)((ListView)sender).SelectedItem).ID);
+            window.Show();
+            window.Closing += Window_Closing;
+        }
     }
 }

@@ -7,19 +7,19 @@
         mc:Ignorable="d"
         Title="ProductWindow" Height="450" Width="800">
     <Grid>
-        <TextBox HorizontalAlignment="Left" Margin="228,88,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtProductId" HorizontalAlignment="Left" Margin="228,88,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtInStock" HorizontalAlignment="Left" Margin="230,280,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtProductPrice" HorizontalAlignment="Left" Margin="228,227,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="228,88,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtProductId" HorizontalAlignment="Left" Margin="228,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtInStock" HorizontalAlignment="Left" Margin="230,280,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtProductPrice" HorizontalAlignment="Left" Margin="228,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
-        <TextBox x:Name="txtProductName" HorizontalAlignment="Left" Margin="228,133,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtProductName" HorizontalAlignment="Left" Margin="228,133,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
         <Label Content="ID:" HorizontalAlignment="Left" Margin="250,68,0,0" VerticalAlignment="Top"/>
         <Label Content="Name:" HorizontalAlignment="Left" Margin="252,106,0,0" VerticalAlignment="Top"/>
         <Label Content="Price:" HorizontalAlignment="Left" Margin="250,196,0,0" VerticalAlignment="Top"/>
         <Label Content="Category:" HorizontalAlignment="Left" Margin="250,151,0,0" VerticalAlignment="Top"/>
         <Label Content="in stock:" HorizontalAlignment="Left" Margin="250,252,0,0" VerticalAlignment="Top"/>
         <ComboBox Name="cmbProductCategory" HorizontalAlignment="Left" Margin="224,176,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnAddProduct" Content="ADD" HorizontalAlignment="Left" Margin="460,359,0,0" VerticalAlignment="Top" Width="106"/>
+        <Button x:Name="btnSaveProduct" Content="Save" HorizontalAlignment="Left" Margin="460,359,0,0" VerticalAlignment="Top" Width="106" Click="btnSaveProduct_Click"/>
 
 
     </Grid>
