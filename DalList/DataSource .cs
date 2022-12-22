@@ -72,8 +72,8 @@ internal static class DataSource
     /// </summary>
     private static void initializeProducts()
     {
-        string[] productNames = new string[10] { "great ring", "golden necklace", "rose bracelet", "goldfild bracelet", "small silver earrings", "kids earrings", "personal design silver ring", "Wedding ring", "Long decorated earring", "Personalized designer necklace" };
-        Enums.Category[] productsCategories = new Enums.Category[10] { Enums.Category.ring, Enums.Category.necklace, Enums.Category.bracelet, Enums.Category.bracelet, Enums.Category.earrings, Enums.Category.earrings, Enums.Category.ring, Enums.Category.ring, Enums.Category.earrings, Enums.Category.necklace };
+        string[] productNames = new string[10] { "MacBook pro", "ipad 10 mini", "iphone 14", " apple watch mini", "air pods 2", "ahr pods 3", "ipad Air", "MacBook", "iphone 14 mini", "Apple Watch SE" };
+        Enums.Category[] productsCategories = new Enums.Category[10] { Enums.Category.Mac, Enums.Category.ipad, Enums.Category.iphone, Enums.Category.watch, Enums.Category.Accessories, Enums.Category.Accessories, Enums.Category.ipad, Enums.Category.Mac, Enums.Category.iphone, Enums.Category.watch };
         
 
         for (int j = 0; j < 10; j++)

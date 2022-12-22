@@ -20,17 +20,17 @@ VerticalAlignment="Stretch" Width="auto">
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions >
             <ComboBox Name="AttributeSelector" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Grid.Column="1" SelectionChanged="AttributeSelector_SelectionChanged" />
-            <Label Content="select a category:" HorizontalAlignment="Left" Margin="146,0,0,0" VerticalAlignment="Center"/>
-            <Button Name="btnClearAll" Grid.Column="1" Content="clear all" Margin="266,0,0,0" Grid.ColumnSpan="2" Click="btnClearAll_Click" />
+            <Label x:Name="lblSelecteCategory" Content="select a category:"  FontSize="18"  FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="42" Width="257" AutomationProperties.IsColumnHeader="True" Foreground="#FF5865E0"/>
+            <Button Name="btnClearAll" Grid.Column="1" Content="clear all"  Margin="266,0,0,0" FontSize="24"  FontWeight="Bold" FontStyle="Italic" Grid.ColumnSpan="2" Click="btnClearAll_Click" Background="White" Foreground="#FF5865E0" />
         </Grid>
-        <ListView Grid.Row="1" Name="productsListView" d:ItemsSource="{d:SampleData ItemCount=5}"  MouseDoubleClick="productsListView_MouseDoubleClick">
+        <ListView Grid.Row="1" Name="productsListView" d:ItemsSource="{d:SampleData ItemCount=5}"  MouseDoubleClick="productsListView_MouseDoubleClick" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Name="btnAddProduct" Content="Add new Product" Grid.Row="2" HorizontalAlignment="Left" Margin="691,5,0,0" Padding="5" Click="btnAddProduct_Click"/>
+        <Button Name="btnAddProduct" Content="Add new Product" Grid.Row="2" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="562,5,0,0" Padding="5" Click="btnAddProduct_Click" Width="238"/>
 
     </Grid>
 </Window>

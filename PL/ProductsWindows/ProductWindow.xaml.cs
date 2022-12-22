@@ -1,22 +1,8 @@
 ﻿using BlApi;
 using BlImplementation;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
 namespace PL.ProductsWindows;
-
 
 /// <summary>
 /// Interaction logic for ProductWindow.xaml
@@ -27,6 +13,9 @@ public partial class ProductWindow : Window
     private IBl bl = new BL();
     private int productId;
 
+    /// <summary>
+    /// Initialize values for adding a product
+    /// </summary>
     public ProductWindow()
     {
         InitializeComponent();
@@ -34,6 +23,10 @@ public partial class ProductWindow : Window
         cmbProductCategory.ItemsSource= Enum.GetValues(typeof(BO.Enums.Category));
     }
 
+    /// <summary>
+    /// Initialize values for product update
+    /// </summary>
+    /// <param name="_productId">Product ID to update</param>
     public ProductWindow(int _productId)
     {
         InitializeComponent();
@@ -43,9 +36,20 @@ public partial class ProductWindow : Window
         insertValues();
     }
 
+    /// <summary>
+    /// Initializes the product fields according to the received ID
+    /// </summary>
     private void insertValues()
     {
-        BO.Product product=bl.Product.GetProduct(productId);
+        //Product request from the logical layer by ID
+        BO.Product product=new BO.Product();
+        try { product = bl.Product.GetProduct(productId);}
+
+        //If the request is not successful, it will be thrown and the user will be shown an appropriate message
+        catch (BO.InvalidInputException){ MessageBox.Show("id cant be negative number"); }
+        catch (BO.DalException) { MessageBox.Show("Sorry, we were unable to load the product for you!");this.Close(); }
+
+        //The initialization of the values according to the variables
         txtProductId.Text = product.ID.ToString();
         txtProductName.Text = product.Name;
         txtProductPrice.Text=product.Price.ToString();
@@ -56,14 +60,32 @@ public partial class ProductWindow : Window
 
     private void btnSaveProduct_Click(object sender, RoutedEventArgs e)
     {
+        int id, inStock;
+        double price;
+
+        //If the user does not fill in all the fields, he will be shown an appropriate message
+        if (txtProductId.Text == "" || txtProductName.Text == "" || txtProductPrice.Text == "" || txtInStock.Text == "" || cmbProductCategory.SelectedIndex == -1)
+        {
+            MessageBox.Show("Please fill in all fields!");
+            return;
+        }
+
+        //If one of the inputs is invalid, an appropriate message will be displayed to the user
+        if (!int.TryParse(txtProductId.Text, out id)) { MessageBox.Show("Invalid ID"); return; };
+        if (!double.TryParse(txtProductPrice.Text, out price)) { MessageBox.Show("Invalid price"); return; };
+        if (!int.TryParse(txtInStock.Text, out inStock)) { MessageBox.Show("Invalid stock quantity"); return; };
+
+        //Creating a logical layer product based on the data
         BO.Product product = new BO.Product()
         {
-            ID=int.Parse(txtProductId.Text),
+            ID = id,
             Name=txtProductName.Text,
-            Price=double.Parse(txtProductPrice.Text),
-            InStock= int.Parse(txtInStock.Text),
+            Price=price,
+            InStock= inStock,
             Category= (BO.Enums.Category?)cmbProductCategory.SelectedItem
         };
+
+        //Request the logical layer update/add If there is a problem, the user will be shown an appropriate message
         try
         {
             if (_pageStatus == Utils.PageStatus.ADD)
@@ -72,10 +94,13 @@ public partial class ProductWindow : Window
                 bl.Product.UpdateProduct(product);
             this.Close();
         }
-        catch(Exception ex)
-        {
-
-        }
-        
+        catch(BO.InvalidInputException ) {
+            MessageBox.Show("one of the fields isn't valid"); }
+        catch(BO.DalException ) {
+            if (_pageStatus == Utils.PageStatus.ADD)
+                MessageBox.Show("the product cant added");
+            else
+                MessageBox.Show("the product cant updated");
+        }   
     }
 }

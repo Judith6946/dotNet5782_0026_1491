@@ -9,7 +9,7 @@ public class Enums
     /// <summary>
     /// Product categories.
     /// </summary>
-    public enum Category { necklace, ring, bracelet, earrings, personal_design };
+    public enum Category { Mac, ipad, iphone, watch, Accessories };
 
     /// <summary>
     /// Order statuses.
