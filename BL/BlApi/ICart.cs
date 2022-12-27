@@ -1,6 +1,4 @@
-﻿
-
-using BO;
+﻿using BO;
 
 namespace BlApi;
 

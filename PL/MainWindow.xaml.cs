@@ -1,6 +1,4 @@
-﻿using BlApi;
-using BlImplementation;
-using System.Windows;
+﻿using System.Windows;
 namespace PL
 {
     /// <summary>
@@ -8,7 +6,8 @@ namespace PL
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IBl bl = new BL();
+       private BlApi.IBl bl = BlApi.Factory.Get();
+
         public MainWindow()
         {
             InitializeComponent();

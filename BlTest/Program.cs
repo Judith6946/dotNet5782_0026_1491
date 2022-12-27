@@ -6,8 +6,8 @@ namespace BlTest;
 
 internal class Program
 {
+    private static BlApi.IBl bl = BlApi.Factory.Get();
 
-    private static IBl bl = new BL();
     private static Cart cart = new Cart() { ItemsList = new List<OrderItem?>(), TotalPrice = 0 };
 
     #region ENUMS

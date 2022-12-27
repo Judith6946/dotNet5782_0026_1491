@@ -1,6 +1,4 @@
-﻿
-
-namespace DalApi;
+﻿namespace DalApi;
 
 /// <summary>
 /// Interface of a dal class.

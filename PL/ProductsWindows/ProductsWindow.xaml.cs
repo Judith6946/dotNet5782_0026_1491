@@ -1,6 +1,4 @@
-﻿using BlApi;
-using BlImplementation;
-using BO;
+﻿using BO;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +10,7 @@ namespace PL.ProductsWindows
     /// </summary>
     public partial class ProductsWindow : Window
     {
-        private IBl bl = new BL();
+      private  BlApi.IBl bl = BlApi.Factory.Get();
 
         /// <summary>
         /// Initializes the entire form

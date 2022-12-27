@@ -1,10 +1,7 @@
-﻿
-
-using BlApi;
-
+﻿using BlApi;
 namespace BlImplementation;
 
-sealed public class BL : IBl
+sealed internal class BL : IBl
 {
     public IProduct Product => new Product();
 

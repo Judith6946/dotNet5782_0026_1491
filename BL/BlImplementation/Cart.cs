@@ -2,7 +2,6 @@
 using AutoMapper;
 using BlApi;
 using BO;
-using Dal;
 using DalApi;
 
 namespace BlImplementation;
@@ -12,8 +11,7 @@ namespace BlImplementation;
 /// </summary>
 internal class Cart : ICart
 {
-
-    private static IDal Dal = new DalList();
+   private static DalApi.IDal Dal = DalApi.Factory.Get();
     private static IMapper mapper = new MapperConfiguration(cfg => cfg.AddProfile(new BoProfile())).CreateMapper();
 
 

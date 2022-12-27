@@ -8,8 +8,9 @@ using DO;
 /// </summary>
 internal class Program
 {
+    static DalApi.IDal dal = DalApi.Factory.Get();
 
-    static IDal dal = new DalList();
+   // static IDal dal = new DalList();
 
     #region ENUMS
     private enum Menue { EXIT, PRODUCT, ORDER, ORDER_ITEM };

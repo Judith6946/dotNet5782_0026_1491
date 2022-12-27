@@ -1,6 +1,5 @@
 ﻿
 using AutoMapper;
-using Dal;
 using DalApi;
 using BO;
 
@@ -12,7 +11,7 @@ namespace BlImplementation;
 internal class Product : BlApi.IProduct
 {
 
-    private IDal Dal = new DalList();
+    private static DalApi.IDal Dal = DalApi.Factory.Get();
     private static IMapper mapper = new MapperConfiguration(cfg => cfg.AddProfile(new BoProfile())).CreateMapper();
 
 

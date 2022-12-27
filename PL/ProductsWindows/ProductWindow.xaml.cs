@@ -1,6 +1,4 @@
-﻿using BlApi;
-using BlImplementation;
-using System;
+﻿using System;
 using System.Windows;
 namespace PL.ProductsWindows;
 
@@ -10,7 +8,8 @@ namespace PL.ProductsWindows;
 public partial class ProductWindow : Window
 {
     private Utils.PageStatus _pageStatus;
-    private IBl bl = new BL();
+
+    private BlApi.IBl bl = BlApi.Factory.Get();
     private int productId;
 
     /// <summary>

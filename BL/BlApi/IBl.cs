@@ -1,5 +1,4 @@
-﻿
-namespace BlApi;
+﻿namespace BlApi;
 
 /// <summary>
 /// BL interface
