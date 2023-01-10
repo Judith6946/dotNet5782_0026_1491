@@ -1,0 +1,32 @@
+﻿<Window x:Class="PL.OrderWindows.OrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL.OrderWindows"
+        mc:Ignorable="d"
+        DataContext="{Binding Path=MyOrder ,RelativeSource={RelativeSource Self}}"
+        Title="OrderWindow" Height="500" Width="800">
+    <Grid Margin="0,0,0,-30">
+        <TextBox x:Name="txtOrderId" IsEnabled="false" Text="{Binding ID}" HorizontalAlignment="Left" Margin="228,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtCustomerEmail" IsEnabled="False" Text="{Binding CustomerEmail}" HorizontalAlignment="Left" Margin="230,214,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtCustomerName" IsEnabled="False" Text="{Binding CustomerName}" HorizontalAlignment="Left" Margin="230,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtCustomerAddress" IsEnabled="False" Text="{Binding CustomerAdress}" HorizontalAlignment="Left" Margin="230,282,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtDeliveryDate" IsEnabled="False" Visibility="Hidden" Text="{Binding DeliveryDate}" HorizontalAlignment="Left" Margin="440,338,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
+        <TextBox x:Name="txtShipDate" IsEnabled="False" Visibility="Hidden" Text="{Binding ShipDate}" HorizontalAlignment="Left" Margin="440,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
+        <TextBox x:Name="txtOrderDate" IsEnabled="False" Text="{Binding OrderDate}" HorizontalAlignment="Left" Margin="440,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
+        <TextBox x:Name="txtStatus" IsEnabled="False" Text="{Binding Status}" HorizontalAlignment="Left" Margin="440,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
+        <TextBox x:Name="txtTotalPrice" IsEnabled="False" Text="{Binding TotalPrice}" HorizontalAlignment="Left" Margin="228,338,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-1.317,5.273"/>
+        <Label Content="ID:" HorizontalAlignment="Left" Margin="228,41,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
+        <Label Content="Customer Name:" HorizontalAlignment="Left" Margin="228,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
+        <Label Content="Customer Email:" HorizontalAlignment="Left" Margin="228,187,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
+        <Label Content="Customer Address:" HorizontalAlignment="Left" Margin="228,254,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
+        <Label Content="Total Price:" HorizontalAlignment="Left" Margin="228,316,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
+        <Label Content="Order Status::" HorizontalAlignment="Left" Margin="435,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
+        <Label Content="Order Date:" HorizontalAlignment="Left" Margin="436,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
+        <Label Content="Ship Date:" Visibility="Hidden" Name="lblShipDate" HorizontalAlignment="Left" Margin="440,236,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
+        <Label Content="Delivery Date:" Visibility="Hidden" Name="lblDeliveryDate" HorizontalAlignment="Left" Margin="440,307,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
+        <Button Content="Button" Name="btnChangeStatus" HorizontalAlignment="Left" Margin="40,70,0,0" VerticalAlignment="Top" Height="36" Width="86"/>
+        <Button Content="Show Order Items" Name="btnShowProducts" HorizontalAlignment="Left" Margin="590,384,0,0" VerticalAlignment="Top" Height="36" Width="141" Click="btnShowProducts_Click"/>
+    </Grid>
+</Window>

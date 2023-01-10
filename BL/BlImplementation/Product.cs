@@ -121,6 +121,31 @@ internal class Product : BlApi.IProduct
 
 
     /// <summary>
+    /// Get product items list.
+    /// </summary>
+    /// <returns>Product items list.</returns>
+    /// <exception cref="DalException">Thrown when DB could not get the products.</exception>
+    public IEnumerable<BO.ProductItem?> GetProductItems(BO.Cart cart)
+    {
+        try
+        {
+            return Dal.Product.GetAll().Select(x =>
+            {
+                BO.OrderItem? item = cart?.ItemsList?.FirstOrDefault(y => y?.ProductId == ((DO.Product)x!).ID, null);
+                var productItem = mapper.Map<DO.Product, BO.ProductItem>((DO.Product)x!);
+                productItem.Amount = item?.Amount ?? 0;
+                return productItem;
+            });
+
+        }
+        catch (Exception e)
+        {
+            throw new DalException("Exception was thrown while getting the products", e);
+        }
+    }
+
+
+    /// <summary>
     /// Get products list.
     /// </summary>
     /// <returns>Products list.</returns>
@@ -143,7 +168,7 @@ internal class Product : BlApi.IProduct
     /// </summary>
     /// <returns>Products list.</returns>
     /// <exception cref="DalException">Thrown when DB could not get the products.</exception>
-    public IEnumerable<BO.ProductForList?> GetProductsByFunc(Func<BO.ProductForList,bool>condition)
+    public IEnumerable<BO.ProductForList?> GetProductsByFunc(Func<BO.ProductForList, bool> condition)
     {
         try
         {

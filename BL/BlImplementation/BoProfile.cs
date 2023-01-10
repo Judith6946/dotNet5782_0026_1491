@@ -29,11 +29,11 @@ internal class BoProfile:Profile
 
         CreateMap<DO.Product, BO.OrderItem>().ForMember(dest => dest.Amount, opts => opts.MapFrom(src => 1))
             .ForMember(dest => dest.ProductId, opts => opts.MapFrom(src => src.ID))
-            .ForMember(dest => dest.ID, opts => opts.MapFrom(src => 0));
+            .ForMember(dest => dest.ID, opts => opts.MapFrom(src => 0))
+            .ForMember(dest => dest.ProductName, opts => opts.MapFrom(src => src.Name));
 
-        CreateMap<BO.Cart, DO.Order>().ForMember(dest => dest.OrderDate, opts => opts.MapFrom(src => DateTime.Now))
-            .ForMember(dest => dest.DeliveryDate, opts => opts.MapFrom(src => DateTime.MinValue))
-            .ForMember(dest => dest.ShipDate, opts => opts.MapFrom(src => DateTime.MinValue));
+        CreateMap<BO.Cart, DO.Order>().ForMember(dest => dest.OrderDate, opts => opts.MapFrom(src => DateTime.Now));
+            
        
         CreateMap<BO.OrderItem, DO.OrderItem>();
 
@@ -75,8 +75,8 @@ internal class BoProfile:Profile
     /// <param name="order">Order object</param>
     /// <returns>Status of order.</returns>
     private static BO.Enums.OrderStatus getStatus(DO.Order order) => 
-        order.DeliveryDate != DateTime.MinValue ? BO.Enums.OrderStatus.delivered : 
-        order.ShipDate != DateTime.MinValue ? BO.Enums.OrderStatus.sent : 
+        order.DeliveryDate != null ? BO.Enums.OrderStatus.delivered : 
+        order.ShipDate != null ? BO.Enums.OrderStatus.sent : 
         BO.Enums.OrderStatus.approved;
 
 }

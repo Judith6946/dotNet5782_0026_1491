@@ -8,7 +8,7 @@ namespace BlImplementation;
 
 internal class Order : BlApi.IOrder
 {
-  private static  DalApi.IDal Dal = DalApi.Factory.Get();
+    private static DalApi.IDal Dal = DalApi.Factory.Get();
     private static IMapper mapper = new MapperConfiguration(cfg => cfg.AddProfile(new BoProfile())).CreateMapper();
 
 
@@ -57,15 +57,15 @@ internal class Order : BlApi.IOrder
         BO.Order order = mapper.Map<DO.Order, BO.Order>(o);
 
         //get order items
-        IEnumerable<DO.OrderItem> items = getOrderItemsByOrder(id);
-        order.TotalPrice = items.Sum(x => x.Price * x.Amount);
+        IEnumerable<DO.OrderItem?> items = getOrderItemsByOrder(id);
+        order.TotalPrice = items.Sum(x => x?.Price * x?.Amount) ?? 0;
 
-        order.ItemsList = (List<OrderItem?>?)items.Select(item =>
+        order.ItemsList = items.Select(item =>
         {
-            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item);
-            orderItem.ProductName = getProduct(item.ProductId).Name;
+            BO.OrderItem? orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item ?? new());
+            orderItem.ProductName = getProduct(item?.ProductId ?? 0).Name;
             return orderItem;
-        });
+        }).ToList<OrderItem?>();
         //return order object.
         return order;
 
@@ -80,9 +80,9 @@ internal class Order : BlApi.IOrder
     {
         return getOrders().Select(order =>
         {
-            BO.OrderForList orderForList = mapper.Map<DO.Order, BO.OrderForList>(order);
-            orderForList.TotalPrice = getOrderItemsByOrder(order.ID).Sum(x => x.Price * x.Amount);
-            orderForList.AmountOfItems = getOrderItemsByOrder(order.ID).Sum(x => x.Amount);
+            BO.OrderForList orderForList = mapper.Map<DO.Order, BO.OrderForList>(order ?? new());
+            orderForList.TotalPrice = getOrderItemsByOrder(order?.ID ?? 0).Sum(x => x?.Price * x?.Amount)??0;
+            orderForList.AmountOfItems = getOrderItemsByOrder(order?.ID ?? 0).Sum(x => x?.Amount)??0;
             return orderForList;
         });
     }
@@ -107,22 +107,22 @@ internal class Order : BlApi.IOrder
             throw new AlreadyDoneException("Order was already delivered.");
 
         //find order items
-        IEnumerable<DO.OrderItem> orderItems = getOrderItemsByOrder(id);
+        IEnumerable<DO.OrderItem?> orderItems = getOrderItemsByOrder(id);
 
         //update delivery date.
         order.DeliveryDate = DateTime.Now;
         BO.Order order2 = mapper.Map<DO.Order, BO.Order>(order);
         order2.Status = BO.Enums.OrderStatus.delivered;
-        order2.TotalPrice = orderItems.Sum(x => x.Price);
+        order2.TotalPrice = orderItems.Sum(x => x?.Price)??0;
 
         //add items
         order2.ItemsList = (List<OrderItem?>?)orderItems.Select(item =>
         {
-            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item);
-            orderItem.ProductName = getProduct(item.ProductId).Name;
+            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item??new());
+            orderItem.ProductName = getProduct(item?.ProductId??0).Name;
             return orderItem;
         });
-        
+
         updateProduct(order);
         return order2;
 
@@ -147,19 +147,19 @@ internal class Order : BlApi.IOrder
             throw new AlreadyDoneException("Order was already shipped.");
 
         //find order items
-        IEnumerable<DO.OrderItem> orderItems = getOrderItemsByOrder(id);
+        IEnumerable<DO.OrderItem?> orderItems = getOrderItemsByOrder(id);
 
         //update delivery date.
         order.ShipDate = DateTime.Now;
         BO.Order order2 = mapper.Map<DO.Order, BO.Order>(order);
         order2.Status = BO.Enums.OrderStatus.sent;
-        order2.TotalPrice = orderItems.Sum(x => x.Price*x.Amount);
+        order2.TotalPrice = orderItems.Sum(x => x?.Price * x?.Amount)??0;
 
         //add items
         order2.ItemsList = (List<OrderItem?>?)orderItems.Select(item =>
         {
-            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item);
-            orderItem.ProductName = getProduct(item.ProductId).Name;
+            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item??new());
+            orderItem.ProductName = getProduct(item?.ProductId??0).Name;
             return orderItem;
         });
 
@@ -192,24 +192,24 @@ internal class Order : BlApi.IOrder
         BO.Order order2 = mapper.Map<DO.Order, BO.Order>(order);
 
         //find order items
-        IEnumerable<DO.OrderItem> orderItems = getOrderItemsByOrder(id);
-        int index=((List<DO.OrderItem>)orderItems).FindIndex(x => x.ProductId == productId);
+        IEnumerable<DO.OrderItem?> orderItems = getOrderItemsByOrder(id);
+        int index = ((List<DO.OrderItem>)orderItems).FindIndex(x => x.ProductId == productId);
         if (index == -1)
             throw new BO.NotFoundException("Could not found this product.");
         DO.OrderItem item1 = ((List<DO.OrderItem>)orderItems)[index];
         item1.Amount = amount;
         updateOrderItem(item1);
-        order2.TotalPrice = orderItems.Sum(x => x.Price * x.Amount);
+        order2.TotalPrice = orderItems.Sum(x => x?.Price * x?.Amount)??0;
 
         //add items
         foreach (var item in orderItems)
         {
-            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item);
-            orderItem.ProductName = getProduct(item.ProductId).Name;
+            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item??new());
+            orderItem.ProductName = getProduct(item?.ProductId??0).Name;
             order2.ItemsList!.Add(orderItem);
         }
 
-        
+
         return order2;
     }
 
@@ -221,11 +221,11 @@ internal class Order : BlApi.IOrder
     /// </summary>
     /// <returns>Collection of orders</returns>
     /// <exception cref="DalException">Thrown when DB could not get the orders.</exception>
-    private static IEnumerable<DO.Order> getOrders()
+    private static IEnumerable<DO.Order?> getOrders()
     {
         try
         {
-            return (IEnumerable<DO.Order>)Dal.Order.GetAll();
+            return Dal.Order.GetAll();
         }
         catch (Exception e)
         {
@@ -260,11 +260,11 @@ internal class Order : BlApi.IOrder
     /// <param name="id">Id of required order</param>
     /// <returns>Collection of order items in order.</returns>
     /// <exception cref="DalException">Thrown when DB could not get the order items.</exception>
-    private static IEnumerable<DO.OrderItem> getOrderItemsByOrder(int id)
+    private static IEnumerable<DO.OrderItem?> getOrderItemsByOrder(int id)
     {
         try
         {
-            return (IEnumerable<DO.OrderItem>)Dal.OrderItem.GetByOrder(id);
+            return Dal.OrderItem.GetByOrder(id);
         }
         catch (Exception e)
         {

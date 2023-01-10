@@ -5,20 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.ProductsWindows"
         mc:Ignorable="d"
+        DataContext="{Binding Path=MyProduct ,RelativeSource={RelativeSource Self}}"
         Title="ProductWindow" Height="450" Width="800">
     <Grid>
-        <TextBox HorizontalAlignment="Left" Margin="228,88,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtProductId" HorizontalAlignment="Left" Margin="228,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtInStock" HorizontalAlignment="Left" Margin="228,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtProductPrice" HorizontalAlignment="Left" Margin="228,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtProductId" Text="{Binding ID}" HorizontalAlignment="Left" Margin="228,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtInStock" Text="{Binding InStock}" HorizontalAlignment="Left" Margin="228,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtProductPrice" Text="{Binding Price}" HorizontalAlignment="Left" Margin="228,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
-        <TextBox x:Name="txtProductName" HorizontalAlignment="Left" Margin="228,133,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtProductName" Text="{Binding Name}" HorizontalAlignment="Left" Margin="228,133,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
         <Label Content="ID:" HorizontalAlignment="Left" Margin="230,65,0,0" VerticalAlignment="Top" Foreground="#FF5865E0" FontWeight="Bold" FontSize="14"/>
         <Label Content="Name:" HorizontalAlignment="Left" Margin="230,109,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FF5865E0"/>
         <Label Content="Price:" HorizontalAlignment="Left" Margin="230,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="#FF5865E0"/>
         <Label Content="Category:" HorizontalAlignment="Left" Margin="230,152,0,0" VerticalAlignment="Top" Foreground="#FF5865E0" FontSize="14" FontWeight="Bold"/>
         <Label Content="in stock:" HorizontalAlignment="Left" Margin="230,247,0,0" VerticalAlignment="Top" Foreground="#FF5865E0" FontSize="14" FontWeight="Bold"/>
-        <ComboBox Name="cmbProductCategory" HorizontalAlignment="Left" Margin="228,176,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox Name="cmbProductCategory" SelectedItem="{Binding Category}" HorizontalAlignment="Left" Margin="228,176,0,0" VerticalAlignment="Top" Width="120"/>
         <Button x:Name="btnSaveProduct" Content="Save" HorizontalAlignment="Left" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Margin="230,352,0,0" VerticalAlignment="Top" Width="106" Click="btnSaveProduct_Click"/>
 
 

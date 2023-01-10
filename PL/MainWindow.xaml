@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="btnProduct" Background="White">
-        <Button Content="products" HorizontalAlignment="Left" Margin="513,301,0,0" VerticalAlignment="Top" Height="47" Width="114" Click="Button_Click" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic"/>
-
+        <Button Content="Admin" Name="btnAdmin" HorizontalAlignment="Left" Margin="458,289,0,0" VerticalAlignment="Top" Height="47" Width="169" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Click="btnAdmin_Click"/>
+        <Button Content="New Order" Name="btnNewOrder" HorizontalAlignment="Left" Margin="458,188,0,0" VerticalAlignment="Top" Height="47" Width="169" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Click="btnNewOrder_Click"/>
+        <Button Content="Follow Order" Name="btnFollowOrder" HorizontalAlignment="Left" Margin="113,265,0,0" VerticalAlignment="Top" Height="46" Width="169" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Click="btnFollowOrder_Click"/>
+        <TextBox HorizontalAlignment="Left" Name="txtOrderId"  Margin="133,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="23"/>
     </Grid>
 </Window>

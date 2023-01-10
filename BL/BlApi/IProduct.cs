@@ -21,5 +21,7 @@ public interface IProduct
 
     public void DeleteProduct(int id);
 
+    public IEnumerable<BO.ProductItem?> GetProductItems(BO.Cart cart);
+
 
 }

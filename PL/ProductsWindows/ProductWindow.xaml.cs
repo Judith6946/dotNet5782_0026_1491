@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BO;
+using System;
 using System.Windows;
 namespace PL.ProductsWindows;
 
@@ -8,9 +9,19 @@ namespace PL.ProductsWindows;
 public partial class ProductWindow : Window
 {
     private Utils.PageStatus _pageStatus;
-
     private BlApi.IBl bl = BlApi.Factory.Get();
-    private int productId;
+
+    public Product MyProduct
+    {
+        get { return (Product)GetValue(MyProductProperty); }
+        set { SetValue(MyProductProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty MyProductProperty =
+        DependencyProperty.Register("MyProduct", typeof(Product), typeof(ProductWindow), new PropertyMetadata(null));
+
+
 
     /// <summary>
     /// Initialize values for adding a product
@@ -20,6 +31,7 @@ public partial class ProductWindow : Window
         InitializeComponent();
         _pageStatus = Utils.PageStatus.ADD;
         cmbProductCategory.ItemsSource= Enum.GetValues(typeof(BO.Enums.Category));
+        MyProduct = new Product();
     }
 
     /// <summary>
@@ -29,68 +41,39 @@ public partial class ProductWindow : Window
     public ProductWindow(int _productId)
     {
         InitializeComponent();
-        _pageStatus = Utils.PageStatus.UPDATE;
+        _pageStatus = Utils.PageStatus.EDIT;
         cmbProductCategory.ItemsSource = Enum.GetValues(typeof(BO.Enums.Category));
-        productId = _productId;
-        insertValues();
-    }
 
-    /// <summary>
-    /// Initializes the product fields according to the received ID
-    /// </summary>
-    private void insertValues()
-    {
         //Product request from the logical layer by ID
-        BO.Product product=new BO.Product();
-        try { product = bl.Product.GetProduct(productId);}
+        try { MyProduct = bl.Product.GetProduct(_productId); }
 
         //If the request is not successful, it will be thrown and the user will be shown an appropriate message
-        catch (BO.InvalidInputException){ MessageBox.Show("id cant be negative number"); }
-        catch (BO.DalException) { MessageBox.Show("Sorry, we were unable to load the product for you!");this.Close(); }
-
-        //The initialization of the values according to the variables
-        txtProductId.Text = product.ID.ToString();
-        txtProductName.Text = product.Name;
-        txtProductPrice.Text=product.Price.ToString();
-        txtInStock.Text = product.InStock.ToString();
-        cmbProductCategory.SelectedItem=product.Category;
+        catch (BO.InvalidInputException) { MessageBox.Show("id cant be negative number"); }
+        catch (BO.DalException) { MessageBox.Show("Sorry, we were unable to load the product for you!"); this.Close(); }
         txtProductId.IsEnabled = false;
     }
 
+    
+
     private void btnSaveProduct_Click(object sender, RoutedEventArgs e)
     {
-        int id, inStock;
-        double price;
+        
 
         //If the user does not fill in all the fields, he will be shown an appropriate message
-        if (txtProductId.Text == "" || txtProductName.Text == "" || txtProductPrice.Text == "" || txtInStock.Text == "" || cmbProductCategory.SelectedIndex == -1)
+        if (MyProduct.Name == "" || MyProduct.ID <= 0 || MyProduct.Price <= 0 || MyProduct.Price < 0 || MyProduct.Category == null)
         {
-            MessageBox.Show("Please fill in all fields!");
+            MessageBox.Show("Please fill in all fields correctly!");
             return;
         }
-
-        //If one of the inputs is invalid, an appropriate message will be displayed to the user
-        if (!int.TryParse(txtProductId.Text, out id)) { MessageBox.Show("Invalid ID"); return; };
-        if (!double.TryParse(txtProductPrice.Text, out price)) { MessageBox.Show("Invalid price"); return; };
-        if (!int.TryParse(txtInStock.Text, out inStock)) { MessageBox.Show("Invalid stock quantity"); return; };
-
-        //Creating a logical layer product based on the data
-        BO.Product product = new BO.Product()
-        {
-            ID = id,
-            Name=txtProductName.Text,
-            Price=price,
-            InStock= inStock,
-            Category= (BO.Enums.Category?)cmbProductCategory.SelectedItem
-        };
+  
 
         //Request the logical layer update/add If there is a problem, the user will be shown an appropriate message
         try
         {
             if (_pageStatus == Utils.PageStatus.ADD)
-                bl.Product.AddProduct(product);
+                bl.Product.AddProduct(MyProduct);
             else
-                bl.Product.UpdateProduct(product);
+                bl.Product.UpdateProduct(MyProduct);
             this.Close();
         }
         catch(BO.InvalidInputException ) {

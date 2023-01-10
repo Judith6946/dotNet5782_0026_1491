@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using PL.OrderWindows;
+using System.Windows;
 namespace PL
 {
     /// <summary>
@@ -13,9 +14,25 @@ namespace PL
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnAdmin_Click(object sender, RoutedEventArgs e)
         {
-            new ProductsWindows.ProductsWindow().Show();
+            new AdminWindow().Show();
+        }
+
+        private void btnNewOrder_Click(object sender, RoutedEventArgs e)
+        {
+            new CatalogWindow().Show();
+        }
+
+        private void btnFollowOrder_Click(object sender, RoutedEventArgs e)
+        {
+            int id;
+            if(!int.TryParse(txtOrderId.Text,out id))
+            {
+                MessageBox.Show("Invalid ID");
+                return;
+            }
+            new OrderTrackingWindow(id).Show();
         }
     }
 }

@@ -1,0 +1,57 @@
+﻿<Window x:Class="PL.OrderWindows.CatalogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL.OrderWindows"
+        mc:Ignorable="d"
+        DataContext="{Binding Path=MyProductItems ,RelativeSource={RelativeSource Self}}"
+        Title="CatalogWindow" Height="600" Width="800">
+    <Grid x:Name="mainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="500*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0"
+VerticalAlignment="Stretch" Width="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions >
+            <ComboBox Name="AttributeSelector" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Grid.Column="1" />
+            <Label x:Name="lblSelecteCategory" Content="select a category:"  FontSize="18"  FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="42" Width="257" AutomationProperties.IsColumnHeader="True" Foreground="#FF5865E0"/>
+            <Button Name="btnClearAll" Grid.Column="1" Content="clear all"  Margin="266,0,0,0" FontSize="24"  FontWeight="Bold" FontStyle="Italic" Grid.ColumnSpan="2" Background="White" Foreground="#FF5865E0" />
+        </Grid>
+        <ListView ItemsSource="{Binding}" Grid.Row="1" Name="productsListView"  >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel>
+                        <TextBlock Text="Name: " />
+                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                        <TextBlock Text=", " />
+                        <TextBlock Text="Price: " />
+                        <TextBlock Text="{Binding Price}" FontWeight="Bold" />
+                        <TextBlock Text=", " />
+                        <TextBlock Text="Category: " />
+                        <TextBlock Text="{Binding Category}" FontWeight="Bold" />
+                        <TextBlock Text=", " />
+                        <TextBlock Text="Available: " />
+                        <TextBlock Text="{Binding Available}" FontWeight="Bold" />
+                        <TextBlock Text=", " />
+                        <TextBlock Text="Amount: " />
+                        <TextBlock Text="{Binding Amount}" FontWeight="Bold" />
+                        <TextBlock Text="  " />
+                        <Button  Content="+" Tag="{Binding ID}" IsEnabled="{Binding Available}" Click="Add_Button_Click" />
+                        <TextBlock Text="  " />
+                        <Button Content="-" Tag="{Binding ID}" Click="Remove_Button_Click"  />
+
+                    </WrapPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Name="btnShowCart" Content="My Cart" Grid.Row="2" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Margin="562,5,0,0" Padding="5" Height="44" VerticalAlignment="Top" Click="btnShowCart_Click"/>
+
+    </Grid>
+</Window>

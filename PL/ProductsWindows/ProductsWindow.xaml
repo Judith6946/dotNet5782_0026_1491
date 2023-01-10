@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.ProductsWindows"
         mc:Ignorable="d"
-        Title="ProductsWindow" Height="640" Width="800">
+        DataContext="{Binding Path=MyProducts ,RelativeSource={RelativeSource Self}}"
+        Title="ProductsWindow" Height="640" Width="800"
+        >
+   
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="40*"/>
@@ -23,7 +26,7 @@ VerticalAlignment="Stretch" Width="auto">
             <Label x:Name="lblSelecteCategory" Content="select a category:"  FontSize="18"  FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="42" Width="257" AutomationProperties.IsColumnHeader="True" Foreground="#FF5865E0"/>
             <Button Name="btnClearAll" Grid.Column="1" Content="clear all"  Margin="266,0,0,0" FontSize="24"  FontWeight="Bold" FontStyle="Italic" Grid.ColumnSpan="2" Click="btnClearAll_Click" Background="White" Foreground="#FF5865E0" />
         </Grid>
-        <ListView Grid.Row="1" Name="productsListView" d:ItemsSource="{d:SampleData ItemCount=5}"  MouseDoubleClick="productsListView_MouseDoubleClick" >
+        <ListView ItemsSource="{Binding}" Grid.Row="1" Name="productsListView"  MouseDoubleClick="productsListView_MouseDoubleClick" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>

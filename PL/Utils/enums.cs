@@ -2,5 +2,5 @@
 
 public enum PageStatus
 {
-    ADD,UPDATE
+    ADD,EDIT,DISPLAY
 }

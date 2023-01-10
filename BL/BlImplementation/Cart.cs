@@ -11,7 +11,7 @@ namespace BlImplementation;
 /// </summary>
 internal class Cart : ICart
 {
-   private static DalApi.IDal Dal = DalApi.Factory.Get();
+    private static DalApi.IDal Dal = DalApi.Factory.Get();
     private static IMapper mapper = new MapperConfiguration(cfg => cfg.AddProfile(new BoProfile())).CreateMapper();
 
 
@@ -67,6 +67,7 @@ internal class Cart : ICart
         checkOrderValidity(cart);
         //add new order
         DO.Order order = mapper.Map<BO.Cart, DO.Order>(cart);
+        order.DeliveryDate = order.ShipDate = null;
         int id = addOrder(order);
 
         //add all order items...
@@ -84,6 +85,28 @@ internal class Cart : ICart
             orderItem.OrderId = id;
             addOrderItem(orderItem);
         }
+
+    }
+
+    /// <summary>
+    /// Remove an item from cart.
+    /// </summary>
+    /// <param name="cart">Cart of customer.</param>
+    /// <param name="id">Id of product to be removed.</param>
+    /// <returns>Updated cart.</returns>
+    /// <exception cref="NotFoundException">Thrown when product cant be found on this cart.</exception>
+    public BO.Cart RemoveItem(BO.Cart cart, int id)
+    {
+        if (cart.ItemsList == null)
+            throw new NotFoundException("Cannot find this product in your cart");
+
+        //find item on the items list of cart.
+        int index = cart.ItemsList.FindIndex(x => x!.ProductId == id);
+        if (index == -1)
+            throw new NotFoundException("Cannot find this product in your cart");
+
+        int newAmount = cart.ItemsList[index]!.Amount - 1;
+        return UpdateAmount(cart, newAmount, id);
 
     }
 
@@ -239,7 +262,7 @@ internal class Cart : ICart
 
     private static void checkOrderValidity(BO.Cart cart)
     {
-        if (cart.CustomerAdress == "" || cart.CustomerName == "" || cart.CustomerEmail == ""||cart.ItemsList==null)
+        if (cart.CustomerAdress == "" || cart.CustomerName == "" || cart.CustomerEmail == "" || cart.ItemsList == null)
             throw new InvalidInputException("address & name & email & items cannot be empty");
         foreach (var item in cart.ItemsList)
         {
