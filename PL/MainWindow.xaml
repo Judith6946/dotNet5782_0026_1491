@@ -6,10 +6,40 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid x:Name="btnProduct" Background="White">
-        <Button Content="Admin" Name="btnAdmin" HorizontalAlignment="Left" Margin="458,289,0,0" VerticalAlignment="Top" Height="47" Width="169" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Click="btnAdmin_Click"/>
-        <Button Content="New Order" Name="btnNewOrder" HorizontalAlignment="Left" Margin="458,188,0,0" VerticalAlignment="Top" Height="47" Width="169" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Click="btnNewOrder_Click"/>
-        <Button Content="Follow Order" Name="btnFollowOrder" HorizontalAlignment="Left" Margin="113,265,0,0" VerticalAlignment="Top" Height="46" Width="169" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Click="btnFollowOrder_Click"/>
-        <TextBox HorizontalAlignment="Left" Name="txtOrderId"  Margin="133,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="23"/>
+    <Window.Resources>
+
+    </Window.Resources>
+    <Grid x:Name="btnProduct">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200*" />
+            <RowDefinition Height="400*" />
+            <RowDefinition Height="300*" />
+        </Grid.RowDefinitions>
+        <Button Template="{DynamicResource ButtonTemplate1}"  Grid.Column="2" Grid.Row="0"  Content="Admin" Name="btnAdmin" HorizontalAlignment="Center"  VerticalAlignment="Top" Height="47" Width="170"  Click="btnAdmin_Click" Margin="0,41,0,0"/>
+        <Button Template="{DynamicResource ButtonTemplate1}" Grid.Column="1" Grid.Row="0"  Content="New Order" Name="btnNewOrder" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="47" Width="170"  Click="btnNewOrder_Click" Margin="91,41,0,0" RenderTransformOrigin="-0.138,0.163"/>
+        <Button Template="{DynamicResource ButtonTemplate1}"  Grid.Row="2"  Content="Follow Order" Name="btnFollowOrder" HorizontalAlignment="Center"  VerticalAlignment="Top" Height="46" Width="170"  Click="btnFollowOrder_Click" Margin="0,64,0,0"/>
+
+        <TextBox Grid.Row="2" HorizontalAlignment="Center" Name="txtOrderId"  TextWrapping="Wrap" VerticalAlignment="Top" Width="170" Height="23" Margin="0,20,0,0"/>
+        <TextBlock Grid.Row="2" IsHitTestVisible="False" Text="Enter order ID" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="56,23,0,0" Foreground="DarkGray">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, ElementName=txtOrderId}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <Grid.Background>
+            <ImageBrush ImageSource="/images/macbook.png" Stretch="UniformToFill"/>
+        </Grid.Background>
     </Grid>
+
 </Window>

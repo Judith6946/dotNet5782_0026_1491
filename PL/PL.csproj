@@ -18,7 +18,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\macbook.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj" />
+  </ItemGroup>
+
+	
+
+  <ItemGroup>
+    <Content Include="images\macbook.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

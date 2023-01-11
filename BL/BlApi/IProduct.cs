@@ -23,5 +23,7 @@ public interface IProduct
 
     public IEnumerable<BO.ProductItem?> GetProductItems(BO.Cart cart);
 
+    public IEnumerable<BO.ProductItem?> GetProductItemsByFunc(BO.Cart cart, Func<BO.ProductItem, bool> condition);
+
 
 }

@@ -1,19 +1,7 @@
 ﻿using BlApi;
 using BO;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL.OrderWindows;
 
@@ -53,5 +41,30 @@ public partial class CartWindow : Window
         }
         catch (SoldOutException ex) { MessageBox.Show("Sold out! \n " + ex.Message); }
         catch(InvalidInputException ex) { MessageBox.Show("Invalid input! \n " + ex.Message); }
+    }
+
+    private void Remove_Button_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            int id = int.Parse(((Button)sender).Tag.ToString()!);
+            MyCart = bl.Cart.RemoveItem(MyCart, id);
+        }
+        catch (NotFoundException) { MessageBox.Show("Cannot find this product on your cart."); }
+        catch (InvalidInputException) { MessageBox.Show("Sorry, your input was wrong. please try again."); }
+        catch (DalException) { MessageBox.Show("sorry, something went wrong. please try again."); }
+    }
+
+    private void Add_Button_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            int id = int.Parse(((Button)sender).Tag.ToString()!);
+            MyCart = bl.Cart.AddItem(MyCart, id);
+        }
+        catch (NotFoundException) { MessageBox.Show("Cannot find this product on your cart."); }
+        catch (InvalidInputException) { MessageBox.Show("Sorry, something went wrong. please try again."); }
+        catch (SoldOutException) { MessageBox.Show("Sorry, this product was sold out"); }
+        catch (DalException) { MessageBox.Show("sorry, something went wrong. please try again."); }
     }
 }

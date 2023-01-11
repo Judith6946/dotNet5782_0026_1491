@@ -6,14 +6,47 @@
         xmlns:local="clr-namespace:PL.OrderWindows"
         mc:Ignorable="d"
         DataContext="{Binding Path=MyOrders ,RelativeSource={RelativeSource Self}}"
-        Title="OrdersWindow" Height="450" Width="800">
+        Title="OrdersWindow" Height="500" Width="800">
     <Grid>
-        <ListView ItemsSource="{Binding}" Grid.Row="1" Name="ordersListView" MouseDoubleClick="ordersListView_MouseDoubleClick" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="70" />
+        </Grid.RowDefinitions>
+        <Grid Width="650" VerticalAlignment="Bottom" Grid.Row="1"  Background="LightBlue">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Padding="10" Grid.Column="0" FontFamily="Consolas" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"  Text="ID" />
+            <TextBlock Padding="10" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Customer Name" />
+            <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Status" />
+            <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Amount" />
+            <TextBlock Padding="10" Grid.Column="4" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Total Price" />
+        </Grid>
+        <ListView Width="650" ItemsSource="{Binding}" Grid.Row="2" Name="ordersListView" MouseDoubleClick="ordersListView_MouseDoubleClick" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="600"  Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Padding="10" Grid.Column="0" FontFamily="Consolas" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"  Text="{Binding ID}" />
+                        <TextBlock Padding="10" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding CustomerName}" />
+                        <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding StatusOrder}" />
+                        <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding AmountOfItems}" />
+                        <TextBlock Padding="10" Grid.Column="4" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding TotalPrice}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
     </Grid>
 </Window>

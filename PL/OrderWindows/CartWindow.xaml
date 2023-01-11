@@ -10,26 +10,65 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100*"/>
+            <RowDefinition Height="50" />
             <RowDefinition Height="500*"/>
-            <RowDefinition Height="300*"/>
+            <RowDefinition Height="400*"/>
         </Grid.RowDefinitions>
+       
         <Label Content="Total Price:" HorizontalAlignment="Left" Margin="129,0,0,0" VerticalAlignment="Center"/>
         <TextBox HorizontalAlignment="Left" Margin="199,0,0,0" TextWrapping="Wrap" Text="{Binding TotalPrice}" VerticalAlignment="Center" Width="120"/>
-        <ListView ItemsSource="{Binding ItemsList}" Grid.Row="1" Name="OrderItemsListView" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
+
+
+        <Grid Width="750" VerticalAlignment="Bottom" Grid.Row="1"  Background="LightBlue">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Padding="10" Grid.Column="0" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Product ID" />
+            <TextBlock Padding="10" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Product Name" />
+            <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Price" />
+            <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Total Price" />
+            <TextBlock Padding="10" Grid.Column="4" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Amount" />
+        </Grid>
+
+
+
+        <ListView Width="750" ItemsSource="{Binding ItemsList}" Grid.Row="2" Name="OrderItemsListView" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="700"  Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Padding="10" Grid.Column="0" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding ProductId}" />
+                        <TextBlock Padding="10" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding ProductName}" />
+                        <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Price}" />
+                        <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding TotalPrice}" />
+                        <WrapPanel Grid.Column="4" Orientation="Horizontal">
+                            <Button FontSize="10" Width="20" Foreground="Black" Background="White" Content="-" Tag="{Binding ProductId}"  Click="Remove_Button_Click" />
+                            <TextBlock Padding="10" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Amount}" />
+                            <Button FontSize="10" Width="20" Foreground="Black" Background="White" Content="+" Tag="{Binding ProductId}" Click="Add_Button_Click"/>
+                        </WrapPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
 
-        <Button Content="Finish Order" Grid.Row="2" Height="50" Width="100" Margin="557,105,143,106" Name="btnFinishOrder" Click="btnFinishOrder_Click" />
+        <Button Content="Finish Order" Grid.Row="3" Height="50" Margin="557,105,84,106" Name="btnFinishOrder" Click="btnFinishOrder_Click" />
 
-        <TextBox Width="120" Height="30" Grid.Row="2" Margin="162,61,518,170" Name="txtCustomerName" Text="{Binding CustomerName}" />
-        <Label Width="120" Height="30" Grid.Row="2" Margin="76,65,604,166" Content="Name:" />
-        <TextBox Width="120" Height="30" Grid.Row="2" Margin="162,165,518,66" Name="txtCustomerEmail" Text="{Binding CustomerEmail}" />
-        <Label Width="120" Height="30" Grid.Row="2" Margin="76,113,604,118" Content="Email:" />
-        <Label Width="120" Height="30" Grid.Row="2" Margin="76,165,604,66" Content="Adress:" />
-        <TextBox Width="120" Height="30" Grid.Row="2" Margin="162,111,518,120" Name="txtCustomerAdress" Text="{Binding CustomerAdress}" />
+        <TextBox Width="120" Height="30" Grid.Row="3" Margin="162,61,518,170" Name="txtCustomerName" Text="{Binding CustomerName}" />
+        <Label Width="120" Height="30" Grid.Row="3" Margin="76,65,604,166" Content="Name:" />
+        <TextBox Width="120" Height="30" Grid.Row="3" Margin="162,165,518,66" Name="txtCustomerEmail" Text="{Binding CustomerEmail}" />
+        <Label Width="120" Height="30" Grid.Row="3" Margin="76,113,604,118" Content="Email:" />
+        <Label Width="120" Height="30" Grid.Row="3" Margin="76,165,604,66" Content="Adress:" />
+        <TextBox Width="120" Height="30" Grid.Row="3" Margin="162,111,518,120" Name="txtCustomerAdress" Text="{Binding CustomerAdress}" />
     </Grid>
 </Window>

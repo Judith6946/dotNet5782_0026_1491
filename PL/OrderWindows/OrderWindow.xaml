@@ -3,30 +3,48 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL.OrderWindows"
+        xmlns:local="clr-namespace:PL.OrderWindows" xmlns:local1="clr-namespace:PL.Convertors"
         mc:Ignorable="d"
         DataContext="{Binding Path=MyOrder ,RelativeSource={RelativeSource Self}}"
         Title="OrderWindow" Height="500" Width="800">
-    <Grid Margin="0,0,0,-30">
-        <TextBox x:Name="txtOrderId" IsEnabled="false" Text="{Binding ID}" HorizontalAlignment="Left" Margin="228,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtCustomerEmail" IsEnabled="False" Text="{Binding CustomerEmail}" HorizontalAlignment="Left" Margin="230,214,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtCustomerName" IsEnabled="False" Text="{Binding CustomerName}" HorizontalAlignment="Left" Margin="230,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtCustomerAddress" IsEnabled="False" Text="{Binding CustomerAdress}" HorizontalAlignment="Left" Margin="230,282,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtDeliveryDate" IsEnabled="False" Visibility="Hidden" Text="{Binding DeliveryDate}" HorizontalAlignment="Left" Margin="440,338,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
-        <TextBox x:Name="txtShipDate" IsEnabled="False" Visibility="Hidden" Text="{Binding ShipDate}" HorizontalAlignment="Left" Margin="440,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
-        <TextBox x:Name="txtOrderDate" IsEnabled="False" Text="{Binding OrderDate}" HorizontalAlignment="Left" Margin="440,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
-        <TextBox x:Name="txtStatus" IsEnabled="False" Text="{Binding Status}" HorizontalAlignment="Left" Margin="440,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="150"/>
-        <TextBox x:Name="txtTotalPrice" IsEnabled="False" Text="{Binding TotalPrice}" HorizontalAlignment="Left" Margin="228,338,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-1.317,5.273"/>
-        <Label Content="ID:" HorizontalAlignment="Left" Margin="228,41,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
-        <Label Content="Customer Name:" HorizontalAlignment="Left" Margin="228,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
-        <Label Content="Customer Email:" HorizontalAlignment="Left" Margin="228,187,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
-        <Label Content="Customer Address:" HorizontalAlignment="Left" Margin="228,254,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
-        <Label Content="Total Price:" HorizontalAlignment="Left" Margin="228,316,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
-        <Label Content="Order Status::" HorizontalAlignment="Left" Margin="435,113,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
-        <Label Content="Order Date:" HorizontalAlignment="Left" Margin="436,177,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
-        <Label Content="Ship Date:" Visibility="Hidden" Name="lblShipDate" HorizontalAlignment="Left" Margin="440,236,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
-        <Label Content="Delivery Date:" Visibility="Hidden" Name="lblDeliveryDate" HorizontalAlignment="Left" Margin="440,307,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312"/>
-        <Button Content="Button" Name="btnChangeStatus" HorizontalAlignment="Left" Margin="40,70,0,0" VerticalAlignment="Top" Height="36" Width="86"/>
-        <Button Content="Show Order Items" Name="btnShowProducts" HorizontalAlignment="Left" Margin="590,384,0,0" VerticalAlignment="Top" Height="36" Width="141" Click="btnShowProducts_Click"/>
+    <Window.Resources>
+        <local1:OrderStatusToVisibilityConvertor
+        x:Key="OrderStatusToVisibilityConvertor" />
+        <local1:OrderStatusToButtonTextConvertor
+        x:Key="OrderStatusToButtonTextConvertor" />
+    </Window.Resources>
+    <Grid  >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBox x:Name="txtOrderId" IsEnabled="false" Text="{Binding ID}" HorizontalAlignment="Center"  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="0,48,0,0"/>
+        <TextBox Grid.Row="2" x:Name="txtCustomerEmail" IsEnabled="False" Text="{Binding CustomerEmail}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="0,49,0,0"/>
+        <TextBox Grid.Row="1" x:Name="txtCustomerName" IsEnabled="False" Text="{Binding CustomerName}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="0,48,0,0"/>
+        <TextBox Grid.Row="3" x:Name="txtCustomerAddress" IsEnabled="False" Text="{Binding CustomerAdress}" HorizontalAlignment="Center"  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="0,46,0,0"/>
+        <TextBox Grid.Column="1" Grid.Row="3" x:Name="txtDeliveryDate" IsEnabled="False" Visibility="{Binding Path=Status, Converter={StaticResource OrderStatusToVisibilityConvertor}, ConverterParameter=txtDeliveryDate}" Text="{Binding DeliveryDate}" HorizontalAlignment="Center"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="0,46,0,0"/>
+        <TextBox Grid.Column="1" Grid.Row="2" x:Name="txtShipDate" IsEnabled="False" Visibility="{Binding Path=Status, Converter={StaticResource OrderStatusToVisibilityConvertor}, ConverterParameter=txtShipDate}" Text="{Binding ShipDate}" HorizontalAlignment="Center"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="0,49,0,0"/>
+        <TextBox Grid.Column="1" Grid.Row="1" x:Name="txtOrderDate" IsEnabled="False" Text="{Binding OrderDate}" HorizontalAlignment="Center"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="0,48,0,0"/>
+        <TextBox Grid.Column="1" x:Name="txtStatus" IsEnabled="False" Text="{Binding Status}" HorizontalAlignment="Center"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="0,48,0,0"/>
+        <TextBox Grid.Row="4" x:Name="txtTotalPrice" IsEnabled="False" Text="{Binding TotalPrice}" HorizontalAlignment="Center"  TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-1.317,5.273" Margin="0,48,0,0"/>
+        <Label Content="ID:" HorizontalAlignment="Center"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="-30,15,0,0"/>
+        <Label Grid.Row="1" Content="Customer Name:" HorizontalAlignment="Center"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="-30,15,0,0"/>
+        <Label Grid.Row="2" Content="Customer Email:" HorizontalAlignment="Center"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="0,15,0,0"/>
+        <Label Grid.Row="3" Content="Customer Address:" HorizontalAlignment="Center"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="0,15,0,0"/>
+        <Label Grid.Row="4" Content="Total Price:" HorizontalAlignment="Center"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="-30,15,0,0"/>
+        <Label Grid.Column="1" Content="Order Status::" HorizontalAlignment="Center"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="-30,15,0,0"/>
+        <Label Grid.Column="1" Grid.Row="1" Content="Order Date:" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="-30,15,0,0"/>
+        <Label Grid.Column="1" Grid.Row="2" Content="Ship Date:" Visibility="{Binding Path=Status, Converter={StaticResource OrderStatusToVisibilityConvertor}, ConverterParameter=lblShipDate}" Name="lblShipDate" HorizontalAlignment="Center"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="-30,15,0,0"/>
+        <Label Grid.Column="1" Grid.Row="3" Content="Delivery Date:" Visibility="{Binding Path=Status, Converter={StaticResource OrderStatusToVisibilityConvertor}, ConverterParameter=lblDeliveryDate}" Name="lblDeliveryDate" HorizontalAlignment="Center"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="-30,15,0,0"/>
+        <Button Grid.Row="5"  Template="{StaticResource ButtonTemplate1}" Content="{Binding Path=Status, Converter={StaticResource OrderStatusToButtonTextConvertor} }" Name="btnChangeStatus" Visibility="{Binding Path=Status, Converter={StaticResource OrderStatusToVisibilityConvertor}, ConverterParameter=btnChangeStatus}" HorizontalAlignment="Center"  VerticalAlignment="Center" Height="36" Width="232" Click="btnChangeStatus_Click"/>
+        <Button Grid.Column="1" Grid.Row="5" Template="{StaticResource ButtonTemplate1}" Content="Show Order Items" Name="btnShowProducts" HorizontalAlignment="Center" VerticalAlignment="Center" Height="36" Width="196" Click="btnShowProducts_Click" />
     </Grid>
 </Window>

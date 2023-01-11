@@ -7,8 +7,14 @@
         mc:Ignorable="d"
         Title="AdminWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Orders" Name="btnOrders" HorizontalAlignment="Left" Margin="513,301,0,0" VerticalAlignment="Top" Height="47" Width="114" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Click="btnOrders_Click"/>
-        <Button Content="Products" Name="btnProducts" HorizontalAlignment="Left" Margin="513,209,0,0" VerticalAlignment="Top" Height="47" Width="114" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Click="btnProducts_Click"/>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="500*"/>
+            <ColumnDefinition Width="100*" />
+        </Grid.ColumnDefinitions>
+        <Button Content="Orders" Grid.Column="1" Name="btnOrders" Template="{StaticResource ButtonTemplate1}" HorizontalAlignment="Center" VerticalAlignment="Top" Height="47" Width="114" Click="btnOrders_Click" Margin="0,170,0,0"/>
+        <Button Content="Products" Grid.Column="1" Name="btnProducts" Template="{StaticResource ButtonTemplate1}" HorizontalAlignment="Center"  VerticalAlignment="Top" Height="47" Width="114" Click="btnProducts_Click" Margin="0,217,0,0"/>
+        <Grid.Background>
+            <ImageBrush ImageSource="/images/macbook.png" Stretch="UniformToFill"/>
+        </Grid.Background>
     </Grid>
 </Window>

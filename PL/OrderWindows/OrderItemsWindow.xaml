@@ -7,16 +7,54 @@
         mc:Ignorable="d"
          DataContext="{Binding Path=MyOrderItems ,RelativeSource={RelativeSource Self}}"
         Title="OrderItemsWindow" Height="450" Width="800">
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid Width="650" VerticalAlignment="Bottom" Grid.Row="1"  Background="LightBlue">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Padding="10" Grid.Column="0" FontFamily="Consolas" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"  Text="ID" />
+            <TextBlock Padding="10" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Product ID" />
+            <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Product Name" />
+            <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Price" />
+            <TextBlock Padding="10" Grid.Column="4" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Amount" />
+            <TextBlock Padding="10" Grid.Column="5" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Total Price" />
+        </Grid>
         
-        <ListView Grid.Row="1" ItemsSource="{Binding}" Name="orderItemsListView" MouseDoubleClick="orderItemsListView_MouseDoubleClick" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-            
+        <ListView Width="650" Grid.Row="2" ItemsSource="{Binding}" Name="orderItemsListView" MouseDoubleClick="orderItemsListView_MouseDoubleClick" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="600"  Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Padding="10" Grid.Column="0" FontFamily="Consolas" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"  Text="{Binding ID}" />
+                        <TextBlock Padding="10" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding ProductId}" />
+                        <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding ProductName}" />
+                        <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Price}" />
+                        <TextBlock Padding="10" Grid.Column="4" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Amount}" />
+                        <TextBlock Padding="10" Grid.Column="5" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding TotalPrice}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
-        <Label Name="lblInstructions" Content="Double click for changing amount of item." HorizontalAlignment="Left" Margin="144,35,0,0" VerticalAlignment="Top"/>
+        
+        <Label Name="lblInstructions" Grid.Row="0" Content="Double click for changing amount of item." HorizontalAlignment="Left" Margin="35,14,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

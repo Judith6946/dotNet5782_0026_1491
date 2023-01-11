@@ -144,6 +144,26 @@ internal class Product : BlApi.IProduct
         }
     }
 
+    public IEnumerable<ProductItem?> GetProductItemsByFunc(BO.Cart cart, Func<ProductItem, bool> condition)
+    {
+        try
+        {
+            return Dal.Product.GetAll().Select(x =>
+            {
+                BO.OrderItem? item = cart?.ItemsList?.FirstOrDefault(y => y?.ProductId == ((DO.Product)x!).ID, null);
+                var productItem = mapper.Map<DO.Product, BO.ProductItem>((DO.Product)x!);
+                productItem.Amount = item?.Amount ?? 0;
+                return productItem;
+            }).Where(condition);
+            
+
+        }
+        catch (Exception e)
+        {
+            throw new DalException("Exception was thrown while getting the products", e);
+        }
+    }
+
 
     /// <summary>
     /// Get products list.

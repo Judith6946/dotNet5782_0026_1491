@@ -81,8 +81,8 @@ internal class Order : BlApi.IOrder
         return getOrders().Select(order =>
         {
             BO.OrderForList orderForList = mapper.Map<DO.Order, BO.OrderForList>(order ?? new());
-            orderForList.TotalPrice = getOrderItemsByOrder(order?.ID ?? 0).Sum(x => x?.Price * x?.Amount)??0;
-            orderForList.AmountOfItems = getOrderItemsByOrder(order?.ID ?? 0).Sum(x => x?.Amount)??0;
+            orderForList.TotalPrice = getOrderItemsByOrder(order?.ID ?? 0).Sum(x => x?.Price * x?.Amount) ?? 0;
+            orderForList.AmountOfItems = getOrderItemsByOrder(order?.ID ?? 0).Sum(x => x?.Amount) ?? 0;
             return orderForList;
         });
     }
@@ -113,15 +113,15 @@ internal class Order : BlApi.IOrder
         order.DeliveryDate = DateTime.Now;
         BO.Order order2 = mapper.Map<DO.Order, BO.Order>(order);
         order2.Status = BO.Enums.OrderStatus.delivered;
-        order2.TotalPrice = orderItems.Sum(x => x?.Price)??0;
+        order2.TotalPrice = orderItems.Sum(x => x?.Price) ?? 0;
 
         //add items
-        order2.ItemsList = (List<OrderItem?>?)orderItems.Select(item =>
+        order2.ItemsList = orderItems.Select(item =>
         {
-            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item??new());
-            orderItem.ProductName = getProduct(item?.ProductId??0).Name;
+            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item ?? new());
+            orderItem.ProductName = getProduct(item?.ProductId ?? 0).Name;
             return orderItem;
-        });
+        }).ToList<OrderItem?>();
 
         updateProduct(order);
         return order2;
@@ -153,15 +153,15 @@ internal class Order : BlApi.IOrder
         order.ShipDate = DateTime.Now;
         BO.Order order2 = mapper.Map<DO.Order, BO.Order>(order);
         order2.Status = BO.Enums.OrderStatus.sent;
-        order2.TotalPrice = orderItems.Sum(x => x?.Price * x?.Amount)??0;
+        order2.TotalPrice = orderItems.Sum(x => x?.Price * x?.Amount) ?? 0;
 
         //add items
-        order2.ItemsList = (List<OrderItem?>?)orderItems.Select(item =>
+        order2.ItemsList = orderItems.Select(item =>
         {
-            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item??new());
-            orderItem.ProductName = getProduct(item?.ProductId??0).Name;
+            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item ?? new());
+            orderItem.ProductName = getProduct(item?.ProductId ?? 0).Name;
             return orderItem;
-        });
+        }).ToList<OrderItem?>();
 
         updateProduct(order);
         return order2;
@@ -193,19 +193,21 @@ internal class Order : BlApi.IOrder
 
         //find order items
         IEnumerable<DO.OrderItem?> orderItems = getOrderItemsByOrder(id);
-        int index = ((List<DO.OrderItem>)orderItems).FindIndex(x => x.ProductId == productId);
-        if (index == -1)
-            throw new BO.NotFoundException("Could not found this product.");
-        DO.OrderItem item1 = ((List<DO.OrderItem>)orderItems)[index];
+        //int index = ((List<DO.OrderItem?>)orderItems).FindIndex(x => x?.ProductId == productId);
+        //if (index == -1)
+        //    throw new BO.NotFoundException("Could not found this product.");
+        //DO.OrderItem item1 = ((List<DO.OrderItem>)orderItems)[index];
+        DO.OrderItem item1 = orderItems.FirstOrDefault(x => ((DO.OrderItem?)x)?.OrderId == id) 
+            ?? throw new BO.NotFoundException("Could not found this product.");
         item1.Amount = amount;
         updateOrderItem(item1);
-        order2.TotalPrice = orderItems.Sum(x => x?.Price * x?.Amount)??0;
+        order2.TotalPrice = orderItems.Sum(x => x?.Price * x?.Amount) ?? 0;
 
         //add items
         foreach (var item in orderItems)
         {
-            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item??new());
-            orderItem.ProductName = getProduct(item?.ProductId??0).Name;
+            BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item ?? new());
+            orderItem.ProductName = getProduct(item?.ProductId ?? 0).Name;
             order2.ItemsList!.Add(orderItem);
         }
 

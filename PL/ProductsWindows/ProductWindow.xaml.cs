@@ -21,6 +21,7 @@ public partial class ProductWindow : Window
     public static readonly DependencyProperty MyProductProperty =
         DependencyProperty.Register("MyProduct", typeof(Product), typeof(ProductWindow), new PropertyMetadata(null));
 
+    public Array MyCategories { get {return Enum.GetValues(typeof(BO.Enums.Category)); } }
 
 
     /// <summary>
@@ -30,7 +31,6 @@ public partial class ProductWindow : Window
     {
         InitializeComponent();
         _pageStatus = Utils.PageStatus.ADD;
-        cmbProductCategory.ItemsSource= Enum.GetValues(typeof(BO.Enums.Category));
         MyProduct = new Product();
     }
 
@@ -42,7 +42,6 @@ public partial class ProductWindow : Window
     {
         InitializeComponent();
         _pageStatus = Utils.PageStatus.EDIT;
-        cmbProductCategory.ItemsSource = Enum.GetValues(typeof(BO.Enums.Category));
 
         //Product request from the logical layer by ID
         try { MyProduct = bl.Product.GetProduct(_productId); }
@@ -52,8 +51,6 @@ public partial class ProductWindow : Window
         catch (BO.DalException) { MessageBox.Show("Sorry, we were unable to load the product for you!"); this.Close(); }
         txtProductId.IsEnabled = false;
     }
-
-    
 
     private void btnSaveProduct_Click(object sender, RoutedEventArgs e)
     {
@@ -84,5 +81,6 @@ public partial class ProductWindow : Window
             else
                 MessageBox.Show("the product cant updated");
         }   
+    
     }
 }

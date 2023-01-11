@@ -6,25 +6,30 @@
         xmlns:local="clr-namespace:PL.OrderWindows"
         mc:Ignorable="d"
         DataContext="{Binding Path=MyOrderTracking ,RelativeSource={RelativeSource Self}}"
-        Title="OrderTrackingWindow" Height="450" Width="800">
+        Title="OrderTrackingWindow" Height="600" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="txtOrderId" Text="{Binding OrderId}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="0,69,0,0"/>
-        <TextBox x:Name="txtOrderStatus" Text="{Binding StatusOrder}" HorizontalAlignment="Center" Margin="0,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <ListView ItemsSource="{Binding Tracking}" Grid.Row="1" Name="orderTrackingListView" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
+        <TextBox Grid.Row="0" x:Name="txtOrderId" Text="{Binding OrderId}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="0,69,0,0"/>
+        <TextBox Grid.Row="0" x:Name="txtOrderStatus" Text="{Binding StatusOrder}" HorizontalAlignment="Center" Margin="0,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <ListView ItemsSource="{Binding Tracking}" Width="500" BorderBrush="Transparent" Background="Black" Grid.Row="1" Name="orderTrackingListView" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel Width="450" Background="White" Margin="10">
+                        <TextBlock Padding="10" FontFamily="Consolas" Foreground="red" HorizontalAlignment="Center" FontWeight="ExtraBold" Text=" -> " />
+                        <TextBlock Padding="10" FontFamily="Consolas" HorizontalAlignment="Center"  Text="{Binding Path=Item1}" />
+                        <TextBlock Padding="10" FontFamily="Consolas" HorizontalAlignment="Center" Text=": " />
+                        <TextBlock Padding="10" FontFamily="Consolas" HorizontalAlignment="Center" Text="{Binding Path=Item2}" />
+                    </WrapPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
-        <Label Content="Order ID:" HorizontalAlignment="Left" Margin="344,46,0,0" VerticalAlignment="Top"/>
-        <Label Content="Status:" HorizontalAlignment="Left" Margin="344,122,0,0" VerticalAlignment="Top"/>
-        <Button Content="Show Details" Name="btnShowDetails" HorizontalAlignment="Left" Width="120" Margin="651,19,0,0" Grid.Row="2" VerticalAlignment="Top" Click="btnShowDetails_Click"/>
+        <Label Grid.Row="0" Content="Order ID:" HorizontalAlignment="Center" Margin="-20,40,0,0" VerticalAlignment="Top"/>
+        <Label Grid.Row="0" Content="Status:" HorizontalAlignment="Center" Margin="-20,120,0,0" VerticalAlignment="Top"/>
+        <Button Padding="10" Template="{StaticResource ButtonTemplate1}"  Content="Show Details" Name="btnShowDetails" HorizontalAlignment="Left" Width="180" Margin="570,10,0,0" Grid.Row="2" VerticalAlignment="Top" Click="btnShowDetails_Click"/>
 
     </Grid>
 </Window>

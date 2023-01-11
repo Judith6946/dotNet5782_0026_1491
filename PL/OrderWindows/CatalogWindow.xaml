@@ -3,55 +3,87 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL.OrderWindows"
+        xmlns:local="clr-namespace:PL.OrderWindows" xmlns:local1="clr-namespace:PL.Convertors"
         mc:Ignorable="d"
-        DataContext="{Binding Path=MyProductItems ,RelativeSource={RelativeSource Self}}"
-        Title="CatalogWindow" Height="600" Width="800">
+       DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Title="CatalogWindow" Height="800" Width="1000">
+    <Window.Resources>
+        <local1:SelectedItemToEnableButton
+        x:Key="SelectedItemToEnableButton" />
+        <local1:BoolToVisibilityConvertor
+            x:Key="BoolToVisibilityConvertor" />
+    </Window.Resources>
+
     <Grid x:Name="mainGrid">
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="500*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0"
-VerticalAlignment="Stretch" Width="auto">
+
+        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions >
+
+            <ComboBox ItemsSource="{Binding MyCategories}" Name="AttributeSelector"  Grid.Column="0" SelectionChanged="AttributeSelector_SelectionChanged" Margin="189,29,175,41" />
+            <Label x:Name="lblSelecteCategory" Content="select a category:"  FontSize="18"  FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="23,0,0,0" VerticalAlignment="Center" Height="42" Width="257" AutomationProperties.IsColumnHeader="True" Foreground="White"/>
+            <Button BorderBrush="Transparent" Template="{StaticResource ButtonTemplate1}" IsEnabled="{Binding ElementName=AttributeSelector, Path=SelectedIndex, Converter={StaticResource SelectedItemToEnableButton}}" Name="btnClearAll" Click="btnClearAll_Click" Grid.Column="1" Content="clear all"  Margin="332,25,26,32" />
+
+        </Grid>
+
+
+        <Grid Width="750" VerticalAlignment="Bottom" Grid.Row="1"  Background="LightBlue">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions >
-            <ComboBox Name="AttributeSelector" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Grid.Column="1" />
-            <Label x:Name="lblSelecteCategory" Content="select a category:"  FontSize="18"  FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="42" Width="257" AutomationProperties.IsColumnHeader="True" Foreground="#FF5865E0"/>
-            <Button Name="btnClearAll" Grid.Column="1" Content="clear all"  Margin="266,0,0,0" FontSize="24"  FontWeight="Bold" FontStyle="Italic" Grid.ColumnSpan="2" Background="White" Foreground="#FF5865E0" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Padding="10" Grid.Column="0" FontFamily="Consolas" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"  Text="ID" />
+            <TextBlock Padding="10" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Name" />
+            <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Price" />
+            <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Category" />
+            <TextBlock Padding="10" Grid.Column="4" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Available" />
+            <TextBlock Padding="10" Grid.Column="5" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Amount" />
         </Grid>
-        <ListView ItemsSource="{Binding}" Grid.Row="1" Name="productsListView"  >
+
+
+        <ListView  Width="750" ItemsSource="{Binding MyProductItems}" Grid.Row="2" Name="productsListView"  >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <WrapPanel>
-                        <TextBlock Text="Name: " />
-                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                        <TextBlock Text=", " />
-                        <TextBlock Text="Price: " />
-                        <TextBlock Text="{Binding Price}" FontWeight="Bold" />
-                        <TextBlock Text=", " />
-                        <TextBlock Text="Category: " />
-                        <TextBlock Text="{Binding Category}" FontWeight="Bold" />
-                        <TextBlock Text=", " />
-                        <TextBlock Text="Available: " />
-                        <TextBlock Text="{Binding Available}" FontWeight="Bold" />
-                        <TextBlock Text=", " />
-                        <TextBlock Text="Amount: " />
-                        <TextBlock Text="{Binding Amount}" FontWeight="Bold" />
-                        <TextBlock Text="  " />
-                        <Button  Content="+" Tag="{Binding ID}" IsEnabled="{Binding Available}" Click="Add_Button_Click" />
-                        <TextBlock Text="  " />
-                        <Button Content="-" Tag="{Binding ID}" Click="Remove_Button_Click"  />
-
-                    </WrapPanel>
+                    <Grid Width="700"  Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Padding="10" Grid.Column="0" FontFamily="Consolas" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"  Text="{Binding ID}" />
+                        <TextBlock Padding="10" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Name}" />
+                        <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Price}" />
+                        <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Category}" />
+                        <TextBlock Padding="10" Grid.Column="4" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Available}" />
+                        <WrapPanel Grid.Column="5" Orientation="Horizontal">
+                            <Button FontSize="10" Width="20" Foreground="Black" Background="White" Content="-" Tag="{Binding ID}" Click="Remove_Button_Click"  />
+                            <TextBlock Padding="10" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Amount}" />
+                            <Button FontSize="10" Width="20" Foreground="Black" Background="White" Content="+" Tag="{Binding ID}" Visibility="{Binding Available, Converter={StaticResource BoolToVisibilityConvertor}}" Click="Add_Button_Click" />
+                        </WrapPanel>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Name="btnShowCart" Content="My Cart" Grid.Row="2" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Margin="562,5,0,0" Padding="5" Height="44" VerticalAlignment="Top" Click="btnShowCart_Click"/>
+
+        
+        <Button Name="btnShowCart" Content="My Cart" Grid.Row="3" Template="{StaticResource ButtonTemplate1}" Margin="808,0,45,0" Padding="5" Height="44" VerticalAlignment="Center" Click="btnShowCart_Click"/>
 
     </Grid>
 </Window>

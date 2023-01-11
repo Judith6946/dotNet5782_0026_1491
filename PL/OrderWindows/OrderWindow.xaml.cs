@@ -48,32 +48,21 @@ namespace PL.OrderWindows
             if (pageStatus == PageStatus.DISPLAY)
                 btnChangeStatus.Visibility = Visibility.Hidden;
 
-            switch (MyOrder.Status)
-            {
-                case Enums.OrderStatus.approved:
-                    if (pageStatus == PageStatus.EDIT) btnChangeStatus.Content = "Update Order Ship Date";
-                    break;
-                case Enums.OrderStatus.sent:
-                    txtShipDate.Visibility = Visibility.Visible;
-                    lblShipDate.Visibility = Visibility.Visible;
-                    if(pageStatus==PageStatus.EDIT) btnChangeStatus.Content = "Update Order Delivery Date";
-                    break;
-                case Enums.OrderStatus.delivered:
-                    btnChangeStatus.Visibility = Visibility.Hidden;
-                    txtShipDate.Visibility = Visibility.Visible;
-                    lblShipDate.Visibility = Visibility.Visible;
-                    txtDeliveryDate.Visibility = Visibility.Visible;
-                    lblDeliveryDate.Visibility = Visibility.Visible;
-                    break;
-                default:
-                    break;
-            }
         }
 
         private void btnShowProducts_Click(object sender, RoutedEventArgs e)
         {
             PageStatus status = pageStatus == PageStatus.EDIT && MyOrder.Status == Enums.OrderStatus.approved ? PageStatus.EDIT : PageStatus.DISPLAY;
-            new OrderItemsWindow(MyOrder.ID,status).Show();
+            new OrderItemsWindow(MyOrder.ID, status).Show();
+        }
+
+        private void btnChangeStatus_Click(object sender, RoutedEventArgs e)
+        {
+            if (MyOrder.Status == Enums.OrderStatus.approved)
+                MyOrder = bl.Order.UpdateOrderShipping(MyOrder.ID);
+            else if (MyOrder.Status == Enums.OrderStatus.sent)
+                MyOrder = bl.Order.UpdateOrderDelivery(MyOrder.ID);
+            MessageBox.Show("Order was updated!");
         }
     }
 }

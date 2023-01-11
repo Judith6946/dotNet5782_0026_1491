@@ -27,6 +27,16 @@ public partial class ProductsWindow : Window
         DependencyProperty.Register("MyProducts", typeof(ObservableCollection<ProductForList>), typeof(ProductsWindow), new PropertyMetadata(null));
 
 
+    public Array MyCategories
+    {
+        get
+        {
+            return Enum.GetValues(typeof(BO.Enums.Category));
+        }
+        
+    }
+
+
 
     /// <summary>
     /// Initializes the entire form
@@ -39,10 +49,8 @@ public partial class ProductsWindow : Window
         var temp = bl.Product.GetProducts();
         MyProducts = temp == null ? new() : new(temp);
 
-        //Shows all categories
-        AttributeSelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.Category));
-        btnClearAll.IsEnabled = false;
     }
+
 
     /// <summary>
     /// Displays products filtered by selected category
@@ -56,7 +64,6 @@ public partial class ProductsWindow : Window
         {
             //the selected category
             BO.Enums.Category selectedCategory = (BO.Enums.Category)((ComboBox)sender).SelectedItem;
-            btnClearAll.IsEnabled = true;
 
             //Request all products by category from the logical layer
             var temp = bl.Product.GetProductsByFunc(x => x.Category == selectedCategory);
@@ -112,4 +119,5 @@ public partial class ProductsWindow : Window
         window.Show();
         window.Closing += Window_Closing;
     }
+
 }

@@ -51,13 +51,15 @@ public partial class OrdersWindow : Window
 
     private void ordersListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        var window = new OrderWindow(((OrderForList)((ListView)sender).SelectedItem).ID);
+        var window = new OrderWindow(((OrderForList)((ListView)sender).SelectedItem).ID,Utils.PageStatus.EDIT);
         window.Show();
         window.Closing += Window_Closing;
     }
 
     private void Window_Closing(object? sender, CancelEventArgs e)
     {
-        //throw new NotImplementedException();
+        //Requests a request from the logical layer to fetch all the products and displays them
+        var temp = bl.Order.GetOrders();
+        MyOrders = temp == null ? new() : new(temp);
     }
 }

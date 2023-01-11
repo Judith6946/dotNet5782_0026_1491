@@ -37,6 +37,14 @@ public partial class CatalogWindow : Window
     public static readonly DependencyProperty MyProductItemsProperty =
         DependencyProperty.Register("MyProductItems", typeof(ObservableCollection<ProductItem>), typeof(CatalogWindow), new PropertyMetadata(null));
 
+    public Array MyCategories
+    {
+        get
+        {
+            return Enum.GetValues(typeof(BO.Enums.Category));
+        }
+
+    }
 
     public CatalogWindow()
     {
@@ -81,5 +89,45 @@ public partial class CatalogWindow : Window
         var cartWindow = new CartWindow(myCart);
         if (cartWindow.ShowDialog() == true)
             this.Close();
+        else
+        {
+            myCart = cartWindow.MyCart;
+            var temp = bl.Product.GetProductItems(myCart);
+            MyProductItems = temp == null ? new() : new(temp);
+        }
     }
+
+    /// <summary>
+    /// Displays products filtered by selected category
+    /// </summary>
+    /// <param name="sender">AttributeSelector</param>
+    /// <param name="e">more information about AttributeSelector</param>
+    private void AttributeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        //If there is a selected category, it will display products according to it
+        if (AttributeSelector.SelectedIndex != -1)
+        {
+            //the selected category
+            BO.Enums.Category selectedCategory = (BO.Enums.Category)((ComboBox)sender).SelectedItem;
+
+            //Request all products by category from the logical layer
+            MyProductItems = new(bl.Product.GetProductItemsByFunc(myCart, x => x.Category == selectedCategory));
+        }
+    }
+
+    /// <summary>
+    /// Resets the selection and displays all products without filtering
+    /// </summary>
+    /// <param name="sender">btnClearAll</param>
+    /// <param name="e">more information about btnClearAll</param>
+    private void btnClearAll_Click(object sender, RoutedEventArgs e)
+    {
+        //Requests a request from the logical layer to fetch all the products and displays them
+        var temp = bl.Product.GetProductItems(myCart);
+        MyProductItems = temp == null ? new() : new(temp);
+
+        AttributeSelector.SelectedIndex = -1;
+    }
+
+    
 }
