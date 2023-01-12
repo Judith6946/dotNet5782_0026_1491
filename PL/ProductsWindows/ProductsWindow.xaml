@@ -6,37 +6,73 @@
         xmlns:local="clr-namespace:PL.ProductsWindows" xmlns:local1="clr-namespace:PL.Convertors"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="ProductsWindow" Height="640" Width="800"
+        Title="ProductsWindow" Height="800" Width="1000"
         >
     <Window.Resources>
         <local1:SelectedItemToEnableButton
         x:Key="SelectedItemToEnableButton" />
     </Window.Resources>
+
     <Grid Name="MainGrid">
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="500*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
-        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0"
-VerticalAlignment="Stretch" Width="auto">
+
+        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions >
+
+            <!--<ComboBox ItemsSource="{Binding MyCategories}" Name="AttributeSelector" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Grid.Column="1" SelectionChanged="AttributeSelector_SelectionChanged" />
+            <Label x:Name="lblSelecteCategory" Content="select a category:"  FontSize="18"  FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="42" Width="257" AutomationProperties.IsColumnHeader="True" Foreground="#FF5865E0"/>
+            <Button Name="btnClearAll" IsEnabled="{Binding ElementName=AttributeSelector, Path=SelectedIndex, Converter={StaticResource SelectedItemToEnableButton}}" Grid.Column="1" Content="clear all"  Margin="266,0,0,0" FontSize="24"  FontWeight="Bold" FontStyle="Italic" Grid.ColumnSpan="2" Click="btnClearAll_Click" Background="White" Foreground="#FF5865E0" />-->
+
+            <ComboBox ItemsSource="{Binding MyCategories}" Name="AttributeSelector"  Grid.Column="0" SelectionChanged="AttributeSelector_SelectionChanged" Margin="189,29,175,41" />
+            <Label x:Name="lblSelecteCategory" Content="select a category:"  FontSize="18"  FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="23,0,0,0" VerticalAlignment="Center" Height="42" Width="257" AutomationProperties.IsColumnHeader="True" Foreground="White"/>
+            <Button BorderBrush="Transparent" Template="{StaticResource ButtonTemplate1}" IsEnabled="{Binding ElementName=AttributeSelector, Path=SelectedIndex, Converter={StaticResource SelectedItemToEnableButton}}" Name="btnClearAll" Click="btnClearAll_Click" Grid.Column="1" Content="clear all"  Margin="332,25,26,32" />
+
+
+        </Grid>
+
+
+        <Grid Width="750" VerticalAlignment="Bottom" Grid.Row="1"  Background="LightBlue">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions >
-            <ComboBox ItemsSource="{Binding MyCategories}" Name="AttributeSelector" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Grid.Column="1" SelectionChanged="AttributeSelector_SelectionChanged" />
-            <Label x:Name="lblSelecteCategory" Content="select a category:"  FontSize="18"  FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="42" Width="257" AutomationProperties.IsColumnHeader="True" Foreground="#FF5865E0"/>
-            <Button Name="btnClearAll" IsEnabled="{Binding ElementName=AttributeSelector, Path=SelectedIndex, Converter={StaticResource SelectedItemToEnableButton}}" Grid.Column="1" Content="clear all"  Margin="266,0,0,0" FontSize="24"  FontWeight="Bold" FontStyle="Italic" Grid.ColumnSpan="2" Click="btnClearAll_Click" Background="White" Foreground="#FF5865E0" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Padding="10" Grid.Column="0" FontFamily="Consolas" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"  Text="ID" />
+            <TextBlock Padding="10" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Name" />
+            <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Price" />
+            <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="Category" />
         </Grid>
-        <ListView ItemsSource="{Binding Path=MyProducts}" Grid.Row="1" Name="productsListView"  MouseDoubleClick="productsListView_MouseDoubleClick" >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
+
+        <ListView Width="750" ItemsSource="{Binding Path=MyProducts}" Grid.Row="2" Name="productsListView"  MouseDoubleClick="productsListView_MouseDoubleClick" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Width="700"  Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Padding="10" Grid.Column="0" FontFamily="Consolas" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"  Text="{Binding ID}" />
+                        <TextBlock Padding="10" Grid.Column="1" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Name}" />
+                        <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Price}" />
+                        <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Category}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
-        <Button Name="btnAddProduct" Content="Add new Product" Grid.Row="2" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="562,5,0,0" Padding="5" Click="btnAddProduct_Click" Width="238"/>
+        <Button Name="btnAddProduct" Template="{StaticResource ButtonTemplate1}" Content="Add new Product" Grid.Row="3" HorizontalAlignment="Left" Margin="779,10,0,-5" Padding="5" Click="btnAddProduct_Click" Width="211"/>
 
     </Grid>
 </Window>

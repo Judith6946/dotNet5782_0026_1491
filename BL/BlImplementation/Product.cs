@@ -144,6 +144,13 @@ internal class Product : BlApi.IProduct
         }
     }
 
+    /// <summary>
+    /// Get product items by func filter
+    /// </summary>
+    /// <param name="cart">Cart of customer.</param>
+    /// <param name="condition">Condition to be checked.</param>
+    /// <returns>Collection of product item filtered by func</returns>
+    /// <exception cref="DalException">Thrown when products cant be loaded.</exception>
     public IEnumerable<ProductItem?> GetProductItemsByFunc(BO.Cart cart, Func<ProductItem, bool> condition)
     {
         try

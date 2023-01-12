@@ -19,7 +19,8 @@
         <Label Content="Category:" HorizontalAlignment="Left" Margin="230,152,0,0" VerticalAlignment="Top" Foreground="White" FontSize="14" FontWeight="Bold"/>
         <Label Content="in stock:" HorizontalAlignment="Left" Margin="230,261,0,0" VerticalAlignment="Top" Foreground="White" FontSize="14" FontWeight="Bold"/>
         <ComboBox ItemsSource="{Binding MyCategories}" Name="cmbProductCategory" SelectedItem="{Binding MyProduct.Category}" HorizontalAlignment="Left" Margin="228,176,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnSaveProduct" Content="Save" HorizontalAlignment="Left" Margin="288,352,0,0" VerticalAlignment="Top" Width="106" Click="btnSaveProduct_Click"/>
+        <Button x:Name="btnSaveProduct" Content="Save" HorizontalAlignment="Left" Margin="182,352,0,0" VerticalAlignment="Top" Width="106" Click="btnSaveProduct_Click"/>
+        <Button x:Name="btnDeleteProduct" Content="Delete" HorizontalAlignment="Left" Margin="355,352,0,0" VerticalAlignment="Top" Width="106" Click="btnDeleteProduct_Click" />
 
 
     </Grid>

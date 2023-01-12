@@ -1,5 +1,7 @@
 ﻿using BlApi;
 using BO;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -40,7 +42,8 @@ public partial class CartWindow : Window
             this.Close();
         }
         catch (SoldOutException ex) { MessageBox.Show("Sold out! \n " + ex.Message); }
-        catch(InvalidInputException ex) { MessageBox.Show("Invalid input! \n " + ex.Message); }
+        catch (DalException) { MessageBox.Show("Sorry, something went wrong. please try again"); }
+        catch (InvalidInputException ex) { MessageBox.Show("Invalid input! \n " + ex.Message); }
     }
 
     private void Remove_Button_Click(object sender, RoutedEventArgs e)
@@ -48,7 +51,9 @@ public partial class CartWindow : Window
         try
         {
             int id = int.Parse(((Button)sender).Tag.ToString()!);
-            MyCart = bl.Cart.RemoveItem(MyCart, id);
+            var temp = bl.Cart.RemoveItem(MyCart, id);
+            MyCart = new BO.Cart() { CustomerAdress = temp.CustomerAdress, CustomerEmail = temp.CustomerEmail, CustomerName = temp.CustomerName, TotalPrice = temp.TotalPrice, ItemsList = new(temp.ItemsList ?? new()) };
+
         }
         catch (NotFoundException) { MessageBox.Show("Cannot find this product on your cart."); }
         catch (InvalidInputException) { MessageBox.Show("Sorry, your input was wrong. please try again."); }
@@ -60,7 +65,8 @@ public partial class CartWindow : Window
         try
         {
             int id = int.Parse(((Button)sender).Tag.ToString()!);
-            MyCart = bl.Cart.AddItem(MyCart, id);
+            var temp = bl.Cart.AddItem(MyCart, id);
+            MyCart = new BO.Cart() { CustomerAdress = temp.CustomerAdress, CustomerEmail = temp.CustomerEmail, CustomerName = temp.CustomerName, TotalPrice = temp.TotalPrice, ItemsList = new (temp.ItemsList ?? new())};
         }
         catch (NotFoundException) { MessageBox.Show("Cannot find this product on your cart."); }
         catch (InvalidInputException) { MessageBox.Show("Sorry, something went wrong. please try again."); }

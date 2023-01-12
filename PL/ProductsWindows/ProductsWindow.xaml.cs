@@ -44,10 +44,21 @@ public partial class ProductsWindow : Window
     public ProductsWindow()
     {
         InitializeComponent();
+        updateProducts();
+    }
 
-        //Requests a request from the logical layer to fetch all the products and displays them
-        var temp = bl.Product.GetProducts();
-        MyProducts = temp == null ? new() : new(temp);
+    /// <summary>
+    /// Update MyProducts property.
+    /// </summary>
+    private void updateProducts()
+    {
+        try
+        {
+            //Requests a request from the logical layer to fetch all the products and displays them
+            var temp = bl.Product.GetProducts();
+            MyProducts = temp == null ? new() : new(temp);
+        }
+        catch (DalException) { MessageBox.Show("could not load products information, please try again later."); }
 
     }
 
@@ -64,10 +75,14 @@ public partial class ProductsWindow : Window
         {
             //the selected category
             BO.Enums.Category selectedCategory = (BO.Enums.Category)((ComboBox)sender).SelectedItem;
-
-            //Request all products by category from the logical layer
-            var temp = bl.Product.GetProductsByFunc(x => x.Category == selectedCategory);
-            MyProducts = temp == null ? new() : new(temp);
+            try
+            {
+                //Request all products by category from the logical layer
+                var temp = bl.Product.GetProductsByFunc(x => x.Category == selectedCategory);
+                MyProducts = temp == null ? new() : new(temp);
+            }
+            catch (DalException) { MessageBox.Show("Could not load products info."); }
+            
         }
     }
 
@@ -78,9 +93,7 @@ public partial class ProductsWindow : Window
     /// <param name="e">more information about btnClearAll</param>
     private void btnClearAll_Click(object sender, RoutedEventArgs e)
     {
-        //Requests a request from the logical layer to fetch all the products and displays them
-        var temp = bl.Product.GetProducts();
-        MyProducts = temp == null ? new() : new(temp);
+        updateProducts();
         AttributeSelector.SelectedIndex = -1;
     }
 
@@ -103,9 +116,7 @@ public partial class ProductsWindow : Window
     /// <param name="e">more information about  Window_Closing</param>
     private void Window_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
     {
-        //Requests a request from the logical layer to fetch all the products and displays them
-        var temp = bl.Product.GetProducts();
-        MyProducts = temp == null ? new() : new(temp);
+        updateProducts();
     }
 
     /// <summary>

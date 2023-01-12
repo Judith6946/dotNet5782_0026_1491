@@ -66,6 +66,8 @@ internal class Order : BlApi.IOrder
             orderItem.ProductName = getProduct(item?.ProductId ?? 0).Name;
             return orderItem;
         }).ToList<OrderItem?>();
+
+      
         //return order object.
         return order;
 
@@ -193,21 +195,29 @@ internal class Order : BlApi.IOrder
 
         //find order items
         IEnumerable<DO.OrderItem?> orderItems = getOrderItemsByOrder(id);
-        //int index = ((List<DO.OrderItem?>)orderItems).FindIndex(x => x?.ProductId == productId);
-        //if (index == -1)
-        //    throw new BO.NotFoundException("Could not found this product.");
-        //DO.OrderItem item1 = ((List<DO.OrderItem>)orderItems)[index];
-        DO.OrderItem item1 = orderItems.FirstOrDefault(x => ((DO.OrderItem?)x)?.OrderId == id) 
+        DO.OrderItem item1 = orderItems.FirstOrDefault(x => ((DO.OrderItem?)x)?.OrderId == id&& ((DO.OrderItem?)x)?.ProductId==productId) 
             ?? throw new BO.NotFoundException("Could not found this product.");
         item1.Amount = amount;
-        updateOrderItem(item1);
+
+        if (amount == 0)
+            removeOrderItem(item1.ID); 
+        else
+            updateOrderItem(item1);
+
         order2.TotalPrice = orderItems.Sum(x => x?.Price * x?.Amount) ?? 0;
 
         //add items
         foreach (var item in orderItems)
         {
+            if (item?.ID == item1.ID && amount == 0)
+                continue;
             BO.OrderItem orderItem = mapper.Map<DO.OrderItem, BO.OrderItem>(item ?? new());
             orderItem.ProductName = getProduct(item?.ProductId ?? 0).Name;
+            if (item?.ID == item1.ID)
+            {
+                orderItem.Amount = amount;
+                orderItem.TotalPrice=orderItem.Price* orderItem.Amount;
+            }            
             order2.ItemsList!.Add(orderItem);
         }
 
@@ -326,6 +336,24 @@ internal class Order : BlApi.IOrder
         catch (Exception e)
         {
             throw new DalException("Exception was thrown while updating the order item.", e);
+        }
+
+    }
+
+    /// <summary>
+    /// Remove an order item.
+    /// </summary>
+    /// <param name="itemId">ID of Order item object to be removed.</param>
+    /// <exception cref="DalException">Thrown when DB could not remove the order item.</exception>
+    private static void removeOrderItem(int itemId)
+    {
+        try
+        {
+            Dal.OrderItem.Delete(itemId);
+        }
+        catch (Exception e)
+        {
+            throw new DalException("Exception was thrown while deleting the order item.", e);
         }
 
     }

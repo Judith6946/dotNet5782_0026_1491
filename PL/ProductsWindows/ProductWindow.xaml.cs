@@ -32,6 +32,7 @@ public partial class ProductWindow : Window
         InitializeComponent();
         _pageStatus = Utils.PageStatus.ADD;
         MyProduct = new Product();
+        btnDeleteProduct.Visibility = Visibility.Hidden;
     }
 
     /// <summary>
@@ -52,6 +53,9 @@ public partial class ProductWindow : Window
         txtProductId.IsEnabled = false;
     }
 
+    /// <summary>
+    /// Click event of save button
+    /// </summary>
     private void btnSaveProduct_Click(object sender, RoutedEventArgs e)
     {
         
@@ -82,5 +86,21 @@ public partial class ProductWindow : Window
                 MessageBox.Show("the product cant updated");
         }   
     
+    }
+
+    /// <summary>
+    /// Delete the product
+    /// </summary>
+    private void btnDeleteProduct_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            bl.Product.DeleteProduct(MyProduct.ID);
+            MessageBox.Show("Product was deleted!");
+            Close();
+        }
+        catch (DalException) { MessageBox.Show("Could not delete this product."); }
+        catch (BO.InvalidInputException) { MessageBox.Show("Input was invalid. please try again."); }
+        catch (BO.ImpossibleException) { MessageBox.Show("This product was already ordered, it cannot be deleted."); }
     }
 }

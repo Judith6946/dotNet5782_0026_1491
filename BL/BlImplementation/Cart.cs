@@ -53,6 +53,7 @@ internal class Cart : ICart
             cart.ItemsList.Add(item);
             cart.TotalPrice += p.Price;
         }
+        cart.ItemsList = cart.ItemsList.OrderBy(x => x?.ID).ToList();
         return cart;
     }
 
@@ -152,7 +153,8 @@ internal class Cart : ICart
         }
 
         //return updated cart.
-        return cart;
+        cart.ItemsList = cart.ItemsList.OrderBy(x => x?.ID).ToList();
+        return cart;        
 
     }
 

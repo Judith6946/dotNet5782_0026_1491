@@ -51,12 +51,19 @@ public partial class CatalogWindow : Window
         InitializeComponent();
 
         myCart = new() { TotalPrice = 0, ItemsList = new() };
-
-        //Requests a request from the logical layer to fetch all the products and displays them
-        var temp = bl.Product.GetProductItems(myCart);
-        MyProductItems = temp == null ? new() : new(temp);
+        try
+        {
+            //Requests a request from the logical layer to fetch all the products and displays them
+            var temp = bl.Product.GetProductItems(myCart);
+            MyProductItems = temp == null ? new() : new(temp);
+        }
+        catch (DalException) { MessageBox.Show("Sorry, something went wrong, please try again."); }
+        
     }
 
+    /// <summary>
+    /// Click event of remove buttons
+    /// </summary>
     private void Remove_Button_Click(object sender, RoutedEventArgs e)
     {
         try
@@ -70,6 +77,9 @@ public partial class CatalogWindow : Window
         catch (InvalidInputException) { MessageBox.Show("Sorry, something went wrong. please try again."); }
     }
 
+    /// <summary>
+    /// Click event of add button.
+    /// </summary>
     private void Add_Button_Click(object sender, RoutedEventArgs e)
     {
         try
@@ -84,6 +94,9 @@ public partial class CatalogWindow : Window
         catch (SoldOutException) { MessageBox.Show("Sorry, this product was sold out"); }
     }
 
+    /// <summary>
+    /// Click event of 'show cart' button.
+    /// </summary>
     private void btnShowCart_Click(object sender, RoutedEventArgs e)
     {
         var cartWindow = new CartWindow(myCart);
@@ -104,15 +117,20 @@ public partial class CatalogWindow : Window
     /// <param name="e">more information about AttributeSelector</param>
     private void AttributeSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        //If there is a selected category, it will display products according to it
-        if (AttributeSelector.SelectedIndex != -1)
+        try
         {
-            //the selected category
-            BO.Enums.Category selectedCategory = (BO.Enums.Category)((ComboBox)sender).SelectedItem;
+            //If there is a selected category, it will display products according to it
+            if (AttributeSelector.SelectedIndex != -1)
+            {
+                //the selected category
+                BO.Enums.Category selectedCategory = (BO.Enums.Category)((ComboBox)sender).SelectedItem;
 
-            //Request all products by category from the logical layer
-            MyProductItems = new(bl.Product.GetProductItemsByFunc(myCart, x => x.Category == selectedCategory));
+                //Request all products by category from the logical layer
+                MyProductItems = new(bl.Product.GetProductItemsByFunc(myCart, x => x.Category == selectedCategory));
+            }
         }
+        catch (DalException) { MessageBox.Show("Something went wrong. please try again."); }
+       
     }
 
     /// <summary>
@@ -122,11 +140,15 @@ public partial class CatalogWindow : Window
     /// <param name="e">more information about btnClearAll</param>
     private void btnClearAll_Click(object sender, RoutedEventArgs e)
     {
-        //Requests a request from the logical layer to fetch all the products and displays them
-        var temp = bl.Product.GetProductItems(myCart);
-        MyProductItems = temp == null ? new() : new(temp);
-
-        AttributeSelector.SelectedIndex = -1;
+        try
+        {
+            //Requests a request from the logical layer to fetch all the products and displays them
+            var temp = bl.Product.GetProductItems(myCart);
+            MyProductItems = temp == null ? new() : new(temp);
+            AttributeSelector.SelectedIndex = -1;
+        }
+        catch (DalException) { MessageBox.Show("Sorry, something went wrong, please try again."); }
+       
     }
 
     

@@ -35,15 +35,25 @@ public partial class OrderTrackingWindow : Window
     public static readonly DependencyProperty MyOrderTrackingProperty =
         DependencyProperty.Register("MyOrderTracking", typeof(OrderTracking), typeof(OrderTrackingWindow), new PropertyMetadata(null));
 
-
+  
     public OrderTrackingWindow(int id)
     {
         InitializeComponent();
-        //Requests a request from the logical layer to fetch all the products and displays them
-        var temp = bl.Order.FollowOrder(id);
-        MyOrderTracking = temp == null ? new() : temp;
+        try
+        {
+            //Requests a request from the logical layer to fetch all the products and displays them
+            var temp = bl.Order.FollowOrder(id);
+            MyOrderTracking = temp == null ? new() : temp;
+        }
+        catch (DalException) { MessageBox.Show("Could not find your order information. please try again later"); }
+        catch (InvalidInputException) { MessageBox.Show("ID was not valid"); }
+
+       
     }
 
+    /// <summary>
+    /// Click event of show details button.
+    /// </summary>
     private void btnShowDetails_Click(object sender, RoutedEventArgs e)
     {
         new OrderWindow(MyOrderTracking.OrderId).Show();

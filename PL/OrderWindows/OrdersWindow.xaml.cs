@@ -42,13 +42,27 @@ public partial class OrdersWindow : Window
     public OrdersWindow()
     {
         InitializeComponent();
+        UpdateOrders();
+    }
 
-        //Requests a request from the logical layer to fetch all the products and displays them
-        var temp = bl.Order.GetOrders();
-        MyOrders = temp == null ? new() : new(temp);
+    /// <summary>
+    /// Update MyOrders
+    /// </summary>
+    private void UpdateOrders()
+    {
+        try
+        {
+            //Requests a request from the logical layer to fetch all the products and displays them
+            var temp = bl.Order.GetOrders();
+            MyOrders = temp == null ? new() : new(temp);
+        }
+        catch (DalException) { MessageBox.Show("Orders details could not be loaded, please try again leter."); }
 
     }
 
+    /// <summary>
+    /// Click event of list view.
+    /// </summary>
     private void ordersListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         var window = new OrderWindow(((OrderForList)((ListView)sender).SelectedItem).ID,Utils.PageStatus.EDIT);
@@ -56,10 +70,11 @@ public partial class OrdersWindow : Window
         window.Closing += Window_Closing;
     }
 
-    private void Window_Closing(object? sender, CancelEventArgs e)
-    {
-        //Requests a request from the logical layer to fetch all the products and displays them
-        var temp = bl.Order.GetOrders();
-        MyOrders = temp == null ? new() : new(temp);
-    }
+    /// <summary>
+    /// On Order-window closing
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Window_Closing(object? sender, CancelEventArgs e) => UpdateOrders();
+   
 }

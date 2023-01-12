@@ -53,7 +53,7 @@
                         <TextBlock Padding="10" Grid.Column="2" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Price}" />
                         <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding TotalPrice}" />
                         <WrapPanel Grid.Column="4" Orientation="Horizontal">
-                            <Button FontSize="10" Width="20" Foreground="Black" Background="White" Content="-" Tag="{Binding ProductId}"  Click="Remove_Button_Click" />
+                            <Button FontSize="10" Width="20" Foreground="Black" Background="White" Content="-" Tag="{Binding ProductId }"  Click="Remove_Button_Click" />
                             <TextBlock Padding="10" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Amount}" />
                             <Button FontSize="10" Width="20" Foreground="Black" Background="White" Content="+" Tag="{Binding ProductId}" Click="Add_Button_Click"/>
                         </WrapPanel>
@@ -62,13 +62,15 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Button Content="Finish Order" Grid.Row="3" Height="50" Margin="557,105,84,106" Name="btnFinishOrder" Click="btnFinishOrder_Click" />
+        <Button Template="{StaticResource ButtonTemplate1}" Content="Finish Order" Grid.Row="3" Height="50" Margin="557,105,84,106" Name="btnFinishOrder" Click="btnFinishOrder_Click" />
 
         <TextBox Width="120" Height="30" Grid.Row="3" Margin="162,61,518,170" Name="txtCustomerName" Text="{Binding CustomerName}" />
         <Label Width="120" Height="30" Grid.Row="3" Margin="76,65,604,166" Content="Name:" />
         <TextBox Width="120" Height="30" Grid.Row="3" Margin="162,165,518,66" Name="txtCustomerEmail" Text="{Binding CustomerEmail}" />
-        <Label Width="120" Height="30" Grid.Row="3" Margin="76,113,604,118" Content="Email:" />
-        <Label Width="120" Height="30" Grid.Row="3" Margin="76,165,604,66" Content="Adress:" />
+        <Label Width="120" Height="30" Grid.Row="3" Margin="76,113,604,118" Content="Adress:" />
+        <Label Width="120" Height="30" Grid.Row="3" Margin="76,165,604,66" Content="Email:" />
         <TextBox Width="120" Height="30" Grid.Row="3" Margin="162,111,518,120" Name="txtCustomerAdress" Text="{Binding CustomerAdress}" />
+    
+        
     </Grid>
 </Window>

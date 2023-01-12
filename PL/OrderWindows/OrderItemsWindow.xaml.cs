@@ -41,15 +41,20 @@ public partial class OrderItemsWindow : Window
 
 
 
-    public OrderItemsWindow(int id,PageStatus _pageStatus=PageStatus.DISPLAY)
+    public OrderItemsWindow(int id, PageStatus _pageStatus = PageStatus.DISPLAY)
     {
         InitializeComponent();
-
         orderId = id;
-        //Requests a request from the logical layer to fetch all the products and displays them
-        var order = bl.Order.GetOrder(id);
-        var temp = order.ItemsList;
-        MyOrderItems = temp == null ? new() : new(temp);
+
+        try
+        {
+            //Requests a request from the logical layer to fetch all the products and displays them
+            var order = bl.Order.GetOrder(id);
+            var temp = order.ItemsList;
+            MyOrderItems = temp == null ? new() : new(temp);
+        }
+        catch (InvalidInputException) { MessageBox.Show("Your order was not found, please try again."); }
+        catch (DalException) { MessageBox.Show("Sorry, something went wrong, please try again"); }
 
         pageStatus = _pageStatus;
         if (pageStatus != PageStatus.EDIT)
@@ -58,6 +63,9 @@ public partial class OrderItemsWindow : Window
         }
     }
 
+    /// <summary>
+    /// Click event of order items list
+    /// </summary>
     private void orderItemsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
         int amount;
@@ -71,26 +79,37 @@ public partial class OrderItemsWindow : Window
                     MessageBox.Show("Invalid amount");
                 else
                 {
-                    UpdateProductAmount(((OrderItem)((ListView)sender).SelectedItem).ID, amount);
+
+                    Order? order = UpdateProductAmount(((OrderItem)((ListView)sender).SelectedItem).ProductId, amount);
                     //Requests a request from the logical layer to fetch all the products and displays them
-                    var order = bl.Order.GetOrder(orderId);
-                    var temp = order.ItemsList;
+                    var temp = order != null ? order?.ItemsList : null;
                     MyOrderItems = temp == null ? new() : new(temp);
+
+
                 }
-                    
+
             }
         }
     }
 
-    private void UpdateProductAmount(int productId, int newAmount)
+    /// <summary>
+    /// Update a product amount in order.
+    /// </summary>
+    /// <param name="productId">Product to be updated.</param>
+    /// <param name="newAmount">New amount of product.</param>
+    /// <returns>Updated order.</returns>
+    private Order? UpdateProductAmount(int productId, int newAmount)
     {
         try
         {
-            bl.Order.UpdateOrder(orderId, productId, newAmount);
+            return bl.Order.UpdateOrder(orderId, productId, newAmount);
         }
         catch (InvalidInputException) { MessageBox.Show("Your input was invalid"); }
         catch (ImpossibleException) { MessageBox.Show("Order was already shipped"); }
         catch (NotFoundException) { MessageBox.Show("Cannot find this product on your order"); }
+        catch (DalException) { MessageBox.Show("Sorry, something went wrong. please try again"); }
 
+        return null;
     }
+
 }
