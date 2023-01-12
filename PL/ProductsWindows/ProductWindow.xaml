@@ -8,18 +8,18 @@
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="ProductWindow" Height="450" Width="800">
     <Grid>
-        <TextBox x:Name="txtProductId" Text="{Binding MyProduct.ID}" HorizontalAlignment="Left" Margin="228,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtInStock" Text="{Binding MyProduct.InStock}" HorizontalAlignment="Left" Margin="228,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtProductId" Text="{Binding MyProduct.ID}" HorizontalAlignment="Left" Margin="228,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtInStock" Text="{Binding MyProduct.InStock}" HorizontalAlignment="Left" Margin="228,287,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="txtProductPrice" Text="{Binding MyProduct.Price}" HorizontalAlignment="Left" Margin="228,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
-        <TextBox x:Name="txtProductName" Text="{Binding MyProduct.Name}" HorizontalAlignment="Left" Margin="228,133,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <Label Content="ID:" HorizontalAlignment="Left" Margin="230,65,0,0" VerticalAlignment="Top" Foreground="#FF5865E0" FontWeight="Bold" FontSize="14"/>
-        <Label Content="Name:" HorizontalAlignment="Left" Margin="230,109,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="#FF5865E0"/>
-        <Label Content="Price:" HorizontalAlignment="Left" Margin="230,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="#FF5865E0"/>
-        <Label Content="Category:" HorizontalAlignment="Left" Margin="230,152,0,0" VerticalAlignment="Top" Foreground="#FF5865E0" FontSize="14" FontWeight="Bold"/>
-        <Label Content="in stock:" HorizontalAlignment="Left" Margin="230,247,0,0" VerticalAlignment="Top" Foreground="#FF5865E0" FontSize="14" FontWeight="Bold"/>
+        <TextBox x:Name="txtProductName" Text="{Binding MyProduct.Name}" HorizontalAlignment="Left" Margin="228,115,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <Label Content="ID:" HorizontalAlignment="Left" Margin="230,29,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" FontSize="14"/>
+        <Label Content="Name:" HorizontalAlignment="Left" Margin="230,89,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="White"/>
+        <Label Content="Price:" HorizontalAlignment="Left" Margin="230,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="White"/>
+        <Label Content="Category:" HorizontalAlignment="Left" Margin="230,152,0,0" VerticalAlignment="Top" Foreground="White" FontSize="14" FontWeight="Bold"/>
+        <Label Content="in stock:" HorizontalAlignment="Left" Margin="230,261,0,0" VerticalAlignment="Top" Foreground="White" FontSize="14" FontWeight="Bold"/>
         <ComboBox ItemsSource="{Binding MyCategories}" Name="cmbProductCategory" SelectedItem="{Binding MyProduct.Category}" HorizontalAlignment="Left" Margin="228,176,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnSaveProduct" Content="Save" HorizontalAlignment="Left" FontSize="24" Background="#FF5865E0" FontWeight="Bold" FontStyle="Italic" Margin="230,352,0,0" VerticalAlignment="Top" Width="106" Click="btnSaveProduct_Click"/>
+        <Button x:Name="btnSaveProduct" Content="Save" HorizontalAlignment="Left" Margin="288,352,0,0" VerticalAlignment="Top" Width="106" Click="btnSaveProduct_Click"/>
 
 
     </Grid>
