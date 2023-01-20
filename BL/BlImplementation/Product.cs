@@ -2,6 +2,7 @@
 using AutoMapper;
 using DalApi;
 using BO;
+using System.Security.Cryptography;
 
 namespace BlImplementation;
 
@@ -134,6 +135,7 @@ internal class Product : BlApi.IProduct
                 BO.OrderItem? item = cart?.ItemsList?.FirstOrDefault(y => y?.ProductId == ((DO.Product)x!).ID, null);
                 var productItem = mapper.Map<DO.Product, BO.ProductItem>((DO.Product)x!);
                 productItem.Amount = item?.Amount ?? 0;
+                productItem.Available = ((DO.Product)x).InStock > productItem.Amount;
                 return productItem;
             });
 
@@ -162,7 +164,7 @@ internal class Product : BlApi.IProduct
                 productItem.Amount = item?.Amount ?? 0;
                 return productItem;
             }).Where(condition);
-            
+
 
         }
         catch (Exception e)
@@ -181,8 +183,9 @@ internal class Product : BlApi.IProduct
     {
         try
         {
-            List<BO.ProductForList> products = new List<BO.ProductForList>();
-            return Dal.Product.GetAll().Select(x => mapper.Map<DO.Product, BO.ProductForList>((DO.Product)x!));
+            return (from product in Dal.Product.GetAll()
+                    orderby product?.ID
+                    select mapper.Map<DO.Product, BO.ProductForList>((DO.Product)product));
         }
         catch (Exception e)
         {
@@ -199,8 +202,11 @@ internal class Product : BlApi.IProduct
     {
         try
         {
-            List<BO.ProductForList> products = new List<BO.ProductForList>();
-            return Dal.Product.GetAll().Select(x => mapper.Map<DO.Product, BO.ProductForList>((DO.Product)x!)).Where(condition);
+            return (from product in Dal.Product.GetAll()
+                    orderby product?.ID
+                    let productForList = mapper.Map<DO.Product, BO.ProductForList>((DO.Product)product)
+                    where condition(productForList)
+                    select productForList);
         }
         catch (Exception e)
         {
@@ -240,17 +246,12 @@ internal class Product : BlApi.IProduct
     {
         try
         {
-            IEnumerable<DO.Order?> orders = Dal.Order.GetAll();
-            foreach (DO.Order? order in orders)
-            {
-                IEnumerable<DO.OrderItem?> orderItems = Dal.OrderItem.GetByOrder((int)order?.ID!);
-                foreach (DO.OrderItem? item in orderItems)
-                {
-                    if (item?.ProductId == productId)
-                        return true;
-                }
-            }
-            return false;
+            IEnumerable<DO.OrderItem?> items = Dal.OrderItem.GetAll();
+            return (from item in items
+                    where item?.ProductId == productId
+                    group item by item?.ProductId into p
+                    select new { count = p.ToArray().Length }).ToArray().Length > 0;
+
         }
         catch (Exception e)
         {
