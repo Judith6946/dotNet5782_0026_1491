@@ -184,7 +184,7 @@ internal class Program
     private static void UpdateOrderDelivery()
     {
         Console.WriteLine("Insert id:");
-        string s = Console.ReadLine();
+        string s = Console.ReadLine()??"";
         int id;
         if (int.TryParse(s, out id))
         {
@@ -202,7 +202,7 @@ internal class Program
     private static void FollowOrder()
     {
         Console.WriteLine("Insert id:");
-        string s = Console.ReadLine();
+        string s = Console.ReadLine()??"";
         int id;
         if (int.TryParse(s, out id))
         {
@@ -220,7 +220,7 @@ internal class Program
     private static void UpdateOrderShipping()
     {
         Console.WriteLine("Insert id:");
-        string s = Console.ReadLine();
+        string s = Console.ReadLine()??"";
         int id;
         if (int.TryParse(s, out id))
         {
@@ -260,11 +260,11 @@ internal class Program
         int id, productId, amount;
         string strId, strPID, strAmount;
         Console.WriteLine("insert id:");
-        strId = Console.ReadLine();
+        strId = Console.ReadLine()??"";
         Console.WriteLine("insert product id");
-        strPID = Console.ReadLine();
+        strPID = Console.ReadLine()??"";
         Console.WriteLine("insert amount");
-        strAmount = Console.ReadLine();
+        strAmount = Console.ReadLine()??"";
 
         if (int.TryParse(strId, out id) && int.TryParse(strPID, out productId) && int.TryParse(strAmount, out amount))
         {
@@ -287,16 +287,16 @@ internal class Program
     private static void makeOrder()
     {
         Console.WriteLine("Insert Your Email:");
-        string email = Console.ReadLine();
+        string email = Console.ReadLine()??"";
         Console.WriteLine("Insert Your Name:");
-        string name = Console.ReadLine();
+        string name = Console.ReadLine()??"";
         Console.WriteLine("Insert Your Adress:");
-        string adress = Console.ReadLine();
+        string adress = Console.ReadLine()??"";
         cart.CustomerName = name;
         cart.CustomerAdress = adress;
         cart.CustomerEmail = email;
         bl.Cart.MakeOrder(cart);
-        cart = new Cart() { ItemsList = new List<OrderItem>(), TotalPrice = 0 };
+        cart = new Cart() { ItemsList = new List<OrderItem?>(), TotalPrice = 0 };
     }
 
     /// <summary>
@@ -306,9 +306,9 @@ internal class Program
     private static void updateAmountOnCart()
     {
         Console.WriteLine("Insert product id:");
-        string s1 = Console.ReadLine();
+        string s1 = Console.ReadLine() ?? "";
         Console.WriteLine("Insert new Amount:");
-        string s2 = Console.ReadLine();
+        string s2 = Console.ReadLine() ?? "";
         int id, amount;
         if (int.TryParse(s1, out id) && int.TryParse(s2, out amount))
         {
@@ -326,7 +326,7 @@ internal class Program
     private static void addItemForCart()
     {
         Console.WriteLine("Insert product id:");
-        string s = Console.ReadLine();
+        string s = Console.ReadLine() ?? "";
         int id;
         if (int.TryParse(s, out id))
         {
@@ -354,11 +354,11 @@ internal class Program
         Console.WriteLine("please enter product name:");
         p.Name = Console.ReadLine();
         Console.WriteLine("please enter product price:");
-        p.Price = int.Parse(Console.ReadLine());
+        p.Price = int.Parse(Console.ReadLine()??"");
         Console.WriteLine("please enter amount in stock");
-        p.InStock = int.Parse(Console.ReadLine());
+        p.InStock = int.Parse(Console.ReadLine()??"");
         Console.WriteLine("please choose a category: \npress 0 for necklace \npress 1 for ring \npress 2 for bracelet \npress 3 for earrings \npress 4 for personal_design");
-        p.Category = (Enums.Category)Enum.Parse(typeof(Enums.Category), Console.ReadLine());
+        p.Category = (Enums.Category)Enum.Parse(typeof(Enums.Category), Console.ReadLine()??"");
         return p;
     }
 
@@ -369,7 +369,7 @@ internal class Program
     private static void updateProduct()
     {
         Console.WriteLine("please enter product id:");
-        string s = Console.ReadLine();
+        string s = Console.ReadLine() ?? "";
         int id;
         if (int.TryParse(s, out id))
         {
@@ -426,7 +426,7 @@ internal class Program
     private static void addProduct()
     {
         Console.WriteLine("please enter product id:");
-        string s = Console.ReadLine();
+        string s = Console.ReadLine()??"";
         int id;
         if (int.TryParse(s, out id))
         {
@@ -467,7 +467,7 @@ internal class Program
     private static Menue getMenu()
     {
         Console.WriteLine("Choose a menu: \n press 1 to the product menu. \n press 2 to the order menu. \n press 3 to the cart menu. \n press 0 to exit.");
-        Menue menue = (Menue)Enum.Parse(typeof(Menue), Console.ReadLine());
+        Menue menue = (Menue)Enum.Parse(typeof(Menue), Console.ReadLine()??"");
         return menue;
     }
 
@@ -478,7 +478,7 @@ internal class Program
     private static OrderMenu GetOrdertChoice()
     {
         Console.WriteLine("\n press 0 to get all the orders, for manager.\n press 1 to get an order.\n press 2 to update ship date of order. \n press 3 to update a delivery date of order. \n press 4 to follow an order.\n press 5 to update order.\n");
-        OrderMenu c = (OrderMenu)Enum.Parse(typeof(OrderMenu), Console.ReadLine());
+        OrderMenu c = (OrderMenu)Enum.Parse(typeof(OrderMenu), Console.ReadLine()??"");
         return c;
     }
 
@@ -489,7 +489,7 @@ internal class Program
     private static ProductMenu getProductChoice()
     {
         Console.WriteLine("\n press 0 to get all products. \n press 1 to search product by id, for manager.\n press 2 to update a product.\n press 3 to delete a product. \n press 4 to add a product.\n press 5 to search a product for customer\n");
-        ProductMenu c = (ProductMenu)Enum.Parse(typeof(ProductMenu), Console.ReadLine());
+        ProductMenu c = (ProductMenu)Enum.Parse(typeof(ProductMenu), Console.ReadLine()??"");
         return c;
     }
 
@@ -500,7 +500,7 @@ internal class Program
     private static CartMenu getCartChoice()
     {
         Console.WriteLine("\n press 0 to add item to your cart. \n press 1 to update amount for a product.\n press 2 to make an order.\n");
-        CartMenu c = (CartMenu)Enum.Parse(typeof(CartMenu), Console.ReadLine());
+        CartMenu c = (CartMenu)Enum.Parse(typeof(CartMenu), Console.ReadLine()??"");
         return c;
     }
 

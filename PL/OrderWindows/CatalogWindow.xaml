@@ -12,6 +12,8 @@
         x:Key="SelectedItemToEnableButton" />
         <local1:BoolToVisibilityConvertor
             x:Key="BoolToVisibilityConvertor" />
+        <local1:AmountToVisibiltyConvertor
+            x:Key="AmountToVisibiltyConvertor" />
     </Window.Resources>
 
     <Grid x:Name="mainGrid">
@@ -55,7 +57,7 @@
         </Grid>
 
 
-        <ListView  Width="750" ItemsSource="{Binding MyProductItems}" Grid.Row="2" Name="productsListView"  >
+        <ListView  Width="750" ItemsSource="{Binding MyProductItems}" Grid.Row="2" Name="productsListView" MouseDoubleClick="productsListView_MouseDoubleClick"  >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Width="700"  Background="White">
@@ -73,7 +75,7 @@
                         <TextBlock Padding="10" Grid.Column="3" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Category}" />
                         <TextBlock Padding="10" Grid.Column="4" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Available}" />
                         <WrapPanel Grid.Column="5" Orientation="Horizontal">
-                            <Button FontSize="10" Width="20" Foreground="Black" Background="White" Content="-" Tag="{Binding ID}" Click="Remove_Button_Click"  />
+                            <Button FontSize="10" Width="20" Foreground="Black" Background="White" Content="-" Tag="{Binding ID}" Visibility="{Binding Amount ,Converter={StaticResource AmountToVisibiltyConvertor}}" Click="Remove_Button_Click"  />
                             <TextBlock Padding="10" FontFamily="Consolas" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Amount}" />
                             <Button FontSize="10" Width="20" Foreground="Black" Background="White" Content="+" Tag="{Binding ID}" Visibility="{Binding Available, Converter={StaticResource BoolToVisibilityConvertor}}" Click="Add_Button_Click" />
                         </WrapPanel>
@@ -83,7 +85,7 @@
         </ListView>
 
         
-        <Button Name="btnShowCart" Content="My Cart" Grid.Row="3" Template="{StaticResource ButtonTemplate1}" Margin="808,0,45,0" Padding="5" Height="44" VerticalAlignment="Center" Click="btnShowCart_Click"/>
+        <Button Name="btnShowCart" Content="My Cart" Grid.Row="3" Width="150" Template="{StaticResource ButtonTemplate1}" Margin="808,0,45,0" Padding="5" Height="44" VerticalAlignment="Center" Click="btnShowCart_Click"/>
 
     </Grid>
 </Window>

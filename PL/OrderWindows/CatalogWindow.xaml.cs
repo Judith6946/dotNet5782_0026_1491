@@ -1,4 +1,5 @@
 ﻿using BO;
+using PL.ProductsWindows;
 using PL.Utils;
 using System;
 using System.Collections.Generic;
@@ -151,5 +152,12 @@ public partial class CatalogWindow : Window
        
     }
 
-    
+    /// <summary>
+    /// Show product details
+    /// </summary>
+    private void productsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        int id = ((ProductItem)((ListView)sender).SelectedItem).ID;
+        new ProductWindow(id, Utils.PageStatus.DISPLAY).ShowDialog();
+    }
 }

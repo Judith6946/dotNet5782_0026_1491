@@ -25,5 +25,11 @@ public interface IProduct
 
     public IEnumerable<BO.ProductItem?> GetProductItemsByFunc(BO.Cart cart, Func<BO.ProductItem, bool> condition);
 
+    /// <summary>
+    /// Get products grouping by category
+    /// </summary>
+    /// <returns>Products grouping by category</returns>
+    /// <exception cref="DalException">Thrown when DB could not get the products.</exception>
+    public IEnumerable<Tuple<BO.Enums.Category, IEnumerable<BO.ProductForList>>> GetProductsByCategories();
 
 }

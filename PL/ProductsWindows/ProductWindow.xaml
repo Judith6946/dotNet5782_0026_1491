@@ -3,25 +3,29 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL.ProductsWindows"
+        xmlns:local="clr-namespace:PL.ProductsWindows" xmlns:local1="clr-namespace:PL.Convertors"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="ProductWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local1:ProductPageStatusToVisibilityConvertor
+        x:Key="ProductPageStatusToVisibilityConvertor" />
+        <local1:ProductPageStatusToEnable
+        x:Key="ProductPageStatusToEnable" />
+    </Window.Resources>
     <Grid>
-        <TextBox x:Name="txtProductId" Text="{Binding MyProduct.ID}" HorizontalAlignment="Left" Margin="228,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtInStock" Text="{Binding MyProduct.InStock}" HorizontalAlignment="Left" Margin="228,287,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="txtProductPrice" Text="{Binding MyProduct.Price}" HorizontalAlignment="Left" Margin="228,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtProductId" Text="{Binding MyProduct.ID}" IsEnabled="{Binding MyPageStatus, Converter={StaticResource ProductPageStatusToEnable}, ConverterParameter=txtProductId}" HorizontalAlignment="Left" Margin="228,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtInStock" Text="{Binding MyProduct.InStock}" IsEnabled="{Binding MyPageStatus, Converter={StaticResource ProductPageStatusToEnable}}" HorizontalAlignment="Left" Margin="228,287,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtProductPrice" Text="{Binding MyProduct.Price}" IsEnabled="{Binding MyPageStatus, Converter={StaticResource ProductPageStatusToEnable}}" HorizontalAlignment="Left" Margin="228,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
-        <TextBox x:Name="txtProductName" Text="{Binding MyProduct.Name}" HorizontalAlignment="Left" Margin="228,115,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtProductName" Text="{Binding MyProduct.Name}" IsEnabled="{Binding MyPageStatus, Converter={StaticResource ProductPageStatusToEnable}}" HorizontalAlignment="Left" Margin="228,115,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
         <Label Content="ID:" HorizontalAlignment="Left" Margin="230,29,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" FontSize="14"/>
         <Label Content="Name:" HorizontalAlignment="Left" Margin="230,89,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="White"/>
         <Label Content="Price:" HorizontalAlignment="Left" Margin="230,0,0,0" VerticalAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="White"/>
         <Label Content="Category:" HorizontalAlignment="Left" Margin="230,152,0,0" VerticalAlignment="Top" Foreground="White" FontSize="14" FontWeight="Bold"/>
         <Label Content="in stock:" HorizontalAlignment="Left" Margin="230,261,0,0" VerticalAlignment="Top" Foreground="White" FontSize="14" FontWeight="Bold"/>
-        <ComboBox ItemsSource="{Binding MyCategories}" Name="cmbProductCategory" SelectedItem="{Binding MyProduct.Category}" HorizontalAlignment="Left" Margin="228,176,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnSaveProduct" Content="Save" HorizontalAlignment="Left" Margin="182,352,0,0" VerticalAlignment="Top" Width="106" Click="btnSaveProduct_Click"/>
-        <Button x:Name="btnDeleteProduct" Content="Delete" HorizontalAlignment="Left" Margin="355,352,0,0" VerticalAlignment="Top" Width="106" Click="btnDeleteProduct_Click" />
-
-
+        <ComboBox ItemsSource="{Binding MyCategories}" IsEnabled="{Binding MyPageStatus, Converter={StaticResource ProductPageStatusToEnable}}" Name="cmbProductCategory" SelectedItem="{Binding MyProduct.Category}" HorizontalAlignment="Left" Margin="228,176,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btnSaveProduct" Content="Save" HorizontalAlignment="Left" Visibility="{Binding MyPageStatus, Converter={StaticResource ProductPageStatusToVisibilityConvertor}, ConverterParameter=btnSaveProduct}" Margin="182,352,0,0" VerticalAlignment="Top" Width="106" Click="btnSaveProduct_Click"/>
+        <Button x:Name="btnDeleteProduct" Content="Delete" HorizontalAlignment="Left" Visibility="{Binding MyPageStatus, Converter={StaticResource ProductPageStatusToVisibilityConvertor},ConverterParameter=btnDeleteProduct}"  Margin="355,352,0,0" VerticalAlignment="Top" Width="106" Click="btnDeleteProduct_Click" />
     </Grid>
 </Window>

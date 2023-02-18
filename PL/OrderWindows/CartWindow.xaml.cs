@@ -73,4 +73,11 @@ public partial class CartWindow : Window
         catch (SoldOutException) { MessageBox.Show("Sorry, this product was sold out"); }
         catch (DalException) { MessageBox.Show("sorry, something went wrong. please try again."); }
     }
+
+    private void btnEmptyCart_Click(object sender, RoutedEventArgs e)
+    {
+        var temp = MyCart;
+        MyCart = new BO.Cart() { CustomerAdress = temp.CustomerAdress, CustomerEmail = temp.CustomerEmail, CustomerName = temp.CustomerName, TotalPrice = 0, ItemsList = new() };
+
+    }
 }

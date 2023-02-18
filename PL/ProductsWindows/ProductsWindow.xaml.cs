@@ -126,7 +126,7 @@ public partial class ProductsWindow : Window
     /// <param name="e">more information about productsListView</param>
     private void productsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        var window = new ProductWindow(((ProductForList)((ListView)sender).SelectedItem).ID);
+        var window = new ProductWindow(((ProductForList)((ListView)sender).SelectedItem).ID,Utils.PageStatus.EDIT);
         window.Show();
         window.Closing += Window_Closing;
     }

@@ -11,6 +11,8 @@ public partial class ProductWindow : Window
     private Utils.PageStatus _pageStatus;
     private BlApi.IBl bl = BlApi.Factory.Get();
 
+    public Utils.PageStatus MyPageStatus { get { return _pageStatus; } }
+
     public Product MyProduct
     {
         get { return (Product)GetValue(MyProductProperty); }
@@ -29,20 +31,20 @@ public partial class ProductWindow : Window
     /// </summary>
     public ProductWindow()
     {
-        InitializeComponent();
         _pageStatus = Utils.PageStatus.ADD;
+        InitializeComponent();
         MyProduct = new Product();
-        btnDeleteProduct.Visibility = Visibility.Hidden;
     }
 
     /// <summary>
-    /// Initialize values for product update
+    /// Initialize values for product update/ view
     /// </summary>
-    /// <param name="_productId">Product ID to update</param>
-    public ProductWindow(int _productId)
+    /// <param name="_productId">Product ID</param>
+    public ProductWindow(int _productId,Utils.PageStatus status= Utils.PageStatus.DISPLAY)
     {
+        _pageStatus = status;
         InitializeComponent();
-        _pageStatus = Utils.PageStatus.EDIT;
+       
 
         //Product request from the logical layer by ID
         try { MyProduct = bl.Product.GetProduct(_productId); }
@@ -50,8 +52,9 @@ public partial class ProductWindow : Window
         //If the request is not successful, it will be thrown and the user will be shown an appropriate message
         catch (BO.InvalidInputException) { MessageBox.Show("id cant be negative number"); }
         catch (BO.DalException) { MessageBox.Show("Sorry, we were unable to load the product for you!"); this.Close(); }
-        txtProductId.IsEnabled = false;
     }
+
+
 
     /// <summary>
     /// Click event of save button

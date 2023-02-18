@@ -23,8 +23,13 @@ internal class Cart : ICart
     /// <param name="id">Id of product to be added.</param>
     /// <returns>Updated cart.</returns>
     /// <exception cref="SoldOutException">Thrown when the required product is sold out.</exception>
+    /// <exception cref="InvalidInputException">Thrown when Id was invalid.</exception>
+    /// <exception cref="DalException">Thrown when error was occured while reaching the DB.</exception>
     public BO.Cart AddItem(BO.Cart cart, int id)
     {
+        if (id <= 0)
+            throw new InvalidInputException("Id should be a positive number.");
+
         if (cart.ItemsList == null)
             cart.ItemsList = new List<OrderItem?>();
 
@@ -62,6 +67,8 @@ internal class Cart : ICart
     /// </summary>
     /// <param name="cart">Customer cart.</param>
     /// <exception cref="SoldOutException">Thrown when one of the products was sold out.</exception>
+    /// <exception cref="InvalidInputException">Thrown when order details were invalid</exception>
+    /// <exception cref="DalException">Thrown when error was occured while reaching the DB.</exception>
     public void MakeOrder(BO.Cart cart)
     {
 
@@ -96,8 +103,11 @@ internal class Cart : ICart
     /// <param name="id">Id of product to be removed.</param>
     /// <returns>Updated cart.</returns>
     /// <exception cref="NotFoundException">Thrown when product cant be found on this cart.</exception>
+    /// <exception cref="InvalidInputException">Thrown when id was invalid.</exception>
     public BO.Cart RemoveItem(BO.Cart cart, int id)
     {
+        if (id <= 0)
+            throw new InvalidInputException("Id should be a positive number.");
         if (cart.ItemsList == null)
             throw new NotFoundException("Cannot find this product in your cart");
 
@@ -128,8 +138,12 @@ internal class Cart : ICart
             throw new InvalidInputException("your cart is empty");
 
         //check input validity
-        if (amount < 0 || id < 0)
-            throw new InvalidInputException("Amount/Id cannot be negative.");
+        if (id<=0)
+            throw new InvalidInputException("Id should be a positive number.");
+
+        //check input validity
+        if (amount < 0)
+            throw new InvalidInputException("Amount cannot be negative.");
 
         //find the item
         BO.OrderItem? item = cart.ItemsList.FirstOrDefault(x => x!.ProductId == id, null);
@@ -154,7 +168,7 @@ internal class Cart : ICart
 
         //return updated cart.
         cart.ItemsList = cart.ItemsList.OrderBy(x => x?.ID).ToList();
-        return cart;        
+        return cart;
 
     }
 
@@ -262,10 +276,23 @@ internal class Cart : ICart
 
     }
 
+    /// <summary>
+    /// Check order validity of cart.
+    /// </summary>
+    /// <param name="cart">Cart to be checked.</param>
+    /// <exception cref="InvalidInputException">Thrown when order details were invalid</exception>
+    /// <exception cref="SoldOutException">Trown when one of the products was sold out.</exception>
     private static void checkOrderValidity(BO.Cart cart)
     {
-        if (cart.CustomerAdress == "" || cart.CustomerName == "" || cart.CustomerEmail == "" || cart.ItemsList == null)
-            throw new InvalidInputException("address & name & email & items cannot be empty");
+        if (cart.ItemsList == null || cart.ItemsList.Count == 0)
+            throw new InvalidInputException("Your cart is empty");
+
+        if(!Validation.IsEmail(cart.CustomerEmail))
+            throw new InvalidInputException("Email is invalid");
+
+        if (!Validation.IsName(cart.CustomerName)||!Validation.IsName(cart.CustomerAdress))
+            throw new InvalidInputException("Name and Address should be at least 3 chars");
+
         foreach (var item in cart.ItemsList)
         {
             if (item == null)

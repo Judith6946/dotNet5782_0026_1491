@@ -18,6 +18,7 @@ internal class Order : BlApi.IOrder
     /// <param name="id">Id of order to be followed.</param>
     /// <returns>An orderTracking object that describes an order.</returns>
     /// <exception cref="InvalidInputException">Thrown when id is not valid.</exception>
+    /// <exception cref="DalException">Thrown when there was an error contacting the database.</exception>
     public BO.OrderTracking FollowOrder(int id)
     {
         if (id <= 0)
@@ -45,6 +46,7 @@ internal class Order : BlApi.IOrder
     /// <param name="id">Id of required order.</param>
     /// <returns>Required order.</returns>
     /// <exception cref="InvalidInputException">Thrown when id is not valid.</exception>
+    /// <exception cref="DalException">Thrown when there was an error contacting the database.</exception>
     public BO.Order GetOrder(int id)
     {
 
@@ -78,6 +80,7 @@ internal class Order : BlApi.IOrder
     /// Get all orders
     /// </summary>
     /// <returns>Collection of all orders.</returns>
+    /// <exception cref="DalException">Thrown when there was an error contacting the database.</exception>
     public IEnumerable<BO.OrderForList> GetOrders()
     {
         return getOrders().Select(order =>
@@ -97,6 +100,7 @@ internal class Order : BlApi.IOrder
     /// <returns></returns>
     /// <exception cref="InvalidInputException">Thrown when id is not valid.</exception>
     /// <exception cref="AlreadyDoneException">Thrown when order was already delivered.</exception>
+    /// <exception cref="DalException">Thrown when there was an error contacting the database.</exception>
     public BO.Order UpdateOrderDelivery(int id)
     {
         //check id validity.
@@ -130,6 +134,7 @@ internal class Order : BlApi.IOrder
 
     }
 
+
     /// <summary>
     /// Update ship date of order.
     /// </summary>
@@ -137,6 +142,7 @@ internal class Order : BlApi.IOrder
     /// <returns></returns>
     /// <exception cref="InvalidInputException">Thrown when id is not valid.</exception>
     /// <exception cref="AlreadyDoneException">Thrown when order was already shipped.</exception>
+    /// <exception cref="DalException">Thrown when there was an error contacting the database.</exception>
     public BO.Order UpdateOrderShipping(int id)
     {
         //check id validity.
@@ -181,6 +187,7 @@ internal class Order : BlApi.IOrder
     /// <exception cref="InvalidInputException">Thrown when input is invalid</exception>
     /// <exception cref="ImpossibleException">Thrown when order was already shipped</exception>
     /// <exception cref="NotFoundException">Thrown when no such product was found on this order.</exception>
+    /// <exception cref="DalException">Thrown when there was an error contacting the database.</exception>
     public BO.Order UpdateOrder(int id, int productId, int amount)
     {
         //check id validity.

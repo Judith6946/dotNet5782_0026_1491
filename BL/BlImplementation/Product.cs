@@ -25,8 +25,8 @@ internal class Product : BlApi.IProduct
     /// <exception cref="DalException">Thrown when DB could not add the product.</exception>
     public void AddProduct(BO.Product product)
     {
-        if (product.ID <= 0 || product.Name == "" || product.InStock < 0 || product.Price < 0)
-            throw new InvalidInputException("product details are not valid.");
+        if (product.ID <= 0 || !Validation.IsName(product.Name) || product.InStock < 0 || product.Price < 0)
+            throw new InvalidInputException("product details are not valid. id, instock and price must be positive, name should be at least 3 chars long");
 
         try
         {
@@ -37,6 +37,27 @@ internal class Product : BlApi.IProduct
             throw new DalException("Exception was thrown while adding the product", e);
         }
 
+    }
+
+    /// <summary>
+    /// Get products grouping by category
+    /// </summary>
+    /// <returns>Products grouping by category</returns>
+    /// <exception cref="DalException">Thrown when DB could not get the products.</exception>
+    public IEnumerable<Tuple<BO.Enums.Category, IEnumerable<BO.ProductForList>>> GetProductsByCategories()
+    {
+        try
+        {
+            return (from product in Dal.Product.GetAll()
+                    let product2 = mapper.Map<DO.Product, BO.ProductForList>((DO.Product)product)
+                    group product2 by product2?.Category into p
+                    select new { category = p.Key, products = p })
+                   .Select(x => new Tuple<BO.Enums.Category, IEnumerable<BO.ProductForList>>((Enums.Category)x.category!, x.products));
+        }
+        catch (Exception e)
+        {
+            throw new DalException("Exception was thrown while getting the products", e);
+        }
     }
 
 
@@ -223,8 +244,8 @@ internal class Product : BlApi.IProduct
     /// <exception cref="DalException">Thrown when DB could not update the products.</exception>
     public void UpdateProduct(BO.Product product)
     {
-        if (product.ID <= 0 || product.Name == "" || product.InStock < 0 || product.Price < 0)
-            throw new InvalidInputException("Product details are invalid.");
+        if (product.ID <= 0 || !Validation.IsName(product.Name)|| product.InStock < 0 || product.Price < 0)
+            throw new InvalidInputException("product details are not valid. id, instock and price must be positive, name should be at least 3 chars long");
         try
         {
             Dal.Product.Update(mapper.Map<BO.Product, DO.Product>(product));
@@ -247,10 +268,12 @@ internal class Product : BlApi.IProduct
         try
         {
             IEnumerable<DO.OrderItem?> items = Dal.OrderItem.GetAll();
+
             return (from item in items
                     where item?.ProductId == productId
-                    group item by item?.ProductId into p
-                    select new { count = p.ToArray().Length }).ToArray().Length > 0;
+                    select item).ToArray().Length > 0;
+
+
 
         }
         catch (Exception e)

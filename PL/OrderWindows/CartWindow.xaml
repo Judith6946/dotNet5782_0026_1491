@@ -17,6 +17,7 @@
        
         <Label Content="Total Price:" HorizontalAlignment="Left" Margin="129,0,0,0" VerticalAlignment="Center"/>
         <TextBox HorizontalAlignment="Left" Margin="199,0,0,0" TextWrapping="Wrap" Text="{Binding TotalPrice}" VerticalAlignment="Center" Width="120"/>
+        <Button Template="{StaticResource ButtonTemplate1}" Width="200" Content="Empty Cart"  Height="50"  Name="btnEmptyCart" Margin="575,12,25,11" Click="btnEmptyCart_Click"  />
 
 
         <Grid Width="750" VerticalAlignment="Bottom" Grid.Row="1"  Background="LightBlue">
@@ -62,7 +63,7 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Button Template="{StaticResource ButtonTemplate1}" Content="Finish Order" Grid.Row="3" Height="50" Margin="557,105,84,106" Name="btnFinishOrder" Click="btnFinishOrder_Click" />
+        <Button Template="{StaticResource ButtonTemplate1}" Content="Finish Order" Grid.Row="3" Height="50" Margin="425,122,75,122" Width="300" Name="btnFinishOrder" Click="btnFinishOrder_Click" />
 
         <TextBox Width="120" Height="30" Grid.Row="3" Margin="162,61,518,170" Name="txtCustomerName" Text="{Binding CustomerName}" />
         <Label Width="120" Height="30" Grid.Row="3" Margin="76,65,604,166" Content="Name:" />
