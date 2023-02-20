@@ -55,6 +55,7 @@ public partial class OrderItemsWindow : Window
         }
         catch (InvalidInputException) { MessageBox.Show("Your order was not found, please try again."); }
         catch (DalException) { MessageBox.Show("Sorry, something went wrong, please try again"); }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
 
         pageStatus = _pageStatus;
         if (pageStatus != PageStatus.EDIT)
@@ -108,6 +109,7 @@ public partial class OrderItemsWindow : Window
         catch (ImpossibleException) { MessageBox.Show("Order was already shipped"); }
         catch (NotFoundException) { MessageBox.Show("Cannot find this product on your order"); }
         catch (DalException) { MessageBox.Show("Sorry, something went wrong. please try again"); }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
 
         return null;
     }

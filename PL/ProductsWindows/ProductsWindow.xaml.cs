@@ -59,7 +59,7 @@ public partial class ProductsWindow : Window
             MyProducts = temp == null ? new() : new(temp);
         }
         catch (DalException) { MessageBox.Show("could not load products information, please try again later."); }
-
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
 
 
@@ -82,7 +82,7 @@ public partial class ProductsWindow : Window
                 MyProducts = temp == null ? new() : new(temp);
             }
             catch (DalException) { MessageBox.Show("Could not load products info."); }
-            
+            catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
         }
     }
 

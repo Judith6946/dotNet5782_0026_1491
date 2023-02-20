@@ -47,8 +47,8 @@ public partial class OrderTrackingWindow : Window
         }
         catch (DalException) { MessageBox.Show("Could not find your order information. please try again later"); }
         catch (InvalidInputException) { MessageBox.Show("ID was not valid"); }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
 
-       
     }
 
     /// <summary>

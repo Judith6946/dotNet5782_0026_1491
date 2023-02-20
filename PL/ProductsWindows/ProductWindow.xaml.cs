@@ -52,6 +52,7 @@ public partial class ProductWindow : Window
         //If the request is not successful, it will be thrown and the user will be shown an appropriate message
         catch (BO.InvalidInputException) { MessageBox.Show("id cant be negative number"); }
         catch (BO.DalException) { MessageBox.Show("Sorry, we were unable to load the product for you!"); this.Close(); }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
 
 
@@ -80,15 +81,15 @@ public partial class ProductWindow : Window
                 bl.Product.UpdateProduct(MyProduct);
             this.Close();
         }
-        catch(BO.InvalidInputException ) {
-            MessageBox.Show("one of the fields isn't valid"); }
+        catch(BO.InvalidInputException ) {MessageBox.Show("one of the fields isn't valid"); }
         catch(BO.DalException ) {
             if (_pageStatus == Utils.PageStatus.ADD)
                 MessageBox.Show("the product cant added");
             else
                 MessageBox.Show("the product cant updated");
-        }   
-    
+        }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
+
     }
 
     /// <summary>
@@ -105,5 +106,6 @@ public partial class ProductWindow : Window
         catch (DalException) { MessageBox.Show("Could not delete this product."); }
         catch (BO.InvalidInputException) { MessageBox.Show("Input was invalid. please try again."); }
         catch (BO.ImpossibleException) { MessageBox.Show("This product was already ordered, it cannot be deleted."); }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
 }

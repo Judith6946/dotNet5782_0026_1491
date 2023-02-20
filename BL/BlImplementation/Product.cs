@@ -215,8 +215,9 @@ internal class Product : BlApi.IProduct
     }
 
     /// <summary>
-    /// Get products list.
+    /// Get products list by function.
     /// </summary>
+    /// <param name="condition">Condition to be checked on each product.</param>
     /// <returns>Products list.</returns>
     /// <exception cref="DalException">Thrown when DB could not get the products.</exception>
     public IEnumerable<BO.ProductForList?> GetProductsByFunc(Func<BO.ProductForList, bool> condition)

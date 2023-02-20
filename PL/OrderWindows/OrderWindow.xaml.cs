@@ -63,6 +63,7 @@ namespace PL.OrderWindows
                 MyOrder = temp == null ? new() : new() { ID = temp.ID, CustomerAdress = temp.CustomerAdress, CustomerEmail = temp.CustomerEmail, CustomerName = temp.CustomerName, DeliveryDate = temp.DeliveryDate, OrderDate = temp.OrderDate, ShipDate = temp.ShipDate, Status = temp.Status, TotalPrice = temp.TotalPrice, ItemsList = new(temp.ItemsList!) };
             }
             catch (DalException) { MessageBox.Show("Could not load your order information, please check your input and try again."); }
+            catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
         }
 
         /// <summary>

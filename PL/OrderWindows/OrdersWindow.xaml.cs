@@ -57,7 +57,7 @@ public partial class OrdersWindow : Window
             MyOrders = temp == null ? new() : new(temp);
         }
         catch (DalException) { MessageBox.Show("Orders details could not be loaded, please try again leter."); }
-
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
 
     /// <summary>

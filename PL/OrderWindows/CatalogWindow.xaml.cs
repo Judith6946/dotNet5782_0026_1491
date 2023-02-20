@@ -59,7 +59,8 @@ public partial class CatalogWindow : Window
             MyProductItems = temp == null ? new() : new(temp);
         }
         catch (DalException) { MessageBox.Show("Sorry, something went wrong, please try again."); }
-        
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
+
     }
 
     /// <summary>
@@ -76,6 +77,7 @@ public partial class CatalogWindow : Window
         }
         catch (NotFoundException) { MessageBox.Show("Cannot find this product on your cart."); }
         catch (InvalidInputException) { MessageBox.Show("Sorry, something went wrong. please try again."); }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
 
     /// <summary>
@@ -93,6 +95,7 @@ public partial class CatalogWindow : Window
         catch (NotFoundException) { MessageBox.Show("Cannot find this product on your cart."); }
         catch (InvalidInputException) { MessageBox.Show("Sorry, something went wrong. please try again."); }
         catch (SoldOutException) { MessageBox.Show("Sorry, this product was sold out"); }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
 
     /// <summary>
@@ -131,7 +134,8 @@ public partial class CatalogWindow : Window
             }
         }
         catch (DalException) { MessageBox.Show("Something went wrong. please try again."); }
-       
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
+
     }
 
     /// <summary>
@@ -149,7 +153,8 @@ public partial class CatalogWindow : Window
             AttributeSelector.SelectedIndex = -1;
         }
         catch (DalException) { MessageBox.Show("Sorry, something went wrong, please try again."); }
-       
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
+
     }
 
     /// <summary>

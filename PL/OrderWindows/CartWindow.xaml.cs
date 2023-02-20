@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using BO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -44,6 +45,7 @@ public partial class CartWindow : Window
         catch (SoldOutException ex) { MessageBox.Show("Sold out! \n " + ex.Message); }
         catch (DalException) { MessageBox.Show("Sorry, something went wrong. please try again"); }
         catch (InvalidInputException ex) { MessageBox.Show("Invalid input! \n " + ex.Message); }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
 
     private void Remove_Button_Click(object sender, RoutedEventArgs e)
@@ -58,6 +60,7 @@ public partial class CartWindow : Window
         catch (NotFoundException) { MessageBox.Show("Cannot find this product on your cart."); }
         catch (InvalidInputException) { MessageBox.Show("Sorry, your input was wrong. please try again."); }
         catch (DalException) { MessageBox.Show("sorry, something went wrong. please try again."); }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
 
     private void Add_Button_Click(object sender, RoutedEventArgs e)
@@ -72,6 +75,7 @@ public partial class CartWindow : Window
         catch (InvalidInputException) { MessageBox.Show("Sorry, something went wrong. please try again."); }
         catch (SoldOutException) { MessageBox.Show("Sorry, this product was sold out"); }
         catch (DalException) { MessageBox.Show("sorry, something went wrong. please try again."); }
+        catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
 
     private void btnEmptyCart_Click(object sender, RoutedEventArgs e)
