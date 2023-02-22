@@ -1,4 +1,5 @@
 ﻿using PL.OrderWindows;
+using PL.SimulatorWindows;
 using System.Windows;
 namespace PL
 {
@@ -33,6 +34,11 @@ namespace PL
                 return;
             }
             new OrderTrackingWindow(id).Show();
+        }
+
+        private void btnSimulator_Click(object sender, RoutedEventArgs e)
+        {
+            new SimulatorWindow().Show();
         }
     }
 }

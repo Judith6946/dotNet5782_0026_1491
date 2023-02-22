@@ -22,6 +22,7 @@
         </Grid.RowDefinitions>
         <Button Template="{DynamicResource ButtonTemplate1}"  Grid.Column="2" Grid.Row="0"  Content="Admin" Name="btnAdmin" HorizontalAlignment="Center"  VerticalAlignment="Top" Height="47" Width="170"  Click="btnAdmin_Click" Margin="0,41,0,0"/>
         <Button Template="{DynamicResource ButtonTemplate1}" Grid.Column="1" Grid.Row="0"  Content="New Order" Name="btnNewOrder" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="47" Width="170"  Click="btnNewOrder_Click" Margin="91,41,0,0" RenderTransformOrigin="-0.138,0.163"/>
+        <Button Template="{DynamicResource ButtonTemplate1}" Grid.Column="0" Grid.Row="0"  Content="Simulator" Name="btnSimulator" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="47" Width="170" Margin="91,41,0,0" RenderTransformOrigin="-0.138,0.163" Click="btnSimulator_Click"/>
         <Button Template="{DynamicResource ButtonTemplate1}"  Grid.Row="2"  Content="Follow Order" Name="btnFollowOrder" HorizontalAlignment="Center"  VerticalAlignment="Top" Height="46" Width="170"  Click="btnFollowOrder_Click" Margin="0,64,0,0"/>
 
         <TextBox Grid.Row="2" HorizontalAlignment="Center" Name="txtOrderId"  TextWrapping="Wrap" VerticalAlignment="Top" Width="170" Height="28" Margin="0,20,0,0"/>

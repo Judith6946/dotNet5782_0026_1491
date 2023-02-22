@@ -232,6 +232,42 @@ internal class Order : BlApi.IOrder
         return order2;
     }
 
+    /// <summary>
+    /// Get id of oldest order.
+    /// </summary>
+    /// <returns>Id of last modified order</returns>
+    /// <exception cref="DalException">Thrown when orders details cannot be loaded</exception>
+    public int? GetOldestOrder()
+    {
+        var orders = getOrders();
+        var lastOrder = (from order in orders
+                where order?.DeliveryDate == null
+                let date = order?.ShipDate == null ? order?.OrderDate : order?.ShipDate
+                orderby date
+                select new { date = date, id = order?.ID }).MinBy(x => x.date);
+        return lastOrder == null ? null : lastOrder.id;
+    }
+
+    /// <summary>
+    /// Update status of desired order
+    /// </summary>
+    /// <param name="order_id">Order to be updated</param>
+    /// <exception cref="ImpossibleException">Thrown when order was already delivered.</exception>
+    ///<exception cref="DalException">Thrown when order details cannot be loaded.</exception>
+    ///<exception cref="InvalidInputException">Thrown when id was not valid.</exception>
+    public void UpdateStatus(int order_id)
+    {
+        if (order_id <= 0)
+            throw new InvalidInputException("Id should be a positive value");
+        var order = getOrder(order_id);
+        if (order.DeliveryDate != null)
+            throw new ImpossibleException("Cannot update status of order that has already been delivered");
+        if (order.ShipDate == null)
+            UpdateOrderShipping(order_id);
+        else
+            UpdateOrderDelivery(order_id);
+    }
+
 
     #region UTILS
 
@@ -364,6 +400,8 @@ internal class Order : BlApi.IOrder
         }
 
     }
+
+    
 
     #endregion
 

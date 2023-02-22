@@ -64,4 +64,22 @@ public interface IOrder
     /// <exception cref="NotFoundException">Thrown when no such product was found on this order.</exception>
     /// <exception cref="DalException">Thrown when there was an error contacting the database.</exception>
     public Order UpdateOrder(int id,int productId,int amount);
+
+    /// <summary>
+    /// Get id of oldest order.
+    /// </summary>
+    /// <returns>Id of last modified order</returns>
+    /// <exception cref="DalException">Thrown when orders details cannot be loaded</exception>
+    public int? GetOldestOrder();
+
+    /// <summary>
+    /// Update status of desired order
+    /// </summary>
+    /// <param name="order_id">Order to be updated</param>
+    /// <exception cref="ImpossibleException">Thrown when order was already delivered.</exception>
+    ///<exception cref="DalException">Thrown when order details cannot be loaded.</exception>
+    ///<exception cref="InvalidInputException">Thrown when id was not valid.</exception>
+    public void UpdateStatus(int order_id);
+
+
 }

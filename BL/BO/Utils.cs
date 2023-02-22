@@ -22,13 +22,13 @@ static internal class Utils
     public static string ToStringProperty<T>(this T t)
     {
         string str = "";
-        foreach (PropertyInfo item in t.GetType().GetProperties())
+        foreach (PropertyInfo item in t!.GetType().GetProperties())
         {
             //if the property is a collection- print all of their members.
             if(!(item.GetValue(t, null) is string)&& item.GetValue(t,null) is IEnumerable)
             {
                 str += "\n" + item.Name + ": ";
-                foreach (var item2 in (IEnumerable)item.GetValue(t,null))
+                foreach (var item2 in (IEnumerable)item.GetValue(t,null)!)
                 {
                     str += "\n" + item2.ToString();
                 }
