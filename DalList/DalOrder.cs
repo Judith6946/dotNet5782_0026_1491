@@ -28,7 +28,7 @@ public class DalOrder : IOrder
     /// </summary>
     /// <param name="id">Id of order.</param>
     /// <returns>Order object.</returns>
-    /// <exception cref="Exception">Thrown when the order cant be found.</exception>
+    /// <exception cref="NotFoundException">Thrown when the order cant be found.</exception>
     public Order GetById(int id)
     {
         return getByCondition(x => x?.ID == id) ?? throw new NotFoundException("Cannot find this order.");
@@ -67,6 +67,7 @@ public class DalOrder : IOrder
     /// Delete a order by its id.
     /// </summary>
     /// <param name="id">Id of order to be deleted</param>
+    /// <exception cref="NotFoundException">Thrown when order cannot be found</exception>
     public void Delete(int id)
     {
         _ = getByCondition(x => x?.ID == id) ?? throw new NotFoundException("Order is not exist.");
@@ -78,7 +79,7 @@ public class DalOrder : IOrder
     /// Update a order.
     /// </summary>
     /// <param name="o">Updated order.</param>
-    /// <exception cref="Exception">Thrown when order cant be found.</exception>
+    /// <exception cref="NotFoundException">Thrown when order cant be found.</exception>
     public void Update(Order o)
     {
         int index = DataSource.ordersList.FindIndex(x => x?.ID == o.ID);

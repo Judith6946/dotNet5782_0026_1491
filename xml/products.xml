@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfProduct xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Product>
+    <ID>615787</ID>
+    <Name>MacBook pro</Name>
+    <Price>348</Price>
+    <Category>Mac</Category>
+    <InStock>0</InStock>
+  </Product>
+  <Product>
+    <ID>375773</ID>
+    <Name>ipad 10 mini</Name>
+    <Price>296</Price>
+    <Category>ipad</Category>
+    <InStock>0</InStock>
+  </Product>
+  <Product>
+    <ID>653727</ID>
+    <Name>iphone 14</Name>
+    <Price>423</Price>
+    <Category>iphone</Category>
+    <InStock>0</InStock>
+  </Product>
+  <Product>
+    <ID>108700</ID>
+    <Name>ahr pods 3</Name>
+    <Price>298</Price>
+    <Category>Accessories</Category>
+    <InStock>5</InStock>
+  </Product>
+  <Product>
+    <ID>579367</ID>
+    <Name>ipad Air</Name>
+    <Price>228</Price>
+    <Category>ipad</Category>
+    <InStock>26</InStock>
+  </Product>
+  <Product>
+    <ID>325214</ID>
+    <Name>MacBook</Name>
+    <Price>357</Price>
+    <Category>Mac</Category>
+    <InStock>28</InStock>
+  </Product>
+  <Product>
+    <ID>618178</ID>
+    <Name>iphone 14 mini</Name>
+    <Price>249</Price>
+    <Category>iphone</Category>
+    <InStock>8</InStock>
+  </Product>
+  <Product>
+    <ID>211867</ID>
+    <Name>Apple Watch SE</Name>
+    <Price>410</Price>
+    <Category>watch</Category>
+    <InStock>9</InStock>
+  </Product>
+  <Product>
+    <ID>12222</ID>
+    <Name>nnn</Name>
+    <Price>120</Price>
+    <InStock>12</InStock>
+    <Category>ipad</Category>
+  </Product>
+  <Product>
+    <ID>683203</ID>
+    <Name> apple watch mini</Name>
+    <Price>332</Price>
+    <InStock>2</InStock>
+    <Category>watch</Category>
+  </Product>
+  <Product>
+    <ID>817383</ID>
+    <Name>air pods 2</Name>
+    <Price>448</Price>
+    <InStock>19</InStock>
+    <Category>Accessories</Category>
+  </Product>
+</ArrayOfProduct>

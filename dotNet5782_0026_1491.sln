@@ -25,7 +25,17 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xml", "xml", "{2D215928-8564-457B-9B57-2BEF49288EB1}"
 	ProjectSection(SolutionItems) = preProject
 		xml\dal-config.xml = xml\dal-config.xml
+		xml\orderItems.xml = xml\orderItems.xml
+		xml\orders.xml = xml\orders.xml
+		xml\products.xml = xml\products.xml
+		xml\xml-config.xml = xml\xml-config.xml
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DalXml", "DalXml\DalXml.csproj", "{2C8FD119-08DD-4586-89AA-1C75BCC0F147}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InitializeXML", "InitializeXML\InitializeXML.csproj", "{1A04D402-85F8-4AB9-8BC8-7C3F4896D6B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simulator", "Simulator\Simulator.csproj", "{637AF65A-2AB2-4508-806F-675B9D31FE09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +71,18 @@ Global
 		{C94CAF3B-C7E4-4CF7-800E-112025F671B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C94CAF3B-C7E4-4CF7-800E-112025F671B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C94CAF3B-C7E4-4CF7-800E-112025F671B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C8FD119-08DD-4586-89AA-1C75BCC0F147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C8FD119-08DD-4586-89AA-1C75BCC0F147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C8FD119-08DD-4586-89AA-1C75BCC0F147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C8FD119-08DD-4586-89AA-1C75BCC0F147}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A04D402-85F8-4AB9-8BC8-7C3F4896D6B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A04D402-85F8-4AB9-8BC8-7C3F4896D6B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A04D402-85F8-4AB9-8BC8-7C3F4896D6B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A04D402-85F8-4AB9-8BC8-7C3F4896D6B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{637AF65A-2AB2-4508-806F-675B9D31FE09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{637AF65A-2AB2-4508-806F-675B9D31FE09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{637AF65A-2AB2-4508-806F-675B9D31FE09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{637AF65A-2AB2-4508-806F-675B9D31FE09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

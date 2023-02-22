@@ -38,8 +38,8 @@ internal static class DataSource
 
     //entities lists
     internal static List<Product?> productsList = new List<Product?>();
-    internal static List<Order?>  ordersList = new List<Order?> ();
-    internal static List<OrderItem?>  orderItemsList = new List<OrderItem?> ();
+    internal static List<Order?> ordersList = new List<Order?>();
+    internal static List<OrderItem?> orderItemsList = new List<OrderItem?>();
 
     #region ctor
     /// <summary>
@@ -74,18 +74,18 @@ internal static class DataSource
     {
         string[] productNames = new string[10] { "MacBook pro", "ipad 10 mini", "iphone 14", " apple watch mini", "air pods 2", "ahr pods 3", "ipad Air", "MacBook", "iphone 14 mini", "Apple Watch SE" };
         Enums.Category[] productsCategories = new Enums.Category[10] { Enums.Category.Mac, Enums.Category.ipad, Enums.Category.iphone, Enums.Category.watch, Enums.Category.Accessories, Enums.Category.Accessories, Enums.Category.ipad, Enums.Category.Mac, Enums.Category.iphone, Enums.Category.watch };
-        
+
 
         for (int j = 0; j < 10; j++)
         {
-            Product p=new Product();
+            Product p = new Product();
             p.ID = rn.Next(100000, 999999);
             p.Name = productNames[j];
             p.Category = productsCategories[j];
             p.Price = rn.Next(100, 500);
             p.InStock = rn.Next(0, 30);
 
-            if (j == 0)p.InStock = 0;
+            if (j <= 2) p.InStock = 0;
             productsList.Add(p);
         }
 
@@ -100,24 +100,25 @@ internal static class DataSource
         string[] customerNames = new string[10] { "Yehudit", "Chaya", "Sara", "David", "Moshe", "Tovi", "Adina", "Avi", "Dan", "Miri" };
         string[] customerEmails = new string[10] { "yt9074547@gmail.com", "Chaya9@gmail.com", "Sara@gmail.com", "David@gmail.com", "Moshe@gmail.com", "Tovi@gmail.com", "Adina@gmail.com", "Avi@gmail.com", "Dan@gmail.com", "Miri@gmail.com" };
         string[] customerAdress = new string[10] { "Rdak 4 Elad", "Haperach 5 Petach Tikva", "Rdak 4 Tel Aviv", "Dror 4 Bnei Brak", "Hatamar 67 Beit Shemesh", "Rdak 5 Elad", "Hateena 2 Elad", "Givataaim", "Derech Hashalom 11 Tel Aviv", "Kalanit 10 Eilat" };
-        
+
 
         for (int j = 0; j < 20; j++)
         {
             TimeSpan tms;
-            
-           Order order = new Order();
-           order.ID = Config.OrderLastId;
-           order.CustomerName = customerNames[j % 10];
-           order.CustomerEmail = customerEmails[j % 10];
-           order.CustomerAdress = customerAdress[j % 10];
-           
-           order.OrderDate = DateTime.MinValue;
-           tms = new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60));
+
+            Order order = new Order();
+            order.ID = Config.OrderLastId;
+
+            order.CustomerName = customerNames[j % 10];
+            order.CustomerEmail = customerEmails[j % 10];
+            order.CustomerAdress = customerAdress[j % 10];
+
+            order.OrderDate = new(rn.Next(1999, 2023), rn.Next(1, 13), rn.Next(1, 28));
+            tms = new TimeSpan(rn.Next(1, 10), rn.Next(0, 24), rn.Next(0, 60), rn.Next(0, 60));
 
             if (j < 16)
             {
-                order.ShipDate = DateTime.MinValue + tms;
+                order.ShipDate = order.OrderDate + tms;
             }
 
             if (j < 10)
@@ -136,25 +137,26 @@ internal static class DataSource
     /// </summary>
     private static void initializeOrderItems()
     {
-        
-        for (int j= 0; j < 40; j++)
+        Random rn = new Random();
+
+        for (int j = 0; j < 40; j++)
         {
-           
+            int x = rn.Next(10);
             OrderItem item = new OrderItem();
-           item.ID = Config.OrderItemLastId;
-           item.OrderId = (int)ordersList[j % 20]?.ID!;
-           item.ProductId = (int)productsList[j % 10]?.ID!;
-           item.Price = (int)productsList[j % 10]?.Price!;
-           item.Amount = rn.Next(1, 5);
-           
+            item.ID = Config.OrderItemLastId;
+            item.OrderId = (int)ordersList[j % 20]?.ID!;
+            item.ProductId = (int)productsList[x]?.ID!;
+            item.Price = (int)productsList[x]?.Price!;
+            item.Amount = rn.Next(1, 5);
+
             orderItemsList.Add(item);
-            
+
         }
     }
 
     #endregion
 
 
-   
+
 
 }
