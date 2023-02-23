@@ -162,7 +162,11 @@ public partial class CatalogWindow : Window
     /// </summary>
     private void productsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        int id = ((ProductItem)((ListView)sender).SelectedItem).ID;
-        new ProductWindow(id, Utils.PageStatus.DISPLAY).ShowDialog();
+        if (((ProductItem)((ListView)sender).SelectedItem) != null)
+        {
+            int id = ((ProductItem)((ListView)sender).SelectedItem).ID;
+            new ProductWindow(id, Utils.PageStatus.DISPLAY).ShowDialog();
+        }
+       
     }
 }

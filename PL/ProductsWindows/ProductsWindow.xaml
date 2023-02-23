@@ -19,7 +19,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition Height="50" />
             <RowDefinition Height="*"/>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="200"/>
         </Grid.RowDefinitions>
 
         <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
@@ -29,10 +29,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions >
 
-            <!--<ComboBox ItemsSource="{Binding MyCategories}" Name="AttributeSelector" HorizontalAlignment= "Stretch" VerticalAlignment="Stretch" Grid.Column="1" SelectionChanged="AttributeSelector_SelectionChanged" />
-            <Label x:Name="lblSelecteCategory" Content="select a category:"  FontSize="18"  FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" Grid.ColumnSpan="2" Height="42" Width="257" AutomationProperties.IsColumnHeader="True" Foreground="#FF5865E0"/>
-            <Button Name="btnClearAll" IsEnabled="{Binding ElementName=AttributeSelector, Path=SelectedIndex, Converter={StaticResource SelectedItemToEnableButton}}" Grid.Column="1" Content="clear all"  Margin="266,0,0,0" FontSize="24"  FontWeight="Bold" FontStyle="Italic" Grid.ColumnSpan="2" Click="btnClearAll_Click" Background="White" Foreground="#FF5865E0" />-->
-
+           
             <ComboBox ItemsSource="{Binding MyCategories}" Name="AttributeSelector"  Grid.Column="0" SelectionChanged="AttributeSelector_SelectionChanged" Margin="189,29,175,41" />
             <Label x:Name="lblSelecteCategory" Content="select a category:"  FontSize="18"  FontWeight="Bold" FontStyle="Italic" HorizontalAlignment="Left" Margin="23,0,0,0" VerticalAlignment="Center" Height="42" Width="257" AutomationProperties.IsColumnHeader="True" Foreground="White"/>
             <Button BorderBrush="Transparent" Template="{StaticResource ButtonTemplate1}" IsEnabled="{Binding ElementName=AttributeSelector, Path=SelectedIndex, Converter={StaticResource SelectedItemToEnableButton}}" Name="btnClearAll" Click="btnClearAll_Click" Grid.Column="1" Content="clear all"  Margin="332,25,26,32" />
@@ -72,7 +69,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Name="btnAddProduct" Template="{StaticResource ButtonTemplate1}" Content="Add new Product" Grid.Row="3" HorizontalAlignment="Left" Margin="779,10,0,-5" Padding="5" Click="btnAddProduct_Click" Width="211"/>
+        <Button Name="btnAddProduct" Template="{StaticResource ButtonTemplate1}" Content="Add new Product" Grid.Row="3" HorizontalAlignment="Right" Margin="0,50,50,50" Padding="5" Click="btnAddProduct_Click" Height="80" Width="250"/>
 
     </Grid>
 </Window>

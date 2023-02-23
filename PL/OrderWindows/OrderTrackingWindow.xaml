@@ -9,12 +9,12 @@
         Title="OrderTrackingWindow" Height="600" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="1.5*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" x:Name="txtOrderId" Text="{Binding OrderId}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="0,69,0,0"/>
-        <TextBox Grid.Row="0" x:Name="txtOrderStatus" Text="{Binding StatusOrder}" HorizontalAlignment="Center" Margin="0,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBlock Background="White" Padding="5" Grid.Row="0" x:Name="txtOrderId" Text="{Binding OrderId}" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="0,69,0,0"/>
+        <TextBlock Background="White" Padding="5" Grid.Row="0" x:Name="txtOrderStatus" Text="{Binding StatusOrder}" HorizontalAlignment="Center" Margin="0,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <ListView ItemsSource="{Binding Tracking}" Width="500" BorderBrush="Transparent" Background="Black" Grid.Row="1" Name="orderTrackingListView" >
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -29,7 +29,7 @@
         </ListView>
         <Label Grid.Row="0" Content="Order ID:" HorizontalAlignment="Center" Margin="-20,40,0,0" VerticalAlignment="Top"/>
         <Label Grid.Row="0" Content="Status:" HorizontalAlignment="Center" Margin="-20,120,0,0" VerticalAlignment="Top"/>
-        <Button Padding="10" Template="{StaticResource ButtonTemplate1}"  Content="Show Details" Name="btnShowDetails" HorizontalAlignment="Left" Width="180" Margin="570,10,0,0" Grid.Row="2" VerticalAlignment="Top" Click="btnShowDetails_Click"/>
+        <Button Padding="10" Template="{StaticResource ButtonTemplate1}"  Content="Show Details" Name="btnShowDetails" VerticalAlignment="Center" HorizontalAlignment="Left" Width="180" Margin="570,10,0,0" Grid.Row="2" Click="btnShowDetails_Click"/>
 
     </Grid>
 </Window>

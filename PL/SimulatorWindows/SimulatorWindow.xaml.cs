@@ -1,9 +1,9 @@
 ﻿using Simulator;
 using System;
 using System.ComponentModel;
-using System.Printing.IndexedProperties;
 using System.Threading;
 using System.Windows;
+using System.Windows.Media;
 
 namespace PL.SimulatorWindows;
 
@@ -93,7 +93,7 @@ public partial class SimulatorWindow : Window
 
     private void Bw_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
     {
-        throw new NotImplementedException();
+        this.Close();
     }
 
     private void Bw_ProgressChanged(object? sender, ProgressChangedEventArgs e)
@@ -103,20 +103,24 @@ public partial class SimulatorWindow : Window
         {
             case 1:updateClock();
                 break;
-            case 2:displayOrder((ReportStartEventArgs?)e.UserState);
+            case 2:startOrderUpdate((ReportStartEventArgs?)e.UserState);
                 break;
-            case 3:endOrderUpdate();
+            case 3:endOrderUpdate((ReportEndEventArgs?)e.UserState!);
+                break;
+            case 4:updateProcessBar(((ReportProcessEventArgs?)e.UserState!).ProcessValue);
+                break;
+            case 5:MessageBox.Show("Something went wrong, please try again later");
                 break;
         }
     }
-
-    
-
+ 
     private void Bw_DoWork(object? sender, DoWorkEventArgs e)
     {
-        Simulator.Simulator.RegisterReportStart((e,args) => { bw.ReportProgress(2, args); });
-        Simulator.Simulator.RegisterReportEnd((e, args) => { bw.ReportProgress(3); });
-       // Simulator.Simulator.RegisterReportEndSim();
+        Simulator.Simulator.RegisterReportStart((e,args) => { bw.ReportProgress(2, args);});
+        Simulator.Simulator.RegisterReportEnd((e, args) => { bw.ReportProgress(3,args); });
+        Simulator.Simulator.RegisterReportEndSim((e,args) => { bw.CancelAsync(); });
+        Simulator.Simulator.RegisterReportProcess((e, args) => { bw.ReportProgress(4, args); });
+        Simulator.Simulator.RegisterReportError((e, args) => { bw.ReportProgress(5, args); });
         Simulator.Simulator.Activate();
 
         while (!bw.CancellationPending)
@@ -130,25 +134,47 @@ public partial class SimulatorWindow : Window
 
 
     #region WPF Methods
+
+    /// <summary>
+    /// Update the timer.
+    /// </summary>
     private void updateClock()
     {
         MyTime = DateTime.Now.ToLongTimeString();
 
     }
 
-    private void endOrderUpdate()
+    /// <summary>
+    /// Handle end of order update.
+    /// </summary>
+    private void endOrderUpdate(ReportEndEventArgs args)
     {
-        MessageBox.Show($"finish updating order {MyOrder.ID}");
+        MyOrder = new() { ID=MyOrder.ID,Status=args.NewStatus};
+        txtStatus.Background = Brushes.Red;
     }
 
-    private void displayOrder(ReportStartEventArgs? userState)
+    /// <summary>
+    /// Handle start of order update - display order details.
+    /// </summary>
+    /// <param name="args">Update details (order and finish time)</param>
+    private void startOrderUpdate(ReportStartEventArgs? args)
     {
-        if(userState != null)
+        if(args != null)
         {
-            MyOrder = userState.Order;
+            MyOrder = args.Order;
+            txtStatus.Background = Brushes.White;
             StartTime = DateTime.Now.ToLongTimeString();
-            EndTime = userState.EndTime.ToLongTimeString();
+            EndTime = args.EndTime.ToLongTimeString();
         }
+    }
+
+    /// <summary>
+    /// Update value of process bar.
+    /// </summary>
+    /// <param name="v">New value</param>
+    private void updateProcessBar(double v)
+    {
+        prbProcess.Value = v;
     }
 
     #endregion
@@ -158,7 +184,7 @@ public partial class SimulatorWindow : Window
 
     private void btnExit_Click(object sender, RoutedEventArgs e)
     {
-        Close();
+        Simulator.Simulator.Deactivate();
     }
 
     private void SimulatorWindow_Loaded(object sender, RoutedEventArgs e)

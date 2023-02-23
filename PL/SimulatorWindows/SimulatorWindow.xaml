@@ -7,20 +7,29 @@
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         Title="SimulatorWindow" Height="450" Width="800">
-    <Grid Margin="2,0,-2,0">
-        <Button Template="{DynamicResource ButtonTemplate1}"  Content="Exit" Name="btnExit" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="47" Width="170"   Margin="36,23,0,0" RenderTransformOrigin="-0.138,0.163" Click="btnExit_Click"/>
-        <TextBlock x:Name="txtTimer" Foreground="White" HorizontalAlignment="Left" Margin="711,46,0,0" TextWrapping="Wrap" Text="{Binding Path=MyTime}" VerticalAlignment="Top"/>
+    <Grid Margin="2,4,-2,-4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
+        <Button  Template="{DynamicResource ButtonTemplate1}"  Content="Exit" Name="btnExit" HorizontalAlignment="Left"  VerticalAlignment="Top" Height="47" Width="170"   Margin="36,23,0,0" RenderTransformOrigin="-0.138,0.163" Click="btnExit_Click"/>
+        <TextBlock Grid.Column="1" x:Name="txtTimer" Foreground="White" HorizontalAlignment="Left" Margin="100,46,0,0" TextWrapping="Wrap" Text="{Binding Path=MyTime}" VerticalAlignment="Top"/>
 
-        <TextBlock x:Name="txtOrderId" IsEnabled="false" Background="White" Text="{Binding MyOrder.ID}" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="323,108,0,0" Height="30"/>
-        <Label Content="ID:" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="342,77,0,0"/>
-        <Label Content="Order Status:" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="343,159,0,0"/>
-        <TextBlock x:Name="txtPrevStatus" IsEnabled="False" Background="White" Text="{Binding MyOrder.Status}" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="323,190,0,0" Height="30"/>
+        <TextBlock Grid.Row="1" x:Name="txtOrderId" IsEnabled="false" Background="White" Text="{Binding MyOrder.ID}" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="100,58,0,0" Height="30"/>
+        <Label Grid.Row="1" Content="ID:" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="100,27,0,0"/>
+        <Label Grid.Row="1" Content="Order Status:" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="100,96,0,0"/>
+        <TextBlock Grid.Row="1" x:Name="txtStatus" IsEnabled="False" Background="White" Text="{Binding MyOrder.Status}" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="100,128,0,0" Height="30"/>
 
-        <TextBlock x:Name="txtStartTime" IsEnabled="false" Background="White" Text="{Binding StartTime}" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="200,300,0,0" Height="30"/>
-        <Label Content="Start:" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="129,304,0,0"/>
-        <Label Content="End:" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="508,304,0,0"/>
-        <TextBlock x:Name="txtEndTime" IsEnabled="False" Background="White" Text="{Binding EndTime}" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="561,300,0,0" Height="30" RenderTransformOrigin="2.983,4.418"/>
-
+        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="txtStartTime" IsEnabled="false" Background="White" Text="{Binding StartTime}" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="100,50,0,0" Height="30"/>
+        <Label Grid.Row="1" Grid.Column="1" Content="Start:" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="100,20,0,0"/>
+        <Label Grid.Row="1" Grid.Column="1" Content="End:" HorizontalAlignment="Left"  VerticalAlignment="Top" RenderTransformOrigin="-3.632,0.312" Margin="100,90,0,0"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" x:Name="txtEndTime" IsEnabled="False" Background="White" Text="{Binding EndTime}" HorizontalAlignment="Left"  TextWrapping="Wrap" VerticalAlignment="Top" Width="150" Margin="100,120,0,0" Height="30" RenderTransformOrigin="2.983,4.418"/>
+        <ProgressBar x:Name="prbProcess" Grid.Column="0" Grid.ColumnSpan="2" Foreground="red" HorizontalAlignment="Center" Height="15" VerticalAlignment="Center" Width="300"  Grid.Row="2" Margin="0,0,0,0" />
 
     </Grid>
 </Window>
