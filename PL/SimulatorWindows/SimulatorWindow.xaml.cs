@@ -21,19 +21,28 @@ public partial class SimulatorWindow : Window
     [System.Runtime.InteropServices.DllImport("user32.dll")]
     private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-   
+
 
 
     #endregion
 
-    BackgroundWorker bw;
+    static private BackgroundWorker bw;
 
+    #region Simulator Events
+
+    private event EventHandler<ReportStartEventArgs> OnStart = (e, args) => { bw.ReportProgress(2, args); };
+    private event EventHandler<ReportEndEventArgs> OnEnd = (e, args) => { bw.ReportProgress(3, args); };
+    private event EventHandler OnEndSim = (e, args) => { bw.CancelAsync(); };
+    private event EventHandler<ReportProcessEventArgs> OnProcess = (e, args) => { bw.ReportProgress(4, args); };
+    private event EventHandler<ReportErrorEventArgs> OnError = (e, args) => { bw.ReportProgress(5, args); };
+
+    #endregion
 
     #region DP 
     public string MyTime
     {
         get { return (string)GetValue(MyTimeProperty); }
-        set { SetValue(MyTimeProperty, value); }    
+        set { SetValue(MyTimeProperty, value); }
     }
 
     // Using a DependencyProperty as the backing store for MyTime.  This enables animation, styling, binding, etc...
@@ -74,7 +83,6 @@ public partial class SimulatorWindow : Window
 
     #endregion
 
-
     public SimulatorWindow()
     {
         InitializeComponent();
@@ -88,39 +96,48 @@ public partial class SimulatorWindow : Window
         bw.RunWorkerAsync();
     }
 
-
     #region BW Methods
 
     private void Bw_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e)
     {
+        Simulator.Simulator.UnregisterReportStart(OnStart);
+        Simulator.Simulator.UnregisterReportEnd(OnEnd);
+        Simulator.Simulator.UnregisterReportEndSim(OnEndSim);
+        Simulator.Simulator.UnregisterReportProcess(OnProcess);
+        Simulator.Simulator.UnregisterReportError(OnError);
         this.Close();
     }
 
     private void Bw_ProgressChanged(object? sender, ProgressChangedEventArgs e)
     {
         int updateType = e.ProgressPercentage;
-        switch(updateType)
+        switch (updateType)
         {
-            case 1:updateClock();
+            case 1:
+                updateClock();
                 break;
-            case 2:startOrderUpdate((ReportStartEventArgs?)e.UserState);
+            case 2:
+                startOrderUpdate((ReportStartEventArgs?)e.UserState);
                 break;
-            case 3:endOrderUpdate((ReportEndEventArgs?)e.UserState!);
+            case 3:
+                endOrderUpdate((ReportEndEventArgs?)e.UserState!);
                 break;
-            case 4:updateProcessBar(((ReportProcessEventArgs?)e.UserState!).ProcessValue);
+            case 4:
+                updateProcessBar(((ReportProcessEventArgs?)e.UserState!).ProcessValue);
                 break;
-            case 5:MessageBox.Show("Something went wrong, please try again later");
+            case 5:
+                MessageBox.Show("Something went wrong, please try again later");
                 break;
         }
     }
- 
+
     private void Bw_DoWork(object? sender, DoWorkEventArgs e)
     {
-        Simulator.Simulator.RegisterReportStart((e,args) => { bw.ReportProgress(2, args);});
-        Simulator.Simulator.RegisterReportEnd((e, args) => { bw.ReportProgress(3,args); });
-        Simulator.Simulator.RegisterReportEndSim((e,args) => { bw.CancelAsync(); });
-        Simulator.Simulator.RegisterReportProcess((e, args) => { bw.ReportProgress(4, args); });
-        Simulator.Simulator.RegisterReportError((e, args) => { bw.ReportProgress(5, args); });
+        Simulator.Simulator.RegisterReportStart(OnStart);
+        Simulator.Simulator.RegisterReportEnd(OnEnd);
+        Simulator.Simulator.RegisterReportEndSim(OnEndSim);
+        Simulator.Simulator.RegisterReportProcess(OnProcess);
+        Simulator.Simulator.RegisterReportError(OnError);
         Simulator.Simulator.Activate();
 
         while (!bw.CancellationPending)
@@ -149,7 +166,7 @@ public partial class SimulatorWindow : Window
     /// </summary>
     private void endOrderUpdate(ReportEndEventArgs args)
     {
-        MyOrder = new() { ID=MyOrder.ID,Status=args.NewStatus};
+        MyOrder = new() { ID = MyOrder.ID, Status = args.NewStatus };
         txtStatus.Background = Brushes.Red;
     }
 
@@ -159,7 +176,7 @@ public partial class SimulatorWindow : Window
     /// <param name="args">Update details (order and finish time)</param>
     private void startOrderUpdate(ReportStartEventArgs? args)
     {
-        if(args != null)
+        if (args != null)
         {
             MyOrder = args.Order;
             txtStatus.Background = Brushes.White;
@@ -184,6 +201,7 @@ public partial class SimulatorWindow : Window
 
     private void btnExit_Click(object sender, RoutedEventArgs e)
     {
+        btnExit.Visibility = Visibility.Hidden;
         Simulator.Simulator.Deactivate();
     }
 

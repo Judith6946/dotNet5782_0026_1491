@@ -8,11 +8,11 @@ public static class Simulator
 
     #region events
 
-    private static event EventHandler? ReportStart;
-    private static event EventHandler? ReportEnd;
+    private static event EventHandler<ReportStartEventArgs>? ReportStart;
+    private static event EventHandler<ReportEndEventArgs>? ReportEnd;
     private static event EventHandler? ReportEndSim;
-    private static event EventHandler? ReportProcess;
-    private static event EventHandler? ReportError;
+    private static event EventHandler<ReportProcessEventArgs>? ReportProcess;
+    private static event EventHandler<ReportErrorEventArgs>? ReportError;
 
     #endregion
 
@@ -41,14 +41,14 @@ public static class Simulator
                 //get next order
                 int? oldId = null;
                 try { oldId = bl.Order.GetOldestOrder(); }
-                catch (Exception e) { if (ReportError != null) ReportError(null, new ErrorEventArgs(e)); }
+                catch (Exception e) { if (ReportError != null) ReportError(null, new ReportErrorEventArgs(e)); }
 
                 if (oldId != null)
                 {
                     try
                     {
                         BO.Order order = bl.Order.GetOrder((int)oldId);
-                        int delay = rn.Next(15, 20);
+                        int delay = rn.Next(3,10);
                         DateTime end = DateTime.Now + new TimeSpan(0, 0, delay);
 
                         //report start
@@ -68,9 +68,9 @@ public static class Simulator
                         if (ReportEnd != null) ReportEnd(null, new ReportEndEventArgs(getNextStatus(order.Status)));
                         bl.Order.UpdateStatus(order.ID);
                     }
-                    catch (Exception e) { if (ReportError != null) ReportError(null, new ErrorEventArgs(e)); }
+                    catch (Exception e) { if (ReportError != null) ReportError(null, new ReportErrorEventArgs(e)); }
                 }
-                Thread.Sleep(4000);
+                Thread.Sleep(1000);
             }
             //report end simulator
             if (ReportEndSim != null) ReportEndSim(null, new());
@@ -87,17 +87,17 @@ public static class Simulator
 
     #region Register/ Unregister events
     public static void RegisterReportEndSim(EventHandler handler) => ReportEndSim += handler;
-    public static void RegisterReportEnd(EventHandler handler) => ReportEnd += handler;
-    public static void RegisterReportProcess(EventHandler handler) => ReportProcess += handler;
-    public static void RegisterReportStart(EventHandler handler) => ReportStart += handler;
-    public static void RegisterReportError(EventHandler handler) => ReportError += handler;
+    public static void RegisterReportEnd(EventHandler<ReportEndEventArgs> handler) => ReportEnd += handler;
+    public static void RegisterReportProcess(EventHandler<ReportProcessEventArgs> handler) => ReportProcess += handler;
+    public static void RegisterReportStart(EventHandler<ReportStartEventArgs> handler) => ReportStart += handler;
+    public static void RegisterReportError(EventHandler<ReportErrorEventArgs> handler) => ReportError += handler;
 
 
     public static void UnregisterReportEndSim(EventHandler handler) => ReportEndSim -= handler;
-    public static void UnregisterReportEnd(EventHandler handler) => ReportEnd -= handler;
-    public static void UnregisterReportStart(EventHandler handler) => ReportStart -= handler;
-    public static void UnregisterReportProcess(EventHandler handler) => ReportProcess -= handler;
-    public static void UNregisterReportError(EventHandler handler) => ReportError += handler;
+    public static void UnregisterReportEnd(EventHandler<ReportEndEventArgs> handler) => ReportEnd -= handler;
+    public static void UnregisterReportStart(EventHandler<ReportStartEventArgs> handler) => ReportStart -= handler;
+    public static void UnregisterReportProcess(EventHandler<ReportProcessEventArgs> handler) => ReportProcess -= handler;
+    public static void UnregisterReportError(EventHandler<ReportErrorEventArgs> handler) => ReportError += handler;
 
     #endregion
 
