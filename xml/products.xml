@@ -1,1 +1,73 @@
-﻿<?xml version="1.0" encoding="utf-8"?><ArrayOfProduct xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><Product><ID>792530</ID><Name>MacBook pro</Name><Price>424</Price><Category>Mac</Category><InStock>0</InStock></Product><Product><ID>424939</ID><Name>ipad 10 mini</Name><Price>438</Price><Category>ipad</Category><InStock>0</InStock></Product><Product><ID>181450</ID><Name>iphone 14</Name><Price>443</Price><Category>iphone</Category><InStock>0</InStock></Product><Product><ID>459545</ID><Name> apple watch mini</Name><Price>197</Price><Category>watch</Category><InStock>11</InStock></Product><Product><ID>166790</ID><Name>air pods 2</Name><Price>135</Price><Category>Accessories</Category><InStock>27</InStock></Product><Product><ID>957411</ID><Name>ahr pods 3</Name><Price>481</Price><Category>Accessories</Category><InStock>10</InStock></Product><Product><ID>844755</ID><Name>ipad Air</Name><Price>189</Price><Category>ipad</Category><InStock>25</InStock></Product><Product><ID>648935</ID><Name>MacBook</Name><Price>162</Price><Category>Mac</Category><InStock>28</InStock></Product><Product><ID>702819</ID><Name>iphone 14 mini</Name><Price>181</Price><Category>iphone</Category><InStock>23</InStock></Product><Product><ID>513126</ID><Name>Apple Watch SE</Name><Price>372</Price><Category>watch</Category><InStock>2</InStock></Product></ArrayOfProduct>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfProduct xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Product>
+    <ID>792530</ID>
+    <Name>MacBook pro</Name>
+    <Price>424</Price>
+    <Category>Mac</Category>
+    <InStock>0</InStock>
+  </Product>
+  <Product>
+    <ID>424939</ID>
+    <Name>ipad 10 mini</Name>
+    <Price>438</Price>
+    <Category>ipad</Category>
+    <InStock>0</InStock>
+  </Product>
+  <Product>
+    <ID>181450</ID>
+    <Name>iphone 14</Name>
+    <Price>443</Price>
+    <Category>iphone</Category>
+    <InStock>0</InStock>
+  </Product>
+  <Product>
+    <ID>166790</ID>
+    <Name>air pods 2</Name>
+    <Price>135</Price>
+    <Category>Accessories</Category>
+    <InStock>27</InStock>
+  </Product>
+  <Product>
+    <ID>957411</ID>
+    <Name>ahr pods 3</Name>
+    <Price>481</Price>
+    <Category>Accessories</Category>
+    <InStock>10</InStock>
+  </Product>
+  <Product>
+    <ID>844755</ID>
+    <Name>ipad Air</Name>
+    <Price>189</Price>
+    <Category>ipad</Category>
+    <InStock>25</InStock>
+  </Product>
+  <Product>
+    <ID>648935</ID>
+    <Name>MacBook</Name>
+    <Price>162</Price>
+    <Category>Mac</Category>
+    <InStock>28</InStock>
+  </Product>
+  <Product>
+    <ID>702819</ID>
+    <Name>iphone 14 mini</Name>
+    <Price>181</Price>
+    <Category>iphone</Category>
+    <InStock>23</InStock>
+  </Product>
+  <Product>
+    <ID>513126</ID>
+    <Name>Apple Watch SE</Name>
+    <Price>372</Price>
+    <Category>watch</Category>
+    <InStock>2</InStock>
+  </Product>
+  <Product>
+    <ID>459545</ID>
+    <Name> apple watch mini</Name>
+    <Price>197</Price>
+    <InStock>7</InStock>
+    <Category>watch</Category>
+  </Product>
+</ArrayOfProduct>

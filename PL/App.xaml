@@ -5,6 +5,7 @@
              StartupUri="MainWindow.xaml">
     
     <Application.Resources>
+        
         <Style TargetType="Button">
             <Setter Property="FontSize" Value="20" />
             <Setter Property="FontFamily" Value="Consolas" />

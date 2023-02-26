@@ -13,7 +13,7 @@ internal static class Validation
     /// </summary>
     /// <param name="s">String to be checked.</param>
     /// <returns>True if the string is an email and false otherwise.</returns>
-    public static bool IsEmail(string? s)
+    public static bool IsEmail(this string? s)
     {
         if (s == null) return false;
         int t = 0, c = 0;
@@ -58,7 +58,7 @@ internal static class Validation
     /// </summary>
     /// <param name="s">String to be checked</param>
     /// <returns>True if the string is a number and false otherwise.</returns>
-    public static bool IsNum(string s)
+    public static bool IsNum(this string s)
     {
 
         for (int i = 0; i < s.Length; i++)
@@ -79,7 +79,7 @@ internal static class Validation
     /// </summary>
     /// <param name="s">String to be checked</param>
     /// <returns>True if the string is at least 3 chars and false otherwise.</returns>
-    public static bool IsName(string? s) => s != null && s.Length >= 3;
+    public static bool IsName(this string? s) => s != null && s.Length >= 3;
 
 
 }

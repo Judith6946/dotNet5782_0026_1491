@@ -287,10 +287,10 @@ internal class Cart : ICart
         if (cart.ItemsList == null || cart.ItemsList.Count == 0)
             throw new InvalidInputException("Your cart is empty");
 
-        if(!Validation.IsEmail(cart.CustomerEmail))
+        if(!cart.CustomerEmail.IsEmail())
             throw new InvalidInputException("Email is invalid");
 
-        if (!Validation.IsName(cart.CustomerName)||!Validation.IsName(cart.CustomerAdress))
+        if (!cart.CustomerName.IsName()||!cart.CustomerAdress.IsName())
             throw new InvalidInputException("Name and Address should be at least 3 chars");
 
         foreach (var item in cart.ItemsList)

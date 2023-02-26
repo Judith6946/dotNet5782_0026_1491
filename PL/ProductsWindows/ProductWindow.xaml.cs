@@ -11,6 +11,8 @@ public partial class ProductWindow : Window
     private Utils.PageStatus _pageStatus;
     private BlApi.IBl bl = BlApi.Factory.Get();
 
+    #region Properties
+
     public Utils.PageStatus MyPageStatus { get { return _pageStatus; } }
 
     public Product MyProduct
@@ -25,6 +27,9 @@ public partial class ProductWindow : Window
 
     public Array MyCategories { get {return Enum.GetValues(typeof(BO.Enums.Category)); } }
 
+    #endregion
+
+    #region Ctors
 
     /// <summary>
     /// Initialize values for adding a product
@@ -55,6 +60,7 @@ public partial class ProductWindow : Window
         catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
 
+    #endregion
 
 
     /// <summary>
@@ -108,4 +114,6 @@ public partial class ProductWindow : Window
         catch (BO.ImpossibleException) { MessageBox.Show("This product was already ordered, it cannot be deleted."); }
         catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
     }
+
+
 }

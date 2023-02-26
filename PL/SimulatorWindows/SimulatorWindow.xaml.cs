@@ -21,9 +21,6 @@ public partial class SimulatorWindow : Window
     [System.Runtime.InteropServices.DllImport("user32.dll")]
     private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
-
-
-
     #endregion
 
     static private BackgroundWorker bw;
@@ -37,6 +34,7 @@ public partial class SimulatorWindow : Window
     private event EventHandler<ReportErrorEventArgs> OnError = (e, args) => { bw.ReportProgress(5, args); };
 
     #endregion
+
 
     #region DP 
     public string MyTime
@@ -158,7 +156,6 @@ public partial class SimulatorWindow : Window
     private void updateClock()
     {
         MyTime = DateTime.Now.ToLongTimeString();
-
     }
 
     /// <summary>

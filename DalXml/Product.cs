@@ -44,7 +44,7 @@ internal class Product : IProduct
 
         XMLTools.SaveListToXMLElement(productsRootElem, s_products);
 
-        return entity.ID; ;
+        return entity.ID; 
     }
 
     public void Delete(int id)

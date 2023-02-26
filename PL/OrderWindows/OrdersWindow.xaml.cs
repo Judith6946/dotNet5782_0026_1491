@@ -32,7 +32,7 @@ public partial class OrdersWindow : Window
         set { SetValue(MyOrdersProperty, value); }
     }
 
-   
+
 
     // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty MyOrdersProperty =
@@ -65,9 +65,12 @@ public partial class OrdersWindow : Window
     /// </summary>
     private void ordersListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        var window = new OrderWindow(((OrderForList)((ListView)sender).SelectedItem).ID,Utils.PageStatus.EDIT);
-        window.Show();
-        window.Closing += Window_Closing;
+        if (((OrderForList)((ListView)sender).SelectedItem) != null)
+        {
+            var window = new OrderWindow(((OrderForList)((ListView)sender).SelectedItem).ID, Utils.PageStatus.EDIT);
+            window.Show();
+            window.Closing += Window_Closing;
+        }
     }
 
     /// <summary>
@@ -76,5 +79,5 @@ public partial class OrdersWindow : Window
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void Window_Closing(object? sender, CancelEventArgs e) => UpdateOrders();
-   
+
 }

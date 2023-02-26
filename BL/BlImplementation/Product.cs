@@ -25,7 +25,7 @@ internal class Product : BlApi.IProduct
     /// <exception cref="DalException">Thrown when DB could not add the product.</exception>
     public void AddProduct(BO.Product product)
     {
-        if (product.ID <= 0 || !Validation.IsName(product.Name) || product.InStock < 0 || product.Price < 0)
+        if (product.ID <= 0 || !product.Name.IsName() || product.InStock < 0 || product.Price < 0)
             throw new InvalidInputException("product details are not valid. id, instock and price must be positive, name should be at least 3 chars long");
 
         try
@@ -245,7 +245,7 @@ internal class Product : BlApi.IProduct
     /// <exception cref="DalException">Thrown when DB could not update the products.</exception>
     public void UpdateProduct(BO.Product product)
     {
-        if (product.ID <= 0 || !Validation.IsName(product.Name)|| product.InStock < 0 || product.Price < 0)
+        if (product.ID <= 0 || !product.Name.IsName()|| product.InStock < 0 || product.Price < 0)
             throw new InvalidInputException("product details are not valid. id, instock and price must be positive, name should be at least 3 chars long");
         try
         {

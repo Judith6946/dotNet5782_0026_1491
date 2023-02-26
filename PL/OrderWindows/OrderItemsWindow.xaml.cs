@@ -71,7 +71,7 @@ public partial class OrderItemsWindow : Window
     {
         int amount;
 
-        if (pageStatus != PageStatus.DISPLAY)
+        if (pageStatus != PageStatus.DISPLAY && ((OrderItem)((ListView)sender).SelectedItem) != null)
         {
             var dialogWindow = new InputDialogWindow("Please enter new amount", ((OrderItem)((ListView)sender).SelectedItem).Amount.ToString());
             if (dialogWindow.ShowDialog() == true)

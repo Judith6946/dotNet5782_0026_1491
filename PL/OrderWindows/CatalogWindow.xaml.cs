@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 
 namespace PL.OrderWindows;
 
+
 /// <summary>
 /// Interaction logic for CatalogWindow.xaml
 /// </summary>
@@ -27,6 +28,8 @@ public partial class CatalogWindow : Window
     private BlApi.IBl bl = BlApi.Factory.Get();
     private BO.Cart myCart;
 
+
+    #region Properties
     public ObservableCollection<ProductItem?> MyProductItems
     {
         get { return (ObservableCollection<ProductItem?>)GetValue(MyProductItemsProperty); }
@@ -38,14 +41,11 @@ public partial class CatalogWindow : Window
     public static readonly DependencyProperty MyProductItemsProperty =
         DependencyProperty.Register("MyProductItems", typeof(ObservableCollection<ProductItem>), typeof(CatalogWindow), new PropertyMetadata(null));
 
-    public Array MyCategories
-    {
-        get
-        {
-            return Enum.GetValues(typeof(BO.Enums.Category));
-        }
+    public Array MyCategories { get => Enum.GetValues(typeof(BO.Enums.Category)); }
 
-    }
+
+    #endregion
+
 
     public CatalogWindow()
     {
@@ -62,6 +62,9 @@ public partial class CatalogWindow : Window
         catch (Exception) { MessageBox.Show("Sorry, something went wrong. please try again"); }
 
     }
+
+
+    #region WPF Events
 
     /// <summary>
     /// Click event of remove buttons
@@ -167,6 +170,8 @@ public partial class CatalogWindow : Window
             int id = ((ProductItem)((ListView)sender).SelectedItem).ID;
             new ProductWindow(id, Utils.PageStatus.DISPLAY).ShowDialog();
         }
-       
+
     }
+
+    #endregion
 }
